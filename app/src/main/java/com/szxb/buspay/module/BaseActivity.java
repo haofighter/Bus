@@ -240,7 +240,6 @@ public abstract class BaseActivity extends AppCompatActivity implements OnKeyLis
                     @Override
                     public void accept(@NonNull QRScanMessage qrScanMessage) {
                         try {
-                            message(qrScanMessage);
                             if (qrScanMessage.getResult() == QRCode.STOP_CNT) {
                                 //关闭菜单页
                                 onKeyCancel();
@@ -263,17 +262,19 @@ public abstract class BaseActivity extends AppCompatActivity implements OnKeyLis
                             } else if (qrScanMessage.getResult() == QRCode.STOP_DIALOG) {
                                 //关闭Dialog
                                 closeDialog();
+                            }else {
+                                message(qrScanMessage);
                             }
 
                         } catch (Exception e) {
                             e.printStackTrace();
-                            SLog.d("BaseActivity(accept.java:271)Rx异常>" + e.toString());
+                            SLog.d("BaseActivity(accept.java:271)Rx异常>" + Util.getExectionStr(e));
                         }
                     }
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(@NonNull Throwable throwable) throws Exception {
-                        SLog.d("BaseActivity(call.java:115)Rx异常>>" + throwable.toString());
+                        SLog.d("BaseActivity(call.java:115)Rx异常>>" + Util.getExectionStr((Exception) throwable));
                     }
                 });
     }

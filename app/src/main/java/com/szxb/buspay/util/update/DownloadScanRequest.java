@@ -62,6 +62,7 @@ public class DownloadScanRequest extends BaseRequest {
             macRequest.set(ParamsUtil.getkeyMap());
             Response<JSONObject> execute = SyncRequestExecutor.INSTANCE.execute(macRequest);
             if (execute.isSucceed()) {
+
                 String macMsg = execute.get().getString("retmsg");
                 if (!TextUtils.isEmpty(macMsg) && TextUtils.equals(macMsg, "success")) {
                     final JSONArray array = execute.get().getJSONArray("mackey_list");

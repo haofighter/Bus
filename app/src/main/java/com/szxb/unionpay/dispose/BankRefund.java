@@ -70,8 +70,8 @@ public class BankRefund extends Thread {
 
     private Iso8583Message getIso8583Message(UnionPayEntity payEntity) {
         return TextUtils.isEmpty(payEntity.getReserve_2())
-                ? PosRefund.getInstance().refund(payEntity.getMainCardNo(), payEntity.getReserve_1(), Util.string2Int(payEntity.getTradeSeq()), BusllPosManage.getPosManager().getBatchNum(), "00", Util.string2Int(payEntity.getPayFee()))
-                : PosScanRefund.getInstance().refun(Util.string2Int(payEntity.getTradeSeq()), payEntity.getMainCardNo(), "00", Util.string2Int(payEntity.getPayFee()));
+                ? PosRefund.getInstance().refund(payEntity.getMainCardNo(), payEntity.getReserve_1(), Util.string2Int(payEntity.getTradeSeq()), BusllPosManage.getPosManager().getBatchNum(), "00", Util.string2Int(payEntity.getTotalFee()))
+                : PosScanRefund.getInstance().refun(Util.string2Int(payEntity.getTradeSeq()), payEntity.getMainCardNo(), "00", Util.string2Int(payEntity.getTotalFee()));
     }
 
     private void requestRefund(int what, byte[] sendData, UnionPayEntity entity) {

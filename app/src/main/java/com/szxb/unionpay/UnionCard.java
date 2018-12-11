@@ -11,6 +11,7 @@ import com.szxb.buspay.task.thread.ThreadFactory;
 import com.szxb.buspay.task.thread.WorkThread;
 import com.szxb.buspay.util.Config;
 import com.szxb.buspay.util.DateUtil;
+import com.szxb.buspay.util.Util;
 import com.szxb.buspay.util.tip.BusToast;
 import com.szxb.java8583.core.Iso8583Message;
 import com.szxb.java8583.module.BankPay;
@@ -351,7 +352,7 @@ public class UnionCard {
         } catch (Exception e) {
             e.printStackTrace();
             ret = EXCEPTION;
-            SLog.d("run(LoopThread.java:258)哇哦……出现了异常,请及时处理>>>" + e.toString());
+            SLog.e("UnionCard(run.java:354)哇哦……出现了异常,请及时处理>>>" + Util.getExectionStr(e));
         }
     }
 

@@ -65,6 +65,7 @@ public class BankCardParse {
     private PassCode retPassCode = new PassCode();
 
     synchronized public BankResponse parseResponse(BankResponse icResponse, String lastMainCardNo, long lastTime, int amount, String aid) throws Exception {
+        SLog.d("BankCardParse(parseResponse.java:68)aid=" + aid);
         icResponse.setMsg("参数错误");
         if (TextUtils.isEmpty(aid)) {
             icResponse.setResCode(ERROR_9);
@@ -113,6 +114,7 @@ public class BankCardParse {
 
         for (String key : mapTLV.keySet()) {
             len += Integer.parseInt(mapTLV.get(key));
+            SLog.d("BankCardParse(parseResponse.java:116)key=" + key);
             switch (key) {
                 case "9f66"://终端交易属性,是否支持CDCVM
                     pDOLBuilder.append(term_info.ttq);

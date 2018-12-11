@@ -185,9 +185,10 @@ public class CommonBase {
         RxBus.getInstance().send(new QRScanMessage(new PosRecord(), QRCode.START_DIALOG));
         boolean isNull = bankICResponse.getResCode() == -999;
         BankCardParse cardParse = new BankCardParse();
+
         bankICResponse = cardParse.parseResponse(bankICResponse,
                 isNull ? "0" : bankICResponse.getMainCardNo(),
-                isNull ? 0 : bankICResponse.getLastTime(), BusApp.getPosManager().getUnionPayPrice(), searchCard.cityCode + searchCard.cardNo);
+                isNull ? 0 : bankICResponse.getLastTime(), 1/*BusApp.getPosManager().getUnionPayPrice()*/, searchCard.cityCode + searchCard.cardNo);
         RxBus.getInstance().send(new QRScanMessage(new PosRecord(), QRCode.STOP_DIALOG));
 
         if (bankICResponse.getResCode() > 0) {

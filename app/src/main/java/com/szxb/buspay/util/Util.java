@@ -22,6 +22,9 @@ import com.szxb.unionpay.config.UnionConfig;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.text.DecimalFormat;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -423,4 +426,33 @@ public class Util {
         Matcher matcher = pattern.matcher(var);
         return matcher.matches();
     }
+
+
+    /**
+     * @param e .
+     * @return 异常具体信息
+     */
+    public static String getExectionStr(Exception e) {
+        try {
+            if (e == null) {
+                return "未知错误UNK";
+            }
+            Writer writer = new StringWriter();
+            PrintWriter pw = new PrintWriter(writer);
+            e.printStackTrace(pw);
+            Throwable cause = e.getCause();
+            while (cause != null) {
+                cause.printStackTrace(pw);
+                cause = cause.getCause();
+            }
+            pw.close();
+            return writer.toString();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            SLog.d("Util(getExectionStr.java:501)异常转换异常");
+            return ex.toString();
+        }
+
+    }
+
 }

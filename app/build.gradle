@@ -46,7 +46,7 @@ android {
 //            versionCode 100
 //            versionName "1.0.1"
 //            buildConfigField 'String', 'LOG_TAG', '"zibo"'
-//            buildConfigField 'String', 'BIN_NAME', '"zibo.bin"'
+//            buildConfigField 'String', 'BIN_NAME', '"Q6_K21_181129180102.bin"'
 //            buildConfigField 'int', 'CITY', '0'
 //        }
 //
@@ -57,7 +57,7 @@ android {
 //            buildConfigField 'String', 'BIN_NAME', '"taian_0.0.4.bin"'
 //            buildConfigField 'int', 'CITY', '1'
 //        }
-//
+////
         zhaoyuan_app {
             versionCode 100
             versionName "1.0.7"
