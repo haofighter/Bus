@@ -144,3 +144,6 @@ public static java.lang.String TABLENAME;
 #crash分析
 -dontwarn com.tencent.bugly.**
 -keep public class com.tencent.bugly.**{*;}
+
+#防止混淆丢失行号
+-keepattributes SourceFile,LineNumberTable

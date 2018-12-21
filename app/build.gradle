@@ -2,12 +2,11 @@ apply plugin: 'com.android.application'
 apply plugin: 'org.greenrobot.greendao'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "26.0.0"
+    compileSdkVersion 28
     defaultConfig {
         applicationId "com.szxb.buspay"
         minSdkVersion 15
-        targetSdkVersion 25
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -27,11 +26,12 @@ android {
     }
 
     greendao {
-        schemaVersion 1
+        schemaVersion 2
         daoPackage 'com.szxb.buspay.db.dao'
         targetGenDir 'src/main/java'
     }
 
+    flavorDimensions 'api'
     productFlavors {
         /**
          * city
@@ -60,21 +60,19 @@ android {
 ////
         zhaoyuan_app {
             versionCode 100
-            versionName "1.0.7"
+            versionName "1.1.0"
             buildConfigField 'String', 'LOG_TAG', '"zhaoyuan"'
-            buildConfigField 'String', 'BIN_NAME', '"zhaoyuan_0.0.6.bin"'
+            buildConfigField 'String', 'BIN_NAME', '"zhaoyuan_0.0.7.bin"'
             buildConfigField 'int', 'CITY', '3'
         }
 
     }
 
-    applicationVariants.all { variant ->
-        variant.outputs.each { output ->
-            def outputFile = output.outputFile
+    android.applicationVariants.all { variant ->
+        variant.outputs.all {
             if (variant.buildType.name == 'debug') {
                 def fileName = "${variant.versionName}_${debugTime()}_${variant.productFlavors[0].name}.apk"
-                output.outputFile = new File(outputFile.parent, fileName)
-
+                outputFileName =fileName
             }
         }
     }
@@ -88,30 +86,27 @@ static def debugTime() {
 
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'com.android.support:recyclerview-v7:25.3.1'
-    testCompile 'junit:junit:4.12'
-    compile 'com.alibaba:fastjson:1.2.34'
-    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
-    compile 'io.reactivex.rxjava2:rxjava:2.1.0'
-    compile 'com.google.code.gson:gson:2.2.4'
-    //日志
-    compile 'com.github.wuxinxi:MLog:1.0.3'
-    //银联卡支付
-    compile 'com.github.wuxinxi:unionpay:1.1.0'
-    //网络请求
-    compile 'com.yanzhenjie.nohttp:okhttp:1.1.3'
-    //greenDao数据库
-    compile 'org.greenrobot:greendao:3.2.0'
-    //热修复
-    compile 'com.aliyun.ams:alicloud-android-hotfix:3.2.3'
-    //crash分析
-    compile 'com.tencent.bugly:crashreport:2.6.6'
-    compile files('libs/commons-net-3.0.1.jar')
-    compile files('libs/commons-codec-1.9.jar')
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
 
+    implementation 'com.android.support:appcompat-v7:28.0.0'
+    androidTestImplementation 'junit:junit:4.12'
+    implementation 'com.alibaba:fastjson:1.2.34'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.0'
+    implementation 'com.google.code.gson:gson:2.8.2'
+    //日志
+    implementation 'com.github.wuxinxi:MLog:1.0.3'
+    //银联卡支付
+    implementation 'com.github.wuxinxi:unionpay:1.1.1'
+    //网络请求
+    implementation 'com.yanzhenjie.nohttp:okhttp:1.1.10'
+    //greenDao数据库
+    implementation 'org.greenrobot:greendao:3.2.0'
+    //热修复
+    implementation 'com.aliyun.ams:alicloud-android-hotfix:3.2.3'
+    //crash分析
+    implementation 'com.tencent.bugly:crashreport:2.8.6'
+    implementation files('libs/commons-net-3.0.1.jar')
+    implementation files('libs/commons-codec-1.9.jar')
+    implementation 'com.android.support:recyclerview-v7:28.0.0'
 }

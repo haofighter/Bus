@@ -82,13 +82,15 @@ public class DownloadLineRequest extends BaseRequest {
                         String routeversion = ob.getString("routeversion");
                         String fileName_ = acnt + "," + routeno + ".json";
                         if (TextUtils.equals(fileName_, infoEntity.getFileName())) {
-                            if (TextUtils.equals(routeversion, infoEntity.getVersion())) {
+                            if (TextUtils.equals(routeversion, infoEntity.getVersion())
+                                    && !TextUtils.isEmpty(infoEntity.getRmk1())) {
                                 SLog.d("DownloadLineRequest(doSubscribe.java:76)版本相同无需更新");
                                 BusToast.showToast(BusApp.getInstance(), "线路信息初始化成功[EQ]", true);
                                 response.setStatus(ResponseMessage.NOUPDATE);
                                 response.setMsg("版本相同无需更新");
                             }
                         }
+
                     }
 
                     if (response.getStatus() != ResponseMessage.NOUPDATE) {

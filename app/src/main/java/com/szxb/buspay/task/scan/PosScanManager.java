@@ -79,6 +79,9 @@ public class PosScanManager {
         } else if (qrcode.indexOf("szxb_more") == 0) {
             //更多功能扫码
             codeType = QRCode.QR_MOREN;
+        } else if (qrcode.indexOf("szxb_time") == 0) {
+            //扫码设置时间
+            codeType = QRCode.CONFIG_TIMER;
         } else {
             //线路设置
             codeType = QRCode.CONFIG_CODE_LINE;

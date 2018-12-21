@@ -20,6 +20,7 @@ import com.szxb.buspay.util.Config;
 import com.szxb.buspay.util.tip.BusToast;
 import com.szxb.buspay.util.tip.MainLooper;
 import com.szxb.buspay.util.update.BaseRequest;
+import com.szxb.buspay.util.update.DownloadUnionPayRequest;
 import com.szxb.buspay.util.update.OnResponse;
 import com.szxb.buspay.util.update.ResponseMessage;
 import com.szxb.java8583.module.manager.BusllPosManage;
@@ -109,6 +110,9 @@ public class InitActivity extends AppCompatActivity implements OnResponse {
         }
         String posSn = BusllPosManage.getPosManager().getPosSn();
         if (TextUtils.equals(posSn, "00000000")) {
+            DownloadUnionPayRequest payRequest = new DownloadUnionPayRequest();
+            payRequest.setForceUpdate(true);
+            payRequest.getDisposable();
             SLog.d("InitActivity(initUnionPay.java:120)银联参数暂未配置>>");
             return;
         }

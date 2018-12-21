@@ -12,7 +12,6 @@ import com.szxb.buspay.util.Util;
 import com.szxb.buspay.util.rx.RxBus;
 import com.szxb.buspay.util.sound.SoundPoolUtil;
 import com.szxb.buspay.util.tip.BusToast;
-import com.szxb.mlog.SLog;
 import com.tencent.wlxsdk.WlxSdk;
 
 
@@ -79,9 +78,6 @@ public class TenPosReportManager {
                     posRecord.setTotal_fee(BusApp.getPosManager().getBasePrice());//金额，上线修改为posRecord.setTotal_fee(App.getPosManager().getMarkedPrice());
 
                     posRecord.setPay_fee(BusApp.getPosManager().getWcPayPrice());//实际扣款金额，上线修改为posRecord.setTotal_fee(App.getPosManager().getPayMarkPrice());
-
-                    SLog.d("TenPosReportManager(posScan.java:84)微信应扣款=" + BusApp.getPosManager().getBasePrice());
-                    SLog.d("TenPosReportManager(posScan.java:83)微信实际扣款=" + BusApp.getPosManager().getWcPayPrice());
 
                     posRecord.setCity_code(BusApp.getPosManager().getCityCode());
                     posRecord.setOrder_desc(BusApp.getPosManager().getLineName());//线路名

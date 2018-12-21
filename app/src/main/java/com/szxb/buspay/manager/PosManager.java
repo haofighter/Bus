@@ -212,6 +212,9 @@ public class PosManager implements IPosManager, IAddRess, ISwitch {
 
         //读取线路信息
         lineInfoEntity = DBManager.readLine();
+        if (lineInfoEntity != null) {
+            setZYMonthEnableTime(lineInfoEntity.getRmk1() != null ? lineInfoEntity.getRmk1() : "0");
+        }
     }
 
     private void initBase(String bin) {

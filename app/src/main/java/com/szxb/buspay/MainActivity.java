@@ -58,6 +58,7 @@ public class MainActivity extends BaseActivity implements OnReceiverMessageListe
         sign_time = (TextView) findViewById(R.id.sign_time);
         sign_version = (TextView) findViewById(R.id.sign_version);
         sign_bus_no = (TextView) findViewById(R.id.sign_bus_no);
+
     }
 
     @Override
@@ -77,6 +78,7 @@ public class MainActivity extends BaseActivity implements OnReceiverMessageListe
                             new LoopCardThread()
                     , 1000, 200, "loop_ic", TimeUnit.MILLISECONDS);
         }
+
     }
 
     private void initDatas() {
@@ -167,6 +169,7 @@ public class MainActivity extends BaseActivity implements OnReceiverMessageListe
         mList.add(new MainEntity("导出3个月记录"));
         mList.add(new MainEntity("查看基础信息"));
         mList.add(new MainEntity("手动补传"));
+        mList.add(new MainEntity("更新银联参数"));
     }
 
 

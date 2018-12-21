@@ -19,7 +19,6 @@ import com.szxb.buspay.util.tip.MainLooper;
 import com.szxb.jni.libszxb;
 import com.szxb.mlog.SLog;
 
-import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 import static com.szxb.buspay.util.HexUtil.printHexBinary;
@@ -55,9 +54,6 @@ public class LoopKeyTask {
         return instance;
     }
 
-
-    private ScheduledFuture<?> scheduledFuture;
-
     public void startLoopKey() {
         libszxb.deviceSerialSetBaudrate(3, 115200);
         ThreadFactory.getScheduledPool().executeCycle(new Runnable() {
@@ -73,14 +69,14 @@ public class LoopKeyTask {
                     SLog.d("LoopKeyTask(run.java:58)按键出现异常>>" + e.toString());
                 }
             }
-        }, 500, 200, "key",TimeUnit.MILLISECONDS);
+        }, 500, 200, "key", TimeUnit.MILLISECONDS);
     }
 
 
     private String tempPrices;
+    private byte[] recv = new byte[512];
 
     private void keyBord() {
-        byte[] recv = new byte[20];
         int i = libszxb.deviceSerialRecv(3, recv, 50);
         String keycode = HexUtil.printHexBinary(recv).substring(12, 14);
         if (TextUtils.isEmpty(keycode) ||
@@ -156,6 +152,8 @@ public class LoopKeyTask {
                         + ",微信折扣：" + BusApp.getPosManager().getCoefficent()[8]
                         + ",银联折扣:" + BusApp.getPosManager().getCoefficent()[9]);
                 tempPrices = s;
+                break;
+            default:
                 break;
         }
     }
