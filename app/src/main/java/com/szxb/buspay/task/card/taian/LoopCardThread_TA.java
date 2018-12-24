@@ -221,25 +221,25 @@ public class LoopCardThread_TA extends Thread {
                         case "04"://免费卡
                             if (TextUtils.equals(response.getTransType(), "06")) {
                                 //免费卡交易类型为06时判断余额是否小于5元
-                                checkTheBalance(response, hex2Int(balance) > 500 ? Config.IC_HONOR : Config.IC_RECHARGE);
+                                checkTheBalance(response, hex2Int(balance) > 500 ? Config.IC_FREE : Config.IC_RECHARGE);
                             } else {
                                 zeroDis(response);
-                                checkTheBalance(response, Config.IC_HONOR);
+                                checkTheBalance(response, Config.IC_FREE);
                             }
                             break;
                         case "05"://优惠卡
                             checkTheBalance(response, hex2Int(balance) > 500 ? Config.IC_DIS : Config.IC_RECHARGE);
                             break;
-                        case "06"://员工卡
-                            if (TextUtils.equals(response.getTransType(), "13")) {
-                                //下班
-                                offWork(response);
-                            } else {
-                                //员工卡正常消费
-                                zeroDis(response);
-                                checkTheBalance(response, hex2Int(balance) > 500 ? Config.IC_BASE2 : Config.IC_RECHARGE);
-                            }
-                            break;
+//                        case "06"://员工卡
+//                            if (TextUtils.equals(response.getTransType(), "13")) {
+//                                //下班
+//                                offWork(response);
+//                            } else {
+//                                //员工卡正常消费
+//                                zeroDis(response);
+//                                checkTheBalance(response, hex2Int(balance) > 500 ? Config.IC_BASE2 : Config.IC_RECHARGE);
+//                            }
+//                            break;
                         case "09"://优抚卡
                             if (TextUtils.equals(response.getTransType(), "06")) {
                                 //优抚卡交易类型为06时判断余额是否小于5元

@@ -75,7 +75,7 @@ public class BusApp extends Application {
         super.onCreate();
         instance = this;
 
-        DBCore.init(this, "databases_bus.db");
+        DBCore.init(this, BuildConfig.CITY == 1 ? "databases_bus_.db" : "databases_bus.db");
 
         UnionPayManager unionPayManager = new UnionPayManager();
         BusllPosManage.init(unionPayManager);

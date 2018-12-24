@@ -116,46 +116,48 @@ public abstract class BaseActivity extends AppCompatActivity implements OnKeyLis
     protected TextView pos_sn, black_version, black_cnt;
     protected TextView bin_name, app_version, sn;
 
+    protected View main_main;
+
     private void initCntView() {
-        ic_card_swipe_cnt = (TextView) findViewById(R.id.ic_card_swipe_cnt);
-        ic_card_amount_cnt = (TextView) findViewById(R.id.ic_card_amount_cnt);
-        ic_card_up_status = (TextView) findViewById(R.id.ic_card_up_status);
+        ic_card_swipe_cnt = findViewById(R.id.ic_card_swipe_cnt);
+        ic_card_amount_cnt = findViewById(R.id.ic_card_amount_cnt);
+        ic_card_up_status = findViewById(R.id.ic_card_up_status);
 
-        scan_cnt = (TextView) findViewById(R.id.scan_cnt);
-        scan_amount_cnt = (TextView) findViewById(R.id.scan_amount_cnt);
-        scan_up_status = (TextView) findViewById(R.id.scan_up_status);
+        scan_cnt = findViewById(R.id.scan_cnt);
+        scan_amount_cnt = findViewById(R.id.scan_amount_cnt);
+        scan_up_status = findViewById(R.id.scan_up_status);
 
-        union_cnt = (TextView) findViewById(R.id.union_cnt);
-        union_amount_cnt = (TextView) findViewById(R.id.union_amount_cnt);
-        union_un_status = (TextView) findViewById(R.id.union_un_status);
+        union_cnt = findViewById(R.id.union_cnt);
+        union_amount_cnt = findViewById(R.id.union_amount_cnt);
+        union_un_status = findViewById(R.id.union_un_status);
 
-        sum_cnt = (TextView) findViewById(R.id.sum_cnt);
-        sum_amount_cnt = (TextView) findViewById(R.id.sum_amount_cnt);
-        sum_up_status = (TextView) findViewById(R.id.sum_up_status);
+        sum_cnt = findViewById(R.id.sum_cnt);
+        sum_amount_cnt = findViewById(R.id.sum_amount_cnt);
+        sum_up_status = findViewById(R.id.sum_up_status);
 
-        time_cnt = (TextView) findViewById(R.id.time_cnt);
-        time_amount_cnt = (TextView) findViewById(R.id.time_amount_cnt);
+        time_cnt = findViewById(R.id.time_cnt);
+        time_amount_cnt = findViewById(R.id.time_amount_cnt);
     }
 
     private void initMainInfoView() {
         main_info = findViewById(R.id.main_info);
-        main_info_type = (TextView) findViewById(R.id.main_info_type);
+        main_info_type = findViewById(R.id.main_info_type);
 
-        city_code = (TextView) findViewById(R.id.city_code);
-        ten_mach_id = (TextView) findViewById(R.id.ten_mach_id);
-        union_mch_id = (TextView) findViewById(R.id.union_mch_id);
+        city_code = findViewById(R.id.city_code);
+        ten_mach_id = findViewById(R.id.ten_mach_id);
+        union_mch_id = findViewById(R.id.union_mch_id);
 
-        line_name = (TextView) findViewById(R.id.line_name);
-        driver_no = (TextView) findViewById(R.id.driver_no);
-        union_pos_sn = (TextView) findViewById(R.id.union_pos_sn);
+        line_name = findViewById(R.id.line_name);
+        driver_no = findViewById(R.id.driver_no);
+        union_pos_sn = findViewById(R.id.union_pos_sn);
 
-        pos_sn = (TextView) findViewById(R.id.pos_sn);
-        black_version = (TextView) findViewById(R.id.black_version);
-        black_cnt = (TextView) findViewById(R.id.black_cnt);
+        pos_sn = findViewById(R.id.pos_sn);
+        black_version = findViewById(R.id.black_version);
+        black_cnt = findViewById(R.id.black_cnt);
 
-        bin_name = (TextView) findViewById(R.id.bin_name);
-        app_version = (TextView) findViewById(R.id.app_version);
-        sn = (TextView) findViewById(R.id.sn);
+        bin_name = findViewById(R.id.bin_name);
+        app_version = findViewById(R.id.app_version);
+        sn = findViewById(R.id.sn);
     }
 
     //签到view
@@ -179,15 +181,18 @@ public abstract class BaseActivity extends AppCompatActivity implements OnKeyLis
     private WaitDialog waitDialog;
 
     protected void initView() {
-        net_status = (TextView) findViewById(R.id.net_status);
-        fill_status = (TextView) findViewById(R.id.fill_status);
-        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        recycler_view_record = (RecyclerView) findViewById(R.id.recycler_view_record);
+        net_status = findViewById(R.id.net_status);
+        fill_status = findViewById(R.id.fill_status);
+        recyclerView = findViewById(R.id.recycler_view);
+        recycler_view_record = findViewById(R.id.recycler_view_record);
         main_record = findViewById(R.id.main_record);
-        record_type = (TextView) findViewById(R.id.record_type);
-        record_type_cnt = (TextView) findViewById(R.id.record_type_cnt);
+        record_type = findViewById(R.id.record_type);
+        record_type_cnt = findViewById(R.id.record_type_cnt);
         main_cnt = findViewById(R.id.main_cnt);
         main_sign = findViewById(R.id.main_sign);
+        main_main = findViewById(R.id.main_main);
+        main_sign.setBackgroundResource(BuildConfig.CITY == 1 ? R.mipmap.taian__bg : R.mipmap.bzb);
+        main_main.setBackgroundResource(BuildConfig.CITY == 1 ? R.mipmap.taian__bg : R.mipmap.bzb);
 
         initCntView();
         initMainInfoView();

@@ -3,6 +3,7 @@ package com.szxb.buspay.db.sp;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.szxb.buspay.BuildConfig;
 import com.szxb.buspay.BusApp;
 
 import java.lang.reflect.InvocationTargetException;
@@ -19,7 +20,7 @@ import static android.content.Context.MODE_MULTI_PROCESS;
 
 public class CommonSharedPreferences {
 
-    public static final String FILE_NAME = "XB_BASE_PARAMS";
+    public static final String FILE_NAME = BuildConfig.CITY==1?"XB_BASE_PARAMS_TEMP":"XB_BASE_PARAMS";
 
     public static void put(String key, Object value) {
 
