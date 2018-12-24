@@ -70,7 +70,6 @@ public class RecordThread extends Thread {
 
             } else if (TextUtils.equals(getName(), "union")) {
                 unionRecordTask();
-
             }
         } catch (Exception e) {
             SLog.d("RecordThread(run.java:53)" + getName() + "任务异常>>>" + e.toString());
@@ -82,7 +81,7 @@ public class RecordThread extends Thread {
      * 刷卡
      */
     private void icRecordTask(final int type, List<ConsumeCard> icList) {
-        if (icList.size() == 0) {
+         if (icList.size() == 0) {
             if (type == 1) {
                 stopSupMin();
             }

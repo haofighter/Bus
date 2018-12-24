@@ -55,7 +55,8 @@ public class SoundPoolUtil {
             R.raw.beep2,//.设置音
             R.raw.ic_lllegal_card,//.非法卡
             R.raw.ic_error,//.错误
-            R.raw.ic_high_school_card//高中卡
+            R.raw.ic_high_school_card,//高中卡
+            R.raw.yinlianka//银联卡
 
     };
 

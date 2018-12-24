@@ -123,4 +123,6 @@ public interface IPosManager {
     void setZYMonthEnableTime(String str);
 
     String getZYMonthEnableTime();
+
+    void setZYMouthCardAllowUse(String rmk1);
 }

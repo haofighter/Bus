@@ -86,6 +86,17 @@ public class Util {
     }
 
     //String 2 int
+    public static float string2Float(String var) {
+        try {
+            return Float.valueOf(var);
+        } catch (Exception e) {
+            e.printStackTrace();
+            SLog.d("Util(string2Int.java:33)var=" + var + ",数字类型转换异常>>" + e.toString());
+            return 0;
+        }
+    }
+
+    //String 2 int
     public static int hex2Int(String var) {
         try {
             return Integer.valueOf(var, 16);
@@ -161,11 +172,11 @@ public class Util {
     }
 
     public static boolean filter(long currentTime, long lastTime) {
-        return currentTime - lastTime > 1200;
+        return currentTime - lastTime >2000;
     }
 
     private static boolean checkSwipe(long currentTime, long lastTime) {
-        return currentTime - lastTime > 1500;
+        return currentTime - lastTime > 2000;
     }
 
     /**
@@ -177,7 +188,7 @@ public class Util {
         int strLen = str.length();
         if (strLen < strLength) {
             while (strLen < strLength) {
-                str = str + "000";
+                str = str + "100";
                 strLen = str.length();
             }
         }

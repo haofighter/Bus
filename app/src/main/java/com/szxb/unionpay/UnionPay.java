@@ -124,7 +124,7 @@ public class UnionPay {
                                     case "A6":
                                         //支付成功
                                         unique.setPayFee(pay_fee);
-                                        SoundPoolUtil.play(Config.IC_BASE2);
+                                        SoundPoolUtil.play(Config.IC_YINLIAN_CARD);
                                         String amount = message0810.getValue(4).getValue();
                                         BusToast.showToast(BusApp.getInstance().getApplicationContext(), "扣款成功\n扣款金额" + yuan2Fen(amount) + "元", true);
                                         SLog.d("UnionPay(success.java:104)修改成功");

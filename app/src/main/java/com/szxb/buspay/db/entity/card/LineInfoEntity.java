@@ -33,7 +33,7 @@ public class LineInfoEntity {
     private String line;   //线路号
     private String version;  //版本号
     private String up_station;//线路上行站点数量
-    private String dwon_station;//线路下行站点数量
+    private String down_station;//线路下行站点数量
     private String chinese_name;//线路名称
     private String is_fixed_price;//是否为固定票价线路,1=是, 其他=不是
     private String is_keyboard;//是否支持键盘，0为不支持，1为支持，当线路为非单一票价并且不支持键盘时，下面的站点经纬度和票价表生效，当线路为非单一票价并且支持键盘时，下面键盘快捷价格生效
@@ -44,15 +44,15 @@ public class LineInfoEntity {
     private String rmk1;//month_enable_time 月票支持日期
     private String rmk2;
     private String rmk3;
-    @Generated(hash = 1085203862)
-    public LineInfoEntity(Long id, String line, String version, String up_station, String dwon_station,
+    @Generated(hash = 2133953693)
+    public LineInfoEntity(Long id, String line, String version, String up_station, String down_station,
             String chinese_name, String is_fixed_price, String is_keyboard, String fixed_price,
             String coefficient, String shortcut_price, String fileName, String rmk1, String rmk2, String rmk3) {
         this.id = id;
         this.line = line;
         this.version = version;
         this.up_station = up_station;
-        this.dwon_station = dwon_station;
+        this.down_station = down_station;
         this.chinese_name = chinese_name;
         this.is_fixed_price = is_fixed_price;
         this.is_keyboard = is_keyboard;
@@ -91,11 +91,11 @@ public class LineInfoEntity {
     public void setUp_station(String up_station) {
         this.up_station = up_station;
     }
-    public String getDwon_station() {
-        return this.dwon_station;
+    public String getDown_station() {
+        return this.down_station;
     }
-    public void setDwon_station(String dwon_station) {
-        this.dwon_station = dwon_station;
+    public void setDown_station(String down_station) {
+        this.down_station = down_station;
     }
     public String getChinese_name() {
         return this.chinese_name;
@@ -133,6 +133,12 @@ public class LineInfoEntity {
     public void setShortcut_price(String shortcut_price) {
         this.shortcut_price = shortcut_price;
     }
+    public String getFileName() {
+        return this.fileName;
+    }
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
     public String getRmk1() {
         return this.rmk1;
     }
@@ -151,10 +157,5 @@ public class LineInfoEntity {
     public void setRmk3(String rmk3) {
         this.rmk3 = rmk3;
     }
-    public String getFileName() {
-        return this.fileName;
-    }
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
-    }
+
 }

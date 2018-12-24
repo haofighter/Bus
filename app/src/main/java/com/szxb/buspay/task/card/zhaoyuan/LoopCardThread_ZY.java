@@ -162,6 +162,7 @@ public class LoopCardThread_ZY extends Thread {
             }
             String[] times = monthEnableTime.split(",");
             for (String time : times) {
+                time.replace(":", "");
                 int index = time.indexOf("-");
                 int startTime = Util.string2Int(time.substring(0, index));
                 int endTime = Util.string2Int(time.substring(index + 1, time.length()));

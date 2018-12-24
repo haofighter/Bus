@@ -3,7 +3,6 @@ package com.szxb.buspay.util.update;
 import android.os.Environment;
 
 import com.alibaba.fastjson.JSONObject;
-import com.google.gson.Gson;
 import com.szxb.buspay.BusApp;
 import com.szxb.buspay.db.entity.scan.param.UnionPayParam;
 import com.szxb.buspay.util.HexUtil;
@@ -31,6 +30,12 @@ public class DownloadUnionPayRequest extends BaseRequest {
     @Override
     protected void doSubscribe(ObservableEmitter<ResponseMessage> e) {
         response.setWhat(ResponseMessage.WHAT_UNION);
+        UnionPayParam unionParam1 = new UnionPayParam();
+        unionParam1.setSn("99900301");
+        unionParam1.setMch("105370941319002");
+        unionParam1.setKey("4664DCD92CD07FD932E5C2402F292CF1");
+        Util.updateUnionParam(unionParam1);
+
         int res = Util.downUnionPayParasFile(forceUpdate, "unionpay/", "银联参数检查更新");
         if (res == 1) {
             //下载好了更新
@@ -39,11 +44,11 @@ public class DownloadUnionPayRequest extends BaseRequest {
             byte[] params = FileByte.File2byte(Environment.getExternalStorageDirectory() + "/" + lastParamsFileName);
             JSONObject object = HexUtil.parseObject(params);
             if (object != null) {
-                UnionPayParam unionParam = new Gson().fromJson(object.toJSONString(), UnionPayParam.class);
-                Util.updateUnionParam(unionParam);
+//                UnionPayParam unionParam = new Gson().fromJson(object.toJSONString(), UnionPayParam.class);
+//                Util.updateUnionParam(unionParam);
                 response.setStatus(ResponseMessage.SUCCESSFUL);
                 response.setMsg("银联参数更新成功");
-                SLog.d("DownloadUnionPayRequest(doSubscribe.java:47)unionParam=" + unionParam);
+//                SLog.d("DownloadUnionPayRequest(doSubscribe.java:47)unionParam=" + unionParam);
             }
         } else if (res == 2) {
             response.setStatus(ResponseMessage.NOUPDATE);

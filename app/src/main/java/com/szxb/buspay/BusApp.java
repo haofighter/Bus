@@ -9,6 +9,7 @@ import android.os.IBinder;
 import android.util.Log;
 
 import com.lilei.tool.tool.IToolInterface;
+import com.szxb.buspay.db.entity.bean.card.ConsumeCard;
 import com.szxb.buspay.db.manager.DBCore;
 import com.szxb.buspay.manager.PosManager;
 import com.szxb.buspay.task.TaskDelFile;
@@ -35,6 +36,8 @@ import com.yanzhenjie.nohttp.NoHttp;
 import com.yanzhenjie.nohttp.OkHttpNetworkExecutor;
 
 import java.util.concurrent.TimeUnit;
+
+import static com.szxb.buspay.db.manager.DBCore.getDaoSession;
 
 /**
  * 作者：Tangren on 2018-07-18
@@ -189,7 +192,7 @@ public class BusApp extends Application {
         ThreadFactory.getScheduledPool().executeDelay(new WorkThread("app_reg_time"), 1, TimeUnit.MINUTES);
 
         //检查补采
-        ThreadFactory.getScheduledPool().executeDelay(new WorkThread("check_fill", 0), 40, TimeUnit.SECONDS);
+        ThreadFactory.getScheduledPool().executeDelay(new WorkThread("check_fill", 0), 4, TimeUnit.SECONDS);
 
         if (BusApp.getPosManager().isSuppScanPay()) {
             ThreadFactory.getScheduledPool().executeCycle(new RecordThread("scan"), 13, 30, "scan", TimeUnit.SECONDS);

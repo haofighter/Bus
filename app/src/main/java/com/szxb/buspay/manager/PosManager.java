@@ -187,6 +187,9 @@ public class PosManager implements IPosManager, IAddRess, ISwitch {
     //补采flag
     private String flag = "0";
 
+    //月票卡刷卡时间
+    private String rmk1 = "0";
+
     //补采时间
     private String[] times = new String[]{"0", "0"};
 
@@ -457,7 +460,7 @@ public class PosManager implements IPosManager, IAddRess, ISwitch {
 
     @Override
     public String getDriverNo() {
-        return driverNo;
+        return "00112234";
     }
 
     @Override
@@ -512,9 +515,9 @@ public class PosManager implements IPosManager, IAddRess, ISwitch {
         }
         setWcPrice(string2Int(coefficient[8]) * basePrice / 100);
         setUnionPayPrice(string2Int(coefficient[9]) * basePrice / 100);
+        SLog.d("PosManager(setCoefficent.java:501)coefficent=" + string2Int(coefficient[12]) + "     " + basePrice);
         setUnionScanPrice(string2Int(coefficient[12]) * basePrice / 100);
         CommonSharedPreferences.put("coefficient", coefficent);
-
 //        090 090 090 090 100 100 100 100 090 090 100 001 100
 //        095 050 000 100 050 100 100 100 100 100 000 001 100
         SLog.d("PosManager(setCoefficent.java:501)coefficent=" + coefficent);
@@ -581,6 +584,11 @@ public class PosManager implements IPosManager, IAddRess, ISwitch {
     @Override
     public String getZYMonthEnableTime() {
         return zy_month_enable_time;
+    }
+
+    @Override
+    public void setZYMouthCardAllowUse(String rmk1) {
+
     }
 
 

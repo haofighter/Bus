@@ -28,7 +28,7 @@ public class LineInfoEntityDao extends AbstractDao<LineInfoEntity, Long> {
         public final static Property Line = new Property(1, String.class, "line", false, "LINE");
         public final static Property Version = new Property(2, String.class, "version", false, "VERSION");
         public final static Property Up_station = new Property(3, String.class, "up_station", false, "UP_STATION");
-        public final static Property Dwon_station = new Property(4, String.class, "dwon_station", false, "DWON_STATION");
+        public final static Property Down_station = new Property(4, String.class, "down_station", false, "DOWN_STATION");
         public final static Property Chinese_name = new Property(5, String.class, "chinese_name", false, "CHINESE_NAME");
         public final static Property Is_fixed_price = new Property(6, String.class, "is_fixed_price", false, "IS_FIXED_PRICE");
         public final static Property Is_keyboard = new Property(7, String.class, "is_keyboard", false, "IS_KEYBOARD");
@@ -58,7 +58,7 @@ public class LineInfoEntityDao extends AbstractDao<LineInfoEntity, Long> {
                 "\"LINE\" TEXT UNIQUE ," + // 1: line
                 "\"VERSION\" TEXT," + // 2: version
                 "\"UP_STATION\" TEXT," + // 3: up_station
-                "\"DWON_STATION\" TEXT," + // 4: dwon_station
+                "\"DOWN_STATION\" TEXT," + // 4: down_station
                 "\"CHINESE_NAME\" TEXT," + // 5: chinese_name
                 "\"IS_FIXED_PRICE\" TEXT," + // 6: is_fixed_price
                 "\"IS_KEYBOARD\" TEXT," + // 7: is_keyboard
@@ -101,9 +101,9 @@ public class LineInfoEntityDao extends AbstractDao<LineInfoEntity, Long> {
             stmt.bindString(4, up_station);
         }
  
-        String dwon_station = entity.getDwon_station();
-        if (dwon_station != null) {
-            stmt.bindString(5, dwon_station);
+        String down_station = entity.getDown_station();
+        if (down_station != null) {
+            stmt.bindString(5, down_station);
         }
  
         String chinese_name = entity.getChinese_name();
@@ -181,9 +181,9 @@ public class LineInfoEntityDao extends AbstractDao<LineInfoEntity, Long> {
             stmt.bindString(4, up_station);
         }
  
-        String dwon_station = entity.getDwon_station();
-        if (dwon_station != null) {
-            stmt.bindString(5, dwon_station);
+        String down_station = entity.getDown_station();
+        if (down_station != null) {
+            stmt.bindString(5, down_station);
         }
  
         String chinese_name = entity.getChinese_name();
@@ -249,7 +249,7 @@ public class LineInfoEntityDao extends AbstractDao<LineInfoEntity, Long> {
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // line
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // version
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // up_station
-            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // dwon_station
+            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // down_station
             cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // chinese_name
             cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // is_fixed_price
             cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // is_keyboard
@@ -270,7 +270,7 @@ public class LineInfoEntityDao extends AbstractDao<LineInfoEntity, Long> {
         entity.setLine(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setVersion(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setUp_station(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
-        entity.setDwon_station(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
+        entity.setDown_station(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
         entity.setChinese_name(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
         entity.setIs_fixed_price(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
         entity.setIs_keyboard(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));

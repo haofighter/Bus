@@ -109,7 +109,7 @@ public class SyncSSLRequest {
                     icResponse.setMsg("扣款成功\n扣款金额" + yuan2Fen(amount) + "元");
                     icResponse.setLastTime(SystemClock.elapsedRealtime());
                     unique.setPayFee(pay_fee);
-                    SoundPoolUtil.play(type == Config.PAY_TYPE_BANK_IC ? Config.IC_BASE2 : Config.SCAN_SUCCESS);
+                    SoundPoolUtil.play(type == Config.PAY_TYPE_BANK_IC ? Config.IC_YINLIAN_CARD : Config.SCAN_SUCCESS);
                     SLog.d("UnionPay(success.java:104)修改成功");
                     break;
                 case "A0":

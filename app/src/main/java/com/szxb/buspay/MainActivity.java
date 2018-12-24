@@ -54,7 +54,6 @@ public class MainActivity extends BaseActivity implements OnReceiverMessageListe
         prices = (TextView) findViewById(R.id.prices);
         version_name = (TextView) findViewById(R.id.version_name);
         bus_no = (TextView) findViewById(R.id.bus_no);
-
         sign_time = (TextView) findViewById(R.id.sign_time);
         sign_version = (TextView) findViewById(R.id.sign_version);
         sign_bus_no = (TextView) findViewById(R.id.sign_bus_no);

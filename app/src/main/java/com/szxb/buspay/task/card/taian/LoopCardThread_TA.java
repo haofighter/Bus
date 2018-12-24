@@ -224,7 +224,7 @@ public class LoopCardThread_TA extends Thread {
                                 checkTheBalance(response, hex2Int(balance) > 500 ? Config.IC_HONOR : Config.IC_RECHARGE);
                             } else {
                                 zeroDis(response);
-                                checkTheBalance(response, Config.IC_HONOR);
+                                checkTheBalance(response, Config.IC_FREE);
                             }
                             break;
                         case "05"://优惠卡

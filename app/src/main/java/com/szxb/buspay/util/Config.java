@@ -111,6 +111,8 @@ public class Config {
 
     public static final int IC_HIGHT_CARD = IC_ERROR + 1;//.高中卡
 
+    public static final int IC_YINLIAN_CARD = IC_HIGHT_CARD + 1;//银联卡
+
 
     //菜单
     //公交卡刷卡

@@ -120,7 +120,7 @@ public class DownloadLineRequest extends BaseRequest {
                 onLineInfo.setLine(object.getString("line"));
                 onLineInfo.setVersion(object.getString("version"));
                 onLineInfo.setUp_station(object.getString("up_station"));
-                onLineInfo.setDwon_station(object.getString("down_station"));
+                onLineInfo.setDown_station(object.getString("down_station"));
                 onLineInfo.setChinese_name(object.getString("chinese_name"));
                 onLineInfo.setIs_fixed_price(object.getString("is_fixed_price"));
                 onLineInfo.setIs_keyboard(object.getString("is_keyboard"));
@@ -128,7 +128,7 @@ public class DownloadLineRequest extends BaseRequest {
                 onLineInfo.setCoefficient(object.getString("coefficient"));
                 onLineInfo.setShortcut_price(object.getString("shortcut_price"));
                 if (object.containsKey("month_enable_time")) {
-                    onLineInfo.setRmk1(object.getString("month_enable_time"));
+                    onLineInfo.setRmk1(object.getString("month_enable_time").replace(":", ""));
                 } else {
                     onLineInfo.setRmk1("0");
                 }

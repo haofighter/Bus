@@ -61,7 +61,7 @@ public abstract class BaseAdapter extends RecyclerView.Adapter<BaseAdapter.BaseH
             //未被选中
             holder.itemView.setBackgroundResource(R.color.colorToast);
         } else {
-            holder.itemView.setBackgroundResource(R.color.colorToast2);
+            holder.itemView.setBackgroundResource(R.color.yellow3);
         }
         convert(holder, mList.get(position), position);
     }
