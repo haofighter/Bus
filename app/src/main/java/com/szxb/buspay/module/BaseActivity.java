@@ -32,6 +32,7 @@ import com.szxb.buspay.task.key.LoopKeyTask;
 import com.szxb.buspay.task.thread.ThreadFactory;
 import com.szxb.buspay.task.thread.WorkThread;
 import com.szxb.buspay.util.AppUtil;
+import com.szxb.buspay.util.Config;
 import com.szxb.buspay.util.Util;
 import com.szxb.buspay.util.WaitDialog;
 import com.szxb.buspay.util.WriteRecordToSD;
@@ -41,6 +42,7 @@ import com.szxb.buspay.util.rx.RxBus;
 import com.szxb.buspay.util.tip.BusToast;
 import com.szxb.buspay.util.tip.MyToast;
 import com.szxb.buspay.util.update.BaseRequest;
+import com.szxb.buspay.util.update.DownloadUnionPayRequest;
 import com.szxb.buspay.util.update.OnResponse;
 import com.szxb.buspay.util.update.ResponseMessage;
 import com.szxb.java8583.module.manager.BusllPosManage;
@@ -262,7 +264,7 @@ public abstract class BaseActivity extends AppCompatActivity implements OnKeyLis
                             } else if (qrScanMessage.getResult() == QRCode.STOP_DIALOG) {
                                 //关闭Dialog
                                 closeDialog();
-                            }else {
+                            } else {
                                 message(qrScanMessage);
                             }
 
@@ -480,6 +482,12 @@ public abstract class BaseActivity extends AppCompatActivity implements OnKeyLis
                 BusToast.showToast(BusApp.getInstance().getApplicationContext(), "检查补采\n请稍后", true);
                 ThreadFactory.getScheduledPool().executeDelay(new WorkThread("check_fill", 1), 0, TimeUnit.SECONDS);
             }
+            onKeyCancel();
+        } else if (position == Config.POSITION_DN_UNION_PARAMS) {
+            BusToast.showToast(BusApp.getInstance().getApplicationContext(), "正在更新请稍后", true);
+            DownloadUnionPayRequest payRequest = new DownloadUnionPayRequest();
+            payRequest.setForceUpdate(true);
+            payRequest.getDisposable();
             onKeyCancel();
         }
     }

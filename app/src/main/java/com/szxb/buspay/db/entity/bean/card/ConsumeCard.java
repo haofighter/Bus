@@ -5,7 +5,6 @@ import android.text.TextUtils;
 import com.szxb.buspay.BusApp;
 import com.szxb.buspay.util.HexUtil;
 import com.szxb.buspay.util.Util;
-import com.szxb.mlog.SLog;
 
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
@@ -180,6 +179,8 @@ public class ConsumeCard {
         isHalfPrices = BusApp.getPosManager().isHalfPrices() ? "1" : "0";
         mchId = BusApp.getPosManager().getAppId();
         companyNo = BusApp.getPosManager().getUnitno();
+
+        reserve_1 = Util.Random(10);
     }
 
     /**
@@ -205,7 +206,6 @@ public class ConsumeCard {
         arraycopy(ziboDatas, 0, recordData, 0, recordData.length);
         singleRecord = HexUtil.printHexBinary(recordData);
 
-        SLog.d("ConsumeCard(ConsumeCard.java:119)" + BusApp.getPosManager().getAppId() + ">>" + toString());
     }
 
 
@@ -226,7 +226,6 @@ public class ConsumeCard {
         arraycopy(lwDatas, index + cardChildType_bytes.length, cpuVersion_bytes, 0, cpuVersion_bytes.length);
         cpuVersion = HexUtil.printHexBinary(cpuVersion_bytes);
 
-        SLog.d("ConsumeCard(getLw.java:271)" + BusApp.getPosManager().getAppId() + ">>" + toString());
     }
 
     @Generated(hash = 1273169348)
@@ -607,7 +606,6 @@ public class ConsumeCard {
     public void setCompanyNo(String companyNo) {
         this.companyNo = companyNo;
     }
-
 
 
 }

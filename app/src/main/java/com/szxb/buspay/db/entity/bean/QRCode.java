@@ -165,4 +165,6 @@ public class QRCode {
 
     //关闭Dialog
     public static final int STOP_DIALOG = 33;
+    //扫码设置时间
+    public static final int CONFIG_TIMER = 34;
 }

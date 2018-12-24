@@ -157,6 +157,9 @@ public class Config {
     //补传
     public static final int POSITION_PUSH_FILL = POSITION_READ_PARAM + 1;
 
+    //下载银联参数
+    public static final int POSITION_DN_UNION_PARAMS = POSITION_PUSH_FILL + 1;
+
     public static String tip() {
         return tip[(int) (Math.random() * 20)];
     }

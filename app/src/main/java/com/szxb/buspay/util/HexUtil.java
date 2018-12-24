@@ -213,25 +213,27 @@ public class HexUtil {
      * @param str .
      */
     public static void sendBackToKeyBoard(String str) {
-        str = Util.addZeroForNum(str, 3);
-        byte[] by = str.getBytes();
-        byte[] sendoffs = new byte[20];
-        sendoffs[0] = (byte) 0xaa;
-        sendoffs[1] = (byte) 0xbb;
-        sendoffs[2] = (byte) 0x00;
-        sendoffs[3] = (byte) 0x03;
-        sendoffs[4] = (byte) 0x08;
-        sendoffs[5] = (byte) 0x02;
-        sendoffs[6] = by[0];
-        sendoffs[7] = by[1];
-        sendoffs[8] = by[2];
-        sendoffs[9] = (byte) 0x00;
-        sendoffs[10] = (byte) 0x00;
+        try {
+            str = Util.addZeroForNum(str, 3);
+            byte[] by = str.getBytes();
+            byte[] sendoffs = new byte[20];
+            sendoffs[0] = (byte) 0xaa;
+            sendoffs[1] = (byte) 0xbb;
+            sendoffs[2] = (byte) 0x00;
+            sendoffs[3] = (byte) 0x03;
+            sendoffs[4] = (byte) 0x08;
+            sendoffs[5] = (byte) 0x02;
+            sendoffs[6] = by[0];
+            sendoffs[7] = by[1];
+            sendoffs[8] = by[2];
+            sendoffs[9] = (byte) 0x00;
+            sendoffs[10] = (byte) 0x00;
 
-        //声明一个数组
-        byte[] sendoff = new byte[50];
-        libszxb.deviceSerialSend(3, sendoffs, 11);
-        libszxb.deviceSerialRecv(3, sendoff, 50);
+            libszxb.deviceSerialSend(3, sendoffs, 11);
+        } catch (Exception e) {
+            e.printStackTrace();
+            SLog.e("HexUtil(sendBackToKeyBoard.java:220)" + Util.getExectionStr(e));
+        }
     }
 
     public static void parseLine(LineInfoEntity onLineInfo) {

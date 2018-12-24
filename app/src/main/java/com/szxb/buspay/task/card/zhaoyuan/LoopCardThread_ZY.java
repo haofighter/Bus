@@ -154,24 +154,31 @@ public class LoopCardThread_ZY extends Thread {
     private static SimpleDateFormat format = new SimpleDateFormat("HHmm", new Locale("zh", "CN"));
 
     private boolean checkMonthEnableTime(String cardType) {
-        if (TextUtils.equals(cardType, "0A")) {
-            String monthEnableTime = BusApp.getPosManager().getZYMonthEnableTime();
-            if (TextUtils.equals(monthEnableTime, "0")) {
-                //未获取到时间段,允许刷
-                return true;
-            }
-            String[] times = monthEnableTime.split(",");
-            for (String time : times) {
-                time.replace(":", "");
-                int index = time.indexOf("-");
-                int startTime = Util.string2Int(time.substring(0, index));
-                int endTime = Util.string2Int(time.substring(index + 1, time.length()));
-                int currentTime = Util.string2Int(format.format(new Date()));
-                if (currentTime >= startTime && currentTime <= endTime) {
+        try {
+
+            if (TextUtils.equals(cardType, "0A")) {
+                String monthEnableTime = BusApp.getPosManager().getZYMonthEnableTime();
+                if (TextUtils.equals(monthEnableTime, "0")) {
+                    //未获取到时间段,允许刷
+                    SLog.e("LoopCardThread_ZY(checkMonthEnableTime.java:163)未获取到时间段,允许刷");
                     return true;
                 }
+                String[] times = monthEnableTime.split(",");
+                for (String time : times) {
+                    int index = time.indexOf("-");
+                    int startTime = Util.string2Int(time.substring(0, index));
+                    int endTime = Util.string2Int(time.substring(index + 1, time.length()));
+                    int currentTime = Util.string2Int(format.format(new Date()));
+                    if (currentTime >= startTime && currentTime <= endTime) {
+                        SLog.e("LoopCardThread_ZY(checkMonthEnableTime.java:173)currentTime="+currentTime+",startTime="+startTime+",endTime="+endTime);
+                        return true;
+                    }
+                }
+                return false;
             }
-            return false;
+        } catch (Exception e) {
+            e.printStackTrace();
+            SLog.e("LoopCardThread_ZY(checkMonthEnableTime.java:161)" + Util.getExectionStr(e));
         }
         return true;
     }
@@ -268,7 +275,7 @@ public class LoopCardThread_ZY extends Thread {
                                 checkTheBalance(response, hex2Int(balance) > 500 ? Config.IC_HONOR : Config.IC_RECHARGE);
                             } else {
                                 zeroDis(response);
-                                checkTheBalance(response, Config.IC_HONOR);
+                                checkTheBalance(response, Config.IC_FREE);
                             }
                             break;
                         case "05"://优惠卡

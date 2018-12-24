@@ -17,6 +17,7 @@ import com.szxb.buspay.task.service.RecordThread;
 import com.szxb.buspay.task.thread.ThreadFactory;
 import com.szxb.buspay.task.thread.WorkThread;
 import com.szxb.buspay.util.AppUtil;
+import com.szxb.buspay.util.DateUtil;
 import com.szxb.buspay.util.sound.SoundPoolUtil;
 import com.szxb.java8583.module.manager.BusllPosManage;
 import com.szxb.mlog.AndroidLogAdapter;
@@ -35,6 +36,8 @@ import com.yanzhenjie.nohttp.InitializationConfig;
 import com.yanzhenjie.nohttp.NoHttp;
 import com.yanzhenjie.nohttp.OkHttpNetworkExecutor;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import static com.szxb.buspay.db.manager.DBCore.getDaoSession;
@@ -75,7 +78,7 @@ public class BusApp extends Application {
         super.onCreate();
         instance = this;
 
-        DBCore.init(this, "databases_bus_.db");
+        DBCore.init(this, "databases_bus.db");
 
         UnionPayManager unionPayManager = new UnionPayManager();
         BusllPosManage.init(unionPayManager);
@@ -94,8 +97,7 @@ public class BusApp extends Application {
                 .build());
 
         SophixManager.getInstance().queryAndLoadNewPatch();
-        CrashReport.initCrashReport(getApplicationContext(), "e95522befa", false);
-
+        crashReport();
         initTask();
 
         initService();
@@ -207,4 +209,36 @@ public class BusApp extends Application {
             ThreadFactory.getScheduledPool().executeCycle(new RecordThread("union"), 45, 30, "union", TimeUnit.SECONDS);
         }
     }
+
+
+    private void crashReport() {
+        CrashReport.UserStrategy strategy = new CrashReport.UserStrategy(this);
+        strategy.setCrashHandleCallback(new CrashReport.CrashHandleCallback() {
+            @Override
+            public Map<String, String> onCrashHandleStart(int crashType, String errorType,
+                                                          String errorMessage, String errorStack) {
+                LinkedHashMap<String, String> map = new LinkedHashMap<String, String>();
+                map.put("device_no", BusApp.getPosManager().getAppId());
+                map.put("line_no", BusApp.getPosManager().getLineNo());
+                map.put("line_name", BusApp.getPosManager().getLineName());
+                map.put("bus_no", BusApp.getPosManager().getBusNo());
+                map.put("driver_no", BusApp.getPosManager().getPosSN());
+                map.put("time", DateUtil.getCurrentDate());
+                return map;
+            }
+
+            @Override
+            public byte[] onCrashHandleStart2GetExtraDatas(int crashType, String errorType,
+                                                           String errorMessage, String errorStack) {
+                try {
+                    return "Extra data.".getBytes("UTF-8");
+                } catch (Exception e) {
+                    return null;
+                }
+            }
+
+        });
+        CrashReport.initCrashReport(this, "e95522befa", true, strategy);
+    }
+
 }

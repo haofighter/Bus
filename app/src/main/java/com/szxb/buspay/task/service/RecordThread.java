@@ -138,7 +138,7 @@ public class RecordThread extends Thread {
 
             //
             object.put("termid", BusApp.getPosManager().getPosSN());
-            object.put("termseq", Util.Random(10));
+            object.put("termseq", TextUtils.isEmpty(cardRecord.getReserve_1()) ? Util.Random(10) : cardRecord.getReserve_1());
             object.put("mchid", cardRecord.getMchId());
 
             object.put("halfprice", cardRecord.getIsHalfPrices());
@@ -265,7 +265,7 @@ public class RecordThread extends Thread {
                 SLog.d("RecordThread(unionRecordTask.java:116)银联卡上传异常>>" + e.toString());
             }
         } else {
-            SLog.d("RecordThread(unionRecordTask.java:187)银联卡上传网络异常"+execute.getException().toString());
+            SLog.d("RecordThread(unionRecordTask.java:187)银联卡上传网络异常" + execute.getException().toString());
         }
     }
 

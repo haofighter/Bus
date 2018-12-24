@@ -1,11 +1,13 @@
 package com.szxb.buspay.task.scan;
 
+import com.alibaba.fastjson.JSONObject;
 import com.google.gson.Gson;
 import com.szxb.buspay.BusApp;
 import com.szxb.buspay.db.entity.bean.LINEntity;
 import com.szxb.buspay.db.entity.bean.QRCode;
 import com.szxb.buspay.db.entity.scan.param.UnionPayParam;
 import com.szxb.buspay.util.AppUtil;
+import com.szxb.buspay.util.DateUtil;
 import com.szxb.buspay.util.HexUtil;
 import com.szxb.buspay.util.Util;
 import com.szxb.buspay.util.tip.BusToast;
@@ -54,6 +56,12 @@ public class XBPosReportManager {
 
                     break;
                 case QRCode.CONFIG_CODE_IP:
+
+                    break;
+                case QRCode.CONFIG_TIMER:
+                    String time = qrcode.substring(9, qrcode.length());
+                    JSONObject timeObject = JSONObject.parseObject(time);
+                    DateUtil.setTime(timeObject.getString("t"), true);
 
                     break;
                 case QRCode.CONFIG_CODE_UNIONPAY:

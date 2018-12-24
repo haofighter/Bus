@@ -180,6 +180,11 @@ public class UnionPayManager implements IManager {
         CommonSharedPreferences.put("trade_seq", tradeSeq);
     }
 
+    @Override
+    public void setTradeSeq(int i) {
+
+    }
+
 
     @Override
     public String getOperatorNumber() {

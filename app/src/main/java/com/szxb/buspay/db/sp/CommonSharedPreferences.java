@@ -19,7 +19,7 @@ import static android.content.Context.MODE_MULTI_PROCESS;
 
 public class CommonSharedPreferences {
 
-    public static final String FILE_NAME = "XB_BASE_PARAMS_TEMP";
+    public static final String FILE_NAME = "XB_BASE_PARAMS";
 
     public static void put(String key, Object value) {
 

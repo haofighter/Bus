@@ -1,7 +1,6 @@
 package com.szxb.unionpay.dispose;
 
 import android.os.SystemClock;
-import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -23,6 +22,8 @@ import com.szxb.unionpay.unionutil.TLV;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+
+import io.reactivex.annotations.NonNull;
 
 import static com.szxb.buspay.db.manager.DBCore.getDaoSession;
 import static com.szxb.buspay.util.DateUtil.getCurrentDate;
@@ -168,6 +169,8 @@ public class BankCardParse {
                 case "df69"://
                     pDOLBuilder.append("01");
                     break;
+                default:
+                    break;
             }
         }
 
@@ -250,12 +253,11 @@ public class BankCardParse {
         String cardData = retPassCode.getTAG57();
         String tlv = retPassCode.toString();
 
-
         if (BuildConfig.BIN_NAME.contains("zhaoyuan")) {
             //如果是招远则做卡限制
-            if (cardNum.indexOf("62232006") != 0 || cardNum.indexOf("62231906") != 0) {
+            if (mainCardNo.indexOf("62232006") != 0 && mainCardNo.indexOf("62231906") != 0) {
                 icResponse.setResCode(ERROR_10);
-                icResponse.setMsg("暂不支持此银联卡");
+                icResponse.setMsg(mainCardNo + "\n暂不支持此银联卡");
                 return icResponse;
             }
         }
