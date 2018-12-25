@@ -268,5 +268,17 @@ public class DateUtil {
             return day2 - day1;
         }
     }
+
+    public static Date String2Date(String str) {
+        Date date = new Date();
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+        try {
+            date = sdf.parse(str);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date;
+    }
 }
 

@@ -50,14 +50,14 @@ android {
 //            buildConfigField 'int', 'CITY', '0'
 //        }
 //
-        taian_app {
-            versionCode 100
-            versionName "1.0.4T"
-            buildConfigField 'String', 'LOG_TAG', '"taian"'
-            buildConfigField 'String', 'BIN_NAME', '"taian_0.0.5.bin"'
-            buildConfigField 'int', 'CITY', '1'
-        }
-////
+//        taian_app {
+//            versionCode 100
+//            versionName "1.0.1"
+//            buildConfigField 'String', 'LOG_TAG', '"taian"'
+//            buildConfigField 'String', 'BIN_NAME', '"taian_0.0.4.bin"'
+//            buildConfigField 'int', 'CITY', '1'
+//        }
+//
 //        zhaoyuan_app {
 //            versionCode 100
 //            versionName "1.1.0"
@@ -66,13 +66,23 @@ android {
 //            buildConfigField 'int', 'CITY', '3'
 //        }
 
+        laiwu_app {
+            versionCode 100
+            versionName "1.0.1"
+            buildConfigField 'String', 'LOG_TAG', '"laiwu"'
+//            buildConfigField 'String', 'BIN_NAME', '"laiwu_cy.bin"'
+            buildConfigField 'String', 'BIN_NAME', '"laiwu_jiance.bin"'
+//            buildConfigField 'String', 'BIN_NAME', '"laiwu_zhenshi.bin"'
+            buildConfigField 'int', 'CITY', '2'
+        }
+
     }
 
     android.applicationVariants.all { variant ->
         variant.outputs.all {
             if (variant.buildType.name == 'debug') {
                 def fileName = "${variant.versionName}_${debugTime()}_${variant.productFlavors[0].name}.apk"
-                outputFileName =fileName
+                outputFileName = fileName
             }
         }
     }

@@ -113,6 +113,16 @@ public class Config {
 
     public static final int IC_YINLIAN_CARD = IC_HIGHT_CARD + 1;//银联卡
 
+    public static final int WANGLUOYICAHNG = IC_YINLIAN_CARD + 1;//网络异常
+
+    public static final int WU_XIAO_KA = WANGLUOYICAHNG + 1;//无效卡
+
+    public static final int LAORENKA_T = WU_XIAO_KA + 1;//老人卡
+
+    public static final int JUNRENKA_T = LAORENKA_T + 1;//军人卡
+
+    public static final int GUANAIKA_T = LAORENKA_T + 1;//关爱卡
+
 
     //菜单
     //公交卡刷卡

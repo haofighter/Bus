@@ -5,11 +5,12 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.IBinder;
 import android.util.Log;
 
 import com.lilei.tool.tool.IToolInterface;
-import com.szxb.buspay.db.entity.bean.card.ConsumeCard;
 import com.szxb.buspay.db.manager.DBCore;
 import com.szxb.buspay.manager.PosManager;
 import com.szxb.buspay.task.TaskDelFile;
@@ -39,8 +40,6 @@ import com.yanzhenjie.nohttp.OkHttpNetworkExecutor;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
-
-import static com.szxb.buspay.db.manager.DBCore.getDaoSession;
 
 /**
  * 作者：Tangren on 2018-07-18
@@ -241,4 +240,15 @@ public class BusApp extends Application {
         CrashReport.initCrashReport(this, "e95522befa", true, strategy);
     }
 
+
+    public static boolean isConnection(Context context) {
+        //得到管理网络的服务实例
+        ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        //得到网络信息 (判断网络是否连接、3G、4G)
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        //判断网络是否已经连接，如果连接的话，返回true，否则false
+        return (networkInfo != null && networkInfo.isConnected());
+
+
+    }
 }

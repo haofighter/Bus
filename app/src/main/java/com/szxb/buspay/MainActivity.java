@@ -17,7 +17,7 @@ import com.szxb.buspay.db.entity.bean.QRScanMessage;
 import com.szxb.buspay.interfaces.OnReceiverMessageListener;
 import com.szxb.buspay.module.BaseActivity;
 import com.szxb.buspay.module.WeakHandler;
-import com.szxb.buspay.task.card.lw.LoopCardThread_CY;
+import com.szxb.buspay.task.card.lw.LoopCardThread_GJ;
 import com.szxb.buspay.task.card.taian.LoopCardThread_TA;
 import com.szxb.buspay.task.card.zhaoyuan.LoopCardThread_ZY;
 import com.szxb.buspay.task.card.zibo.LoopCardThread;
@@ -72,11 +72,11 @@ public class MainActivity extends BaseActivity implements OnReceiverMessageListe
             String appId = BusApp.getPosManager().getAppId();
             ThreadFactory.getScheduledPool().executeCycle(
                     TextUtils.equals(appId, "10000009") ? new LoopCardThread()//淄博
-                            : TextUtils.equals(appId, "10000010") ? new LoopCardThread_CY()//莱芜长运
+                            : TextUtils.equals(appId, "10000010") ? new LoopCardThread_GJ()//莱芜长运
                             : TextUtils.equals(appId, "10000098") ? new LoopCardThread_TA()//泰安
                             : TextUtils.equals(appId, "10000011") ? new LoopCardThread_ZY() ://招远
                             new LoopCardThread()
-                    , 1000, 200, "loop_ic", TimeUnit.MILLISECONDS);
+                    , 1000, 1000, "loop_ic", TimeUnit.MILLISECONDS);
         }
 
     }

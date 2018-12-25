@@ -81,7 +81,7 @@ public class RecordThread extends Thread {
      * 刷卡
      */
     private void icRecordTask(final int type, List<ConsumeCard> icList) {
-         if (icList.size() == 0) {
+        if (icList.size() == 0) {
             if (type == 1) {
                 stopSupMin();
             }

@@ -40,7 +40,8 @@
       "is_supp_ic_pay": true,
       "is_supp_union_pay": true,
       "is_supp_key_board": true,
-      "city": "莱芜长运[2]"
+      "city": "莱芜公交[2]",
+      "organization": "03754790"
     },
     {
       "ip": "222.135.141.247",
@@ -98,6 +99,20 @@
       "is_supp_key_board": false,
       "city": "荣成[6]",
       "tag": "新修改荣成FTP"
+    },
+    {
+      "ip": "222.134.206.204",
+      "port": 26,
+      "user": "ydtcommserver\\ftp",
+      "psw": "ftp1234!@#$",
+      "mch_id": "10000010",
+      "city_code": "371200",
+      "url_ip": "111.230.85.238",
+      "is_supp_scan_pay": true,
+      "is_supp_ic_pay": true,
+      "is_supp_union_pay": true,
+      "is_supp_key_board": true,
+      "city": "莱芜长运[7]"
     }
   ]
 }

@@ -22,6 +22,7 @@ public class DaoMaster extends AbstractDaoMaster {
     /** Creates underlying database table using DAOs. */
     public static void createAllTables(Database db, boolean ifNotExists) {
         ConsumeCardDao.createTable(db, ifNotExists);
+        whitelistDao.createTable(db, ifNotExists);
         BlackListCardDao.createTable(db, ifNotExists);
         LineInfoEntityDao.createTable(db, ifNotExists);
         BlackListEntityDao.createTable(db, ifNotExists);
@@ -35,6 +36,7 @@ public class DaoMaster extends AbstractDaoMaster {
     /** Drops underlying database table using DAOs. */
     public static void dropAllTables(Database db, boolean ifExists) {
         ConsumeCardDao.dropTable(db, ifExists);
+        whitelistDao.dropTable(db, ifExists);
         BlackListCardDao.dropTable(db, ifExists);
         LineInfoEntityDao.dropTable(db, ifExists);
         BlackListEntityDao.dropTable(db, ifExists);
@@ -62,6 +64,7 @@ public class DaoMaster extends AbstractDaoMaster {
     public DaoMaster(Database db) {
         super(db, SCHEMA_VERSION);
         registerDaoClass(ConsumeCardDao.class);
+        registerDaoClass(whitelistDao.class);
         registerDaoClass(BlackListCardDao.class);
         registerDaoClass(LineInfoEntityDao.class);
         registerDaoClass(BlackListEntityDao.class);

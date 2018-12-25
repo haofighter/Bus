@@ -180,6 +180,9 @@ public class PosManager implements IPosManager, IAddRess, ISwitch {
     //是否是半价(招远键盘使用)
     private boolean halfPrice = false;
 
+    //机构代码
+    private String organization = "03754790";
+
 
     //递增流水号
     private int numSeq = 0;
@@ -248,6 +251,7 @@ public class PosManager implements IPosManager, IAddRess, ISwitch {
         isSuppIcPay = configBean.isIs_supp_ic_pay();
         isSuppScanPay = configBean.isIs_supp_scan_pay();
         isSuppUnionPay = configBean.isIs_supp_union_pay();
+        organization = configBean.getOrganization();
         app_id = configBean.getMch_id();
         cityCode = configBean.getCity_code();
         ftpIP = configBean.getIp();
@@ -463,7 +467,8 @@ public class PosManager implements IPosManager, IAddRess, ISwitch {
 
     @Override
     public String getDriverNo() {
-        return "00112234";
+//        return "00112234";
+        return driverNo;
     }
 
     @Override
@@ -692,4 +697,9 @@ public class PosManager implements IPosManager, IAddRess, ISwitch {
     public boolean isSuppKeyBoard() {
         return isSuppKeyBoard;
     }
+
+    public String getOrganization() {
+        return organization;
+    }
+
 }

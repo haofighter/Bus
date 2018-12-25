@@ -226,6 +226,10 @@ public class ConsumeCard {
         arraycopy(lwDatas, index + cardChildType_bytes.length, cpuVersion_bytes, 0, cpuVersion_bytes.length);
         cpuVersion = HexUtil.printHexBinary(cpuVersion_bytes);
 
+        byte[] cardNumhead = new byte[2];
+        arraycopy(lwDatas, index + cardNumhead.length, cardNumhead, 0, cardNumhead.length);
+        cpuVersion = HexUtil.printHexBinary(cardNumhead);
+
     }
 
     @Generated(hash = 1273169348)

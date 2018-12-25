@@ -33,6 +33,12 @@ public class SearchCard {
     public int aidLength;
     //AID
     public String aid;
+    //交通部返回码
+    public String errorCode;
+    //发卡机构
+    public String company;
+    //白名单标示
+    public String CardTag;
 
     public SearchCard(byte[] datas) {
         int index = 0;
@@ -67,6 +73,17 @@ public class SearchCard {
         arraycopy(datas, index + aidLen.length, aid_byte, 0, aid_byte.length);
         aid = HexUtil.printHexBinary(aid_byte);
 
+        byte[] error_code = new byte[2];
+        arraycopy(datas, 31, error_code, 0, error_code.length);
+        errorCode = HexUtil.printHexBinary(error_code);
+
+        byte[] companybyte = new byte[4];
+        arraycopy(datas, 33, companybyte, 0, companybyte.length);
+        company = HexUtil.printHexBinary(companybyte);
+
+        byte[] cardTag = new byte[4];
+        arraycopy(datas, 37, cardTag, 0, cardTag.length);
+        CardTag = HexUtil.printHexBinary(cardTag);
     }
 
     @Override
@@ -79,6 +96,9 @@ public class SearchCard {
                 ", 卡结构类型='" + cardModuleType + '\'' +
                 ", AID长度='" + aidLength + '\'' +
                 ", AID='" + aid + '\'' +
+                ", errorCode='" + errorCode + '\'' +
+                ", company='" + company + '\'' +
+                ", CardTag='" + CardTag + '\'' +
                 ']';
     }
 }

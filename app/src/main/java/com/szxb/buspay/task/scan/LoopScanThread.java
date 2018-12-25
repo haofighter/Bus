@@ -2,6 +2,7 @@ package com.szxb.buspay.task.scan;
 
 import android.os.SystemClock;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.szxb.buspay.BusApp;
 import com.szxb.buspay.db.entity.bean.QRCode;
@@ -39,8 +40,10 @@ public class LoopScanThread extends Thread {
         try {
             byte[] recs = new byte[1024];
             int barcode = libszxb.getBarcode(recs);
+            Log.i("扫码", "状态：" + barcode);
             if (barcode > 0) {
                 String result = new String(recs, 0, barcode);
+                Log.i("扫码", result);
                 if (PosScanManager.isTenQRcode(result)) {
                     if (!BusApp.getPosManager().isSuppScanPay()) {
                         //本线路不支持扫码

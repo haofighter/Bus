@@ -2,6 +2,7 @@ package com.szxb.buspay.db.manager;
 
 import android.database.Cursor;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -14,8 +15,11 @@ import com.szxb.buspay.db.dao.MacKeyEntityDao;
 import com.szxb.buspay.db.dao.PublicKeyEntityDao;
 import com.szxb.buspay.db.dao.ScanInfoEntityDao;
 import com.szxb.buspay.db.dao.UnionPayEntityDao;
+import com.szxb.buspay.db.dao.whitelistDao;
 import com.szxb.buspay.db.entity.bean.CntEntity;
 import com.szxb.buspay.db.entity.bean.card.ConsumeCard;
+import com.szxb.buspay.db.entity.bean.card.SearchCard;
+import com.szxb.buspay.db.entity.bean.whitelist;
 import com.szxb.buspay.db.entity.card.LineInfoEntity;
 import com.szxb.buspay.db.entity.scan.BlackListEntity;
 import com.szxb.buspay.db.entity.scan.MacKeyEntity;
@@ -545,5 +549,12 @@ public class DBManager {
                 .where(ConsumeCardDao.Properties.TransTime.between(times[0], times[1]))
                 .whereOr(ConsumeCardDao.Properties.Reserve_1.isNull(), ConsumeCardDao.Properties.Reserve_1.notEq(flag))
                 .count();
+    }
+
+    public static boolean checkedWhiteList(SearchCard searchCard) {
+        Log.i("白名单查询", "机构编号=" + searchCard.company + "   卡标示=" + searchCard.CardTag);
+        whitelist whitelist = DBCore.getDaoSession().getWhitelistDao().queryBuilder().where(whitelistDao.Properties.OrganizationCode.eq(searchCard.company), whitelistDao.Properties.PAN.eq(searchCard.CardTag)).limit(1).unique();
+//        whitelist whitelist = DBCore.getDaoSession().getWhitelistDao().queryBuilder().limit(1).unique();
+        return whitelist == null;
     }
 }

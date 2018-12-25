@@ -1,9 +1,9 @@
-package com.szxb.db;
+package com.szxb.buspay.db.entity.bean;
 
 import org.greenrobot.greendao.annotation.Entity;
+import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Unique;
-import org.greenrobot.greendao.annotation.Generated;
 
 /**
  * Created by lilei on 18-1-5.
@@ -21,7 +21,7 @@ public class whitelist {
     private String description;
     @Generated(hash = 2139770620)
     public whitelist(Long id, String organizationCode, String PAN,
-            String description) {
+                     String description) {
         this.id = id;
         this.organizationCode = organizationCode;
         this.PAN = PAN;

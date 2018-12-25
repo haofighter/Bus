@@ -9,6 +9,7 @@ import com.szxb.buspay.db.entity.bean.card.ConsumeCard;
 import com.szxb.buspay.db.entity.bean.card.SearchCard;
 import com.szxb.buspay.db.manager.DBManager;
 import com.szxb.buspay.task.card.CommonBase;
+import com.szxb.buspay.util.AppUtil;
 import com.szxb.buspay.util.Config;
 import com.szxb.buspay.util.DateUtil;
 import com.szxb.buspay.util.Util;
@@ -174,12 +175,25 @@ public class LoopCardThread_CY extends Thread {
     private void elseCardControl(SearchCard searchCard) {
 
         if (TextUtils.equals(searchCard.cardModuleType, "F0")) {
+
             //银联卡
-//            UnionCard.getInstance().run(searchCard.cityCode + searchCard.cardNo);
+            try {
+
+                if (!AppUtil.checkNetStatus()) {
+                    BusToast.showToast(BusApp.getInstance(), "网络异常\n请选择其他方式乘车", false);
+                    return;
+                }
+
+                bankICResponse = CommonBase.unionDispose(bankICResponse, searchCard);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                BusToast.showToast(BusApp.getInstance(), "银联模块异常\n" + e.toString(), false);
+            }
         } else {
             int pay_fee = payFee(searchCard.cardType, searchCard.cardModuleType);
-            int normal_pay = payFee("01","01");
-            ConsumeCard response = CommonBase.response(pay_fee, normal_pay,isBlack, isWhite, true, false,searchCard.cardModuleType);
+            int normal_pay = payFee("01", "01");
+            ConsumeCard response = CommonBase.response(pay_fee, normal_pay, isBlack, isWhite, true, false, searchCard.cardModuleType);
 
             String status = response.getStatus();
             String balance = response.getCardBalance();

@@ -47,8 +47,18 @@ public class ConfigParam {
         private boolean is_supp_scan_pay;
         private boolean is_supp_ic_pay;
         private boolean is_supp_union_pay;
+
+        public String getOrganization() {
+            return organization;
+        }
+
+        public void setOrganization(String organization) {
+            this.organization = organization;
+        }
+
         private boolean is_supp_key_board;
         private String city;
+        private String organization;//机构代码 用于互联互通
 
         public String getIp() {
             return ip;

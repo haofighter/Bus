@@ -9,6 +9,7 @@ import org.greenrobot.greendao.identityscope.IdentityScopeType;
 import org.greenrobot.greendao.internal.DaoConfig;
 
 import com.szxb.buspay.db.entity.bean.card.ConsumeCard;
+import com.szxb.buspay.db.entity.bean.whitelist;
 import com.szxb.buspay.db.entity.card.BlackListCard;
 import com.szxb.buspay.db.entity.card.LineInfoEntity;
 import com.szxb.buspay.db.entity.scan.BlackListEntity;
@@ -19,6 +20,7 @@ import com.szxb.unionpay.entity.UnionAidEntity;
 import com.szxb.unionpay.entity.UnionPayEntity;
 
 import com.szxb.buspay.db.dao.ConsumeCardDao;
+import com.szxb.buspay.db.dao.whitelistDao;
 import com.szxb.buspay.db.dao.BlackListCardDao;
 import com.szxb.buspay.db.dao.LineInfoEntityDao;
 import com.szxb.buspay.db.dao.BlackListEntityDao;
@@ -38,6 +40,7 @@ import com.szxb.buspay.db.dao.UnionPayEntityDao;
 public class DaoSession extends AbstractDaoSession {
 
     private final DaoConfig consumeCardDaoConfig;
+    private final DaoConfig whitelistDaoConfig;
     private final DaoConfig blackListCardDaoConfig;
     private final DaoConfig lineInfoEntityDaoConfig;
     private final DaoConfig blackListEntityDaoConfig;
@@ -48,6 +51,7 @@ public class DaoSession extends AbstractDaoSession {
     private final DaoConfig unionPayEntityDaoConfig;
 
     private final ConsumeCardDao consumeCardDao;
+    private final whitelistDao whitelistDao;
     private final BlackListCardDao blackListCardDao;
     private final LineInfoEntityDao lineInfoEntityDao;
     private final BlackListEntityDao blackListEntityDao;
@@ -63,6 +67,9 @@ public class DaoSession extends AbstractDaoSession {
 
         consumeCardDaoConfig = daoConfigMap.get(ConsumeCardDao.class).clone();
         consumeCardDaoConfig.initIdentityScope(type);
+
+        whitelistDaoConfig = daoConfigMap.get(whitelistDao.class).clone();
+        whitelistDaoConfig.initIdentityScope(type);
 
         blackListCardDaoConfig = daoConfigMap.get(BlackListCardDao.class).clone();
         blackListCardDaoConfig.initIdentityScope(type);
@@ -89,6 +96,7 @@ public class DaoSession extends AbstractDaoSession {
         unionPayEntityDaoConfig.initIdentityScope(type);
 
         consumeCardDao = new ConsumeCardDao(consumeCardDaoConfig, this);
+        whitelistDao = new whitelistDao(whitelistDaoConfig, this);
         blackListCardDao = new BlackListCardDao(blackListCardDaoConfig, this);
         lineInfoEntityDao = new LineInfoEntityDao(lineInfoEntityDaoConfig, this);
         blackListEntityDao = new BlackListEntityDao(blackListEntityDaoConfig, this);
@@ -99,6 +107,7 @@ public class DaoSession extends AbstractDaoSession {
         unionPayEntityDao = new UnionPayEntityDao(unionPayEntityDaoConfig, this);
 
         registerDao(ConsumeCard.class, consumeCardDao);
+        registerDao(whitelist.class, whitelistDao);
         registerDao(BlackListCard.class, blackListCardDao);
         registerDao(LineInfoEntity.class, lineInfoEntityDao);
         registerDao(BlackListEntity.class, blackListEntityDao);
@@ -111,6 +120,7 @@ public class DaoSession extends AbstractDaoSession {
     
     public void clear() {
         consumeCardDaoConfig.clearIdentityScope();
+        whitelistDaoConfig.clearIdentityScope();
         blackListCardDaoConfig.clearIdentityScope();
         lineInfoEntityDaoConfig.clearIdentityScope();
         blackListEntityDaoConfig.clearIdentityScope();
@@ -123,6 +133,10 @@ public class DaoSession extends AbstractDaoSession {
 
     public ConsumeCardDao getConsumeCardDao() {
         return consumeCardDao;
+    }
+
+    public whitelistDao getWhitelistDao() {
+        return whitelistDao;
     }
 
     public BlackListCardDao getBlackListCardDao() {

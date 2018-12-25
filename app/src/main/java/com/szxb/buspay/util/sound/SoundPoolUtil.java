@@ -56,7 +56,12 @@ public class SoundPoolUtil {
             R.raw.ic_lllegal_card,//.非法卡
             R.raw.ic_error,//.错误
             R.raw.ic_high_school_card,//高中卡
-            R.raw.yinlianka//银联卡
+            R.raw.yinlianka,//银联卡
+            R.raw.wangluoyichang,//银联卡
+            R.raw.wuxiaoka,//无效卡
+            R.raw.laorenka_t,//无效卡
+            R.raw.junrenka_t,//军人卡
+            R.raw.guanaika_t,//关爱卡
 
     };
 

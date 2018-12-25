@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,6 +15,8 @@ import com.szxb.buspay.BuildConfig;
 import com.szxb.buspay.BusApp;
 import com.szxb.buspay.MainActivity;
 import com.szxb.buspay.R;
+import com.szxb.buspay.db.entity.bean.whitelist;
+import com.szxb.buspay.db.manager.DBCore;
 import com.szxb.buspay.task.thread.ThreadFactory;
 import com.szxb.buspay.util.AppUtil;
 import com.szxb.buspay.util.Config;
@@ -28,6 +31,9 @@ import com.szxb.jni.libszxb;
 import com.szxb.mlog.SLog;
 import com.szxb.unionpay.unionutil.ParseUtil;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -42,6 +48,7 @@ public class InitActivity extends AppCompatActivity implements OnResponse {
 
     private boolean updateOk = false;
     private boolean binOk = false;
+    private boolean whiteListOK = false;
 
     private TextView update_info;
     private AtomicInteger taskSize;
@@ -64,6 +71,7 @@ public class InitActivity extends AppCompatActivity implements OnResponse {
         initBin();
         setTaskList();
         initUnionPay();
+        initWhiteList();
     }
 
     private void setTaskList() {
@@ -83,9 +91,11 @@ public class InitActivity extends AppCompatActivity implements OnResponse {
                 if (!TextUtils.equals(lastVersion, binName)) {
                     AssetManager ass = BusApp.getInstance().getAssets();
                     int k = libszxb.ymodemUpdate(ass, binName);
-                    BusApp.getPosManager().setLastVersion(binName);
-
+                    if (k == 0) {
+                        BusApp.getPosManager().setLastVersion(binName);
+                    }
                     BusToast.showToast(BusApp.getInstance(), "固件更新成功", true);
+                    Log.i("sfsfasfsafsf", "固件更新成功  状态：" + k);
                 }
                 binOk = true;
                 MainLooper.runOnUiThread(new Runnable() {
@@ -95,7 +105,7 @@ public class InitActivity extends AppCompatActivity implements OnResponse {
                     }
                 });
 
-                if (updateOk) {
+                if (updateOk && whiteListOK) {
                     startActivity(new Intent(InitActivity.this, MainActivity.class));
                     finish();
                 }
@@ -138,7 +148,69 @@ public class InitActivity extends AppCompatActivity implements OnResponse {
         update_info.append(response.getMsg() + "\n");
         if (taskSize.get() <= 0) {
             updateOk = true;
-            if (binOk) {
+            if (binOk && whiteListOK) {
+                startActivity(new Intent(InitActivity.this, MainActivity.class));
+                finish();
+            }
+        }
+    }
+
+
+    public void initWhiteList() {
+        update_info.setText("导入白名单\n");
+        InputStream is = null;
+        try {
+            is = getAssets().open("whitelist.dat.txt");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        int lenght = 0;
+        try {
+            lenght = is.available();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        byte[] buffer = new byte[lenght];
+        try {
+            is.read(buffer);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        String result = null;
+        try {
+            result = new String(buffer, "utf-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        String[] sresult = result.split("\r\n");
+        for (int i = 0; i < sresult.length; i++) {
+
+            System.out.println(sresult[i]);
+
+            if (i > 1) {
+                String[] sitem = sresult[i].split("\\s+");
+
+                if (sitem.length > 2) {
+                    System.out.println(sitem[0] + sitem[1] + sitem[2]);
+
+                    whitelist addlist = new whitelist(null, sitem[0], sitem[1], sitem[2]);
+                    DBCore.getDaoSession().getWhitelistDao().insertOrReplace(addlist);
+                } else {
+                    System.out.println(sitem[0] + sitem[1]);
+
+                    whitelist addlist = new whitelist(null, sitem[0], sitem[1], "no word");
+                    DBCore.getDaoSession().getWhitelistDao().insertOrReplace(addlist);
+                }
+            }
+        }
+        List<whitelist> list = DBCore.getDaoSession().getWhitelistDao().loadAll();
+
+        System.out.println(list.size() + "");
+        whiteListOK = true;
+        update_info.append("白名单导入成功\n");
+        if (taskSize.get() <= 0) {
+            if (binOk && updateOk) {
                 startActivity(new Intent(InitActivity.this, MainActivity.class));
                 finish();
             }

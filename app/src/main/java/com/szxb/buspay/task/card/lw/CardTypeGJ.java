@@ -9,71 +9,32 @@ package com.szxb.buspay.task.card.lw;
 
 public class CardTypeGJ {
 
+    //设置
+    public static final String CARD_SETTIIN = "40";
+
     //普通卡
-    public static final String CARD_NORMAL = "01";
+    public static final String CARD_NORMAL = "41";
 
     //学生卡
-    public static final String CARD_STUDENT = "02";
+    public static final String CARD_STUDENT = "42";
 
     //老年卡
-    public static final String CARD_OLD = "03";
+    public static final String CARD_OLD = "43";
 
     //免费卡
-    public static final String CARD_FREE = "04";
+    public static final String CARD_FREE = "44";
 
-    //纪念卡
-    public static final String CARD_MEMORY = "05";
+    //残疾人卡
+    public static final String CARD_MEMORY = "45";
 
-    //员工卡
-    public static final String CARD_EMP = "06";
+    //员工
+    public static final String CARD_YUANGONG = "46";
 
-    //优惠卡
-    public static final String CARD_DIS = "07";
+    //特殊
+    public static final String CARD_TESHU = "88";
 
-    //下班卡
-    public static final String CARD_OFF_WORK = "10";
-
-    //采集卡
-    public static final String CARD_GATHER = "11";
-
-    //签点卡
-    @Deprecated
-    public static final String CARD_SIGNED = "12";
-
-    //检测卡
-    @Deprecated
-    public static final String CARD_CHECKED = "13";
-
-    //稽查卡
-    @Deprecated
-    public static final String CARD_CHECK = "18";
-
-    //CPU普通卡
-    public static final String CARD_CPU_NORMAL="41";
-
-    //CPU学生卡
-    public static final String CARD_CPU_STUDENT="42";
-
-    //CPU老年卡
-    public static final String CARD_CPU_OLD="43";
-
-    //CPU免费卡
-    public static final String CARD_CPU_FREE="44";
-
-    //CPU残疾人卡
-    public static final String CARD_CPU_DEFECT="45";
-
-    //CPU特殊卡
-    public static final String CARD_CPU_SPECIAL="88";
-
-    //济南CPU普通卡
-    public static final String CARD_CPU_JN="04";
-
-
-
-
-
-
+    //济南
+    public static final String CARD_JINAN = "04";
 
 
 }
