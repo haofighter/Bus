@@ -54,6 +54,7 @@ public class MainActivity extends BaseActivity implements OnReceiverMessageListe
         prices = (TextView) findViewById(R.id.prices);
         version_name = (TextView) findViewById(R.id.version_name);
         bus_no = (TextView) findViewById(R.id.bus_no);
+
         sign_time = (TextView) findViewById(R.id.sign_time);
         sign_version = (TextView) findViewById(R.id.sign_version);
         sign_bus_no = (TextView) findViewById(R.id.sign_bus_no);
@@ -86,13 +87,19 @@ public class MainActivity extends BaseActivity implements OnReceiverMessageListe
             main_sign.setVisibility(View.VISIBLE);
         }
         setPrices();
-        station_name.setText(BusApp.getPosManager().getChinese_name());
         sign_time.setText(DateUtil.getCurrentDate("yyyy-MM-dd"));
         version_name.setText(String.format("[%1$s]", AppUtil.getVersionName(getApplicationContext())));
         sign_version.setText(String.format("[%1$s]\n%2$s", AppUtil.getVersionName(getApplicationContext()), BuildConfig.BIN_NAME));
         sign_bus_no.setText(BusApp.getPosManager().getBusNo());
         bus_no.setText(String.format("车辆号:%1$s\n司机号:%2$s",
                 BusApp.getPosManager().getBusNo(), BusApp.getPosManager().getDriverNo()));
+        String stationName = BusApp.getPosManager().getChinese_name();
+        if (stationName.length() > 11) {
+            stationName = stationName.replace("-", "\n");
+            station_name.setTextSize(30);
+            station_name.setMaxLines(2);
+        }
+        station_name.setText(stationName);
     }
 
     /**

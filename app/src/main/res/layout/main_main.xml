@@ -1,7 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@mipmap/taian__bg"
+    android:background="@mipmap/bzb"
     android:orientation="vertical">
 
     <LinearLayout
@@ -18,9 +18,13 @@
             android:id="@+id/station_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:gravity="center"
+            android:lineSpacingExtra="3dp"
             android:text="请先设置线路信息"
             android:textColor="#3A5FCD"
-            android:textSize="25sp" />
+            android:textSize="45sp" />
 
         <TextView
             android:id="@+id/prices"

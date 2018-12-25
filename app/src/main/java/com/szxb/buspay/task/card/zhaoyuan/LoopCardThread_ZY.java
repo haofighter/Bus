@@ -272,7 +272,7 @@ public class LoopCardThread_ZY extends Thread {
                         case "04"://免费卡
                             if (TextUtils.equals(response.getTransType(), "06")) {
                                 //免费卡交易类型为06时判断余额是否小于5元
-                                checkTheBalance(response, hex2Int(balance) > 500 ? Config.IC_HONOR : Config.IC_RECHARGE);
+                                checkTheBalance(response, hex2Int(balance) > 500 ? Config.IC_FREE : Config.IC_RECHARGE);
                             } else {
                                 zeroDis(response);
                                 checkTheBalance(response, Config.IC_FREE);

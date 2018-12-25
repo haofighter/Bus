@@ -1,6 +1,8 @@
 package com.szxb.buspay.db.sp;
 
 
+import com.szxb.buspay.BuildConfig;
+
 /**
  * 作者: Tangren on 2017/7/12
  * 包名：com.szxb.onlinbus.util
@@ -28,7 +30,7 @@ public class FetchAppConfig {
 
     //司机tac
     public static String getDriverNo() {
-        return (String) CommonSharedPreferences.get("driver_no", "00000000");
+        return (String) CommonSharedPreferences.get("driver_no", BuildConfig.CITY == 1 ? "00112234" : "00000000");
     }
 
     //司机卡号
