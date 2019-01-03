@@ -62,7 +62,7 @@ public class BusApp extends Application {
      * 4：荣成
      * 5：潍坊
      */
-    private static int city = BuildConfig.CITY;
+    public final static int city = BuildConfig.CITY;
 
     /**
      * taian.bin 泰安

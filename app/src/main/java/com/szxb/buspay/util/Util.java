@@ -5,6 +5,7 @@ import android.content.res.AssetManager;
 import android.os.Environment;
 import android.os.SystemClock;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.szxb.buspay.BusApp;
 import com.szxb.buspay.db.entity.bean.FTPEntity;
@@ -172,11 +173,12 @@ public class Util {
     }
 
     public static boolean filter(long currentTime, long lastTime) {
-        return currentTime - lastTime >2000;
+        return currentTime - lastTime > 2000;
     }
 
     private static boolean checkSwipe(long currentTime, long lastTime) {
-        return currentTime - lastTime > 2000;
+        Log.i("时间", "currentTime=" + currentTime + "        lastTime=" + lastTime);
+        return currentTime - lastTime > 3000;
     }
 
     /**

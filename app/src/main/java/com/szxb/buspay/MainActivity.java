@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.ForegroundColorSpan;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.szxb.buspay.db.entity.bean.MainEntity;
@@ -17,6 +18,7 @@ import com.szxb.buspay.db.entity.bean.QRScanMessage;
 import com.szxb.buspay.interfaces.OnReceiverMessageListener;
 import com.szxb.buspay.module.BaseActivity;
 import com.szxb.buspay.module.WeakHandler;
+import com.szxb.buspay.task.card.lw.LoopCardThread_CY;
 import com.szxb.buspay.task.card.lw.LoopCardThread_GJ;
 import com.szxb.buspay.task.card.taian.LoopCardThread_TA;
 import com.szxb.buspay.task.card.zhaoyuan.LoopCardThread_ZY;
@@ -35,11 +37,13 @@ import java.util.concurrent.TimeUnit;
 import static com.szxb.buspay.util.AppUtil.sp2px;
 import static com.szxb.buspay.util.Util.fen2Yuan;
 
-public class MainActivity extends BaseActivity implements OnReceiverMessageListener {
+public class
+MainActivity extends BaseActivity implements OnReceiverMessageListener {
 
     private WeakHandler.MyHandler mHandler;
     private TextView time, station_name, prices, version_name, bus_no;
     private TextView sign_time, sign_version, sign_bus_no;
+    private RelativeLayout main_layout;
 
     @Override
     protected int rootView() {
@@ -50,6 +54,7 @@ public class MainActivity extends BaseActivity implements OnReceiverMessageListe
     protected void initView() {
         super.initView();
         time = (TextView) findViewById(R.id.currentTime);
+        main_layout = (RelativeLayout) findViewById(R.id.main_layout);
         station_name = (TextView) findViewById(R.id.station_name);
         prices = (TextView) findViewById(R.id.prices);
         version_name = (TextView) findViewById(R.id.version_name);
@@ -58,6 +63,8 @@ public class MainActivity extends BaseActivity implements OnReceiverMessageListe
         sign_time = (TextView) findViewById(R.id.sign_time);
         sign_version = (TextView) findViewById(R.id.sign_version);
         sign_bus_no = (TextView) findViewById(R.id.sign_bus_no);
+
+
 
     }
 
@@ -72,13 +79,13 @@ public class MainActivity extends BaseActivity implements OnReceiverMessageListe
             String appId = BusApp.getPosManager().getAppId();
             ThreadFactory.getScheduledPool().executeCycle(
                     TextUtils.equals(appId, "10000009") ? new LoopCardThread()//淄博
-                            : TextUtils.equals(appId, "10000010") ? new LoopCardThread_GJ()//莱芜长运
+                            : TextUtils.equals(appId, "10000093") ? new LoopCardThread_GJ()//莱芜长运
+                            : TextUtils.equals(appId, "10000010") ? new LoopCardThread_CY()//莱芜长运
                             : TextUtils.equals(appId, "10000098") ? new LoopCardThread_TA()//泰安
                             : TextUtils.equals(appId, "10000011") ? new LoopCardThread_ZY() ://招远
                             new LoopCardThread()
-                    , 1000, 1000, "loop_ic", TimeUnit.MILLISECONDS);
+                    , 500, 500, "loop_ic", TimeUnit.MILLISECONDS);
         }
-
     }
 
     private void initDatas() {

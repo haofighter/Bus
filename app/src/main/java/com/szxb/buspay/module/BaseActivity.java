@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -191,8 +192,17 @@ public abstract class BaseActivity extends AppCompatActivity implements OnKeyLis
         main_cnt = findViewById(R.id.main_cnt);
         main_sign = findViewById(R.id.main_sign);
         main_main = findViewById(R.id.main_main);
-        main_sign.setBackgroundResource(BuildConfig.CITY == 1 ? R.mipmap.taian__bg : R.mipmap.bzb);
-        main_main.setBackgroundResource(BuildConfig.CITY == 1 ? R.mipmap.taian__bg : R.mipmap.bzb);
+
+        if (BuildConfig.CITY == 1) {
+            main_sign.setBackgroundResource(R.mipmap.taian__bg);
+            main_main.setBackgroundResource(R.mipmap.taian__bg);
+        } else if (BuildConfig.CITY == 2) {
+            main_sign.setBackgroundResource(R.mipmap.laiwu_gj);
+            main_main.setBackgroundResource(R.mipmap.laiwu_gj);
+        } else {
+            main_sign.setBackgroundResource(R.mipmap.bzb);
+            main_main.setBackgroundResource(R.mipmap.bzb);
+        }
 
         initCntView();
         initMainInfoView();
@@ -585,6 +595,7 @@ public abstract class BaseActivity extends AppCompatActivity implements OnKeyLis
      *
      * @param code .
      */
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     private void fillPush(int code) {
         long supplementaryMiningCnt = BusApp.getPosManager().getSupplementaryMiningCnt();
         if (code == QRCode.FILL_PUSH_ING) {

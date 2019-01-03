@@ -71,8 +71,8 @@ android {
             versionName "1.0.1"
             buildConfigField 'String', 'LOG_TAG', '"laiwu"'
 //            buildConfigField 'String', 'BIN_NAME', '"laiwu_cy.bin"'
-            buildConfigField 'String', 'BIN_NAME', '"laiwu_jiance.bin"'
-//            buildConfigField 'String', 'BIN_NAME', '"laiwu_zhenshi.bin"'
+//            buildConfigField 'String', 'BIN_NAME', '"laiwu_jiance1.bin"'
+            buildConfigField 'String', 'BIN_NAME', '"laiwu_zhenshi.bin"'
             buildConfigField 'int', 'CITY', '2'
         }
 

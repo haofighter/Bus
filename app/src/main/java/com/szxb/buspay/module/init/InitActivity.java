@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.szxb.buspay.BuildConfig;
@@ -51,6 +52,7 @@ public class InitActivity extends AppCompatActivity implements OnResponse {
     private boolean whiteListOK = false;
 
     private TextView update_info;
+    private RelativeLayout init_layout;
     private AtomicInteger taskSize;
 
     private AnimationDrawable drawable;
@@ -60,10 +62,11 @@ public class InitActivity extends AppCompatActivity implements OnResponse {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity);
         update_info = findViewById(R.id.update_info);
-        ImageView progress =  findViewById(R.id.progress);
+        init_layout = findViewById(R.id.init_layout);
+        ImageView progress = findViewById(R.id.progress);
         drawable = (AnimationDrawable) progress.getBackground();
         drawable.start();
-        TextView tip_info =  findViewById(R.id.tip_info);
+        TextView tip_info = findViewById(R.id.tip_info);
         tip_info.setText(String.format("温馨提示:\n\t\t\t\t%1$s", Config.tip()));
         update_info.setText("微信同步中\n");
         update_info.append("bin初始化中\n");
@@ -72,6 +75,15 @@ public class InitActivity extends AppCompatActivity implements OnResponse {
         setTaskList();
         initUnionPay();
         initWhiteList();
+        initView();
+    }
+
+    private void initView() {
+        if (BusApp.getInstance().city == 2) {
+            init_layout.setBackgroundResource(R.mipmap.laiwu_gj);
+        } else {
+            init_layout.setBackgroundResource(R.mipmap.bzb);
+        }
     }
 
     private void setTaskList() {

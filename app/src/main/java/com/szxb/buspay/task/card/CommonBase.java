@@ -56,7 +56,9 @@ public class CommonBase {
                 if (TextUtils.equals(response.getStatus(), "F2")) {
                     DateUtil.setK21Time();
                 }
-                BusToast.showToast(BusApp.getInstance(), "签到失败[" + response.getStatus() + "|" + response.getTransType() + "]", false);
+                if (!response.getStatus().equals("FF")) {
+                    BusToast.showToast(BusApp.getInstance(), "签到失败[" + response.getStatus() + "|" + response.getTransType() + "]", false);
+                }
             }
         } else {
             //如果不是普通员工签到卡,则不做任何提示
@@ -188,7 +190,7 @@ public class CommonBase {
 
         bankICResponse = cardParse.parseResponse(bankICResponse,
                 isNull ? "0" : bankICResponse.getMainCardNo(),
-                isNull ? 0 : bankICResponse.getLastTime(),BusApp.getPosManager().getUnionPayPrice(), searchCard.cityCode + searchCard.cardNo);
+                isNull ? 0 : bankICResponse.getLastTime(), BusApp.getPosManager().getUnionPayPrice(), searchCard.cityCode + searchCard.cardNo);
         RxBus.getInstance().send(new QRScanMessage(new PosRecord(), QRCode.STOP_DIALOG));
 
         if (bankICResponse.getResCode() > 0) {
