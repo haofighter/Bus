@@ -61,6 +61,9 @@ public class ConsumeCardDao extends AbstractDao<ConsumeCard, Long> {
         public final static Property Reserve_3 = new Property(34, String.class, "reserve_3", false, "RESERVE_3");
         public final static Property Reserve_4 = new Property(35, String.class, "reserve_4", false, "RESERVE_4");
         public final static Property Reserve_5 = new Property(36, String.class, "reserve_5", false, "RESERVE_5");
+        public final static Property CardRecordType = new Property(37, String.class, "cardRecordType", false, "CARD_RECORD_TYPE");
+        public final static Property CardMacVersion = new Property(38, String.class, "cardMacVersion", false, "CARD_MAC_VERSION");
+        public final static Property CardMacIndex = new Property(39, String.class, "cardMacIndex", false, "CARD_MAC_INDEX");
     }
 
 
@@ -112,7 +115,10 @@ public class ConsumeCardDao extends AbstractDao<ConsumeCard, Long> {
                 "\"RESERVE_2\" TEXT," + // 33: reserve_2
                 "\"RESERVE_3\" TEXT," + // 34: reserve_3
                 "\"RESERVE_4\" TEXT," + // 35: reserve_4
-                "\"RESERVE_5\" TEXT);"); // 36: reserve_5
+                "\"RESERVE_5\" TEXT," + // 36: reserve_5
+                "\"CARD_RECORD_TYPE\" TEXT," + // 37: cardRecordType
+                "\"CARD_MAC_VERSION\" TEXT," + // 38: cardMacVersion
+                "\"CARD_MAC_INDEX\" TEXT);"); // 39: cardMacIndex
         // Add Indexes
         db.execSQL("CREATE INDEX " + constraint + "IDX_CONSUME_CARD_CARD_NO ON CONSUME_CARD" +
                 " (\"CARD_NO\" ASC);");
@@ -312,6 +318,21 @@ public class ConsumeCardDao extends AbstractDao<ConsumeCard, Long> {
         if (reserve_5 != null) {
             stmt.bindString(37, reserve_5);
         }
+ 
+        String cardRecordType = entity.getCardRecordType();
+        if (cardRecordType != null) {
+            stmt.bindString(38, cardRecordType);
+        }
+ 
+        String cardMacVersion = entity.getCardMacVersion();
+        if (cardMacVersion != null) {
+            stmt.bindString(39, cardMacVersion);
+        }
+ 
+        String cardMacIndex = entity.getCardMacIndex();
+        if (cardMacIndex != null) {
+            stmt.bindString(40, cardMacIndex);
+        }
     }
 
     @Override
@@ -502,6 +523,21 @@ public class ConsumeCardDao extends AbstractDao<ConsumeCard, Long> {
         if (reserve_5 != null) {
             stmt.bindString(37, reserve_5);
         }
+ 
+        String cardRecordType = entity.getCardRecordType();
+        if (cardRecordType != null) {
+            stmt.bindString(38, cardRecordType);
+        }
+ 
+        String cardMacVersion = entity.getCardMacVersion();
+        if (cardMacVersion != null) {
+            stmt.bindString(39, cardMacVersion);
+        }
+ 
+        String cardMacIndex = entity.getCardMacIndex();
+        if (cardMacIndex != null) {
+            stmt.bindString(40, cardMacIndex);
+        }
     }
 
     @Override
@@ -548,7 +584,10 @@ public class ConsumeCardDao extends AbstractDao<ConsumeCard, Long> {
             cursor.isNull(offset + 33) ? null : cursor.getString(offset + 33), // reserve_2
             cursor.isNull(offset + 34) ? null : cursor.getString(offset + 34), // reserve_3
             cursor.isNull(offset + 35) ? null : cursor.getString(offset + 35), // reserve_4
-            cursor.isNull(offset + 36) ? null : cursor.getString(offset + 36) // reserve_5
+            cursor.isNull(offset + 36) ? null : cursor.getString(offset + 36), // reserve_5
+            cursor.isNull(offset + 37) ? null : cursor.getString(offset + 37), // cardRecordType
+            cursor.isNull(offset + 38) ? null : cursor.getString(offset + 38), // cardMacVersion
+            cursor.isNull(offset + 39) ? null : cursor.getString(offset + 39) // cardMacIndex
         );
         return entity;
     }
@@ -592,6 +631,9 @@ public class ConsumeCardDao extends AbstractDao<ConsumeCard, Long> {
         entity.setReserve_3(cursor.isNull(offset + 34) ? null : cursor.getString(offset + 34));
         entity.setReserve_4(cursor.isNull(offset + 35) ? null : cursor.getString(offset + 35));
         entity.setReserve_5(cursor.isNull(offset + 36) ? null : cursor.getString(offset + 36));
+        entity.setCardRecordType(cursor.isNull(offset + 37) ? null : cursor.getString(offset + 37));
+        entity.setCardMacVersion(cursor.isNull(offset + 38) ? null : cursor.getString(offset + 38));
+        entity.setCardMacIndex(cursor.isNull(offset + 39) ? null : cursor.getString(offset + 39));
      }
     
     @Override

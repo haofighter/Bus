@@ -504,6 +504,9 @@ public abstract class BaseActivity extends AppCompatActivity implements OnKeyLis
             payRequest.setForceUpdate(true);
             payRequest.getDisposable();
             onKeyCancel();
+        } else if (position == Config.HISTROY) {
+
+            ThreadFactory.getScheduledPool().execute(new WorkThread("history"));
         }
     }
 

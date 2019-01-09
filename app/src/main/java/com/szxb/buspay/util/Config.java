@@ -26,7 +26,7 @@ public class Config {
 
 
     private static final String IP = "http://111.230.85.238";//139.199.158.253
-//    private static final String IP = "http://112.74.102.125";
+//    private static final String IP = "http://112.74.102.125" ;
 //    private static final String IP = "http://2t183d9338.iask.in:27781";
 
     //小兵mac
@@ -169,6 +169,8 @@ public class Config {
 
     //下载银联参数
     public static final int POSITION_DN_UNION_PARAMS = POSITION_PUSH_FILL + 1;
+    //交易记录导出
+    public static final int HISTROY = POSITION_DN_UNION_PARAMS + 1;
 
     public static String tip() {
         return tip[(int) (Math.random() * 20)];

@@ -1,6 +1,7 @@
 package com.szxb.buspay.task.service;
 
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -146,11 +147,15 @@ public class RecordThread extends Thread {
             object.put("citycode", cardRecord.getCardNo().substring(0, 4));
             object.put("internalcode", cardRecord.getCardNo().substring(4, 8));
             object.put("branchcode", BusApp.getPosManager().getUnitno());
+            object.put("keyver", cardRecord.getCardMacVersion());
+            object.put("keyindex", cardRecord.getCardMacIndex());
 
             array.add(object);
         }
         map.put("data", array.toJSONString());
-        JsonRequest request = new JsonRequest(Config.IC_CARD_RECORD, RequestMethod.POST);
+        String net = Config.IC_CARD_RECORD;
+        Log.i("数据上传地址", "数据地址：" + Config.IC_CARD_RECORD);
+        JsonRequest request = new JsonRequest(net, RequestMethod.POST);
         request.add(map);
         Response<JSONObject> execute = SyncRequestExecutor.INSTANCE.execute(request);
         if (execute.isSucceed()) {
@@ -167,7 +172,6 @@ public class RecordThread extends Thread {
                         String cardTradeCount = ob.getString("cardTradeCount");
                         String busNo = ob.getString("busNo");
                         String cardNo = ob.getString("cardNo");
-
                         DBManager.updateCardInfo(type, tradeDate, pasmNumber, cardTradeCount, busNo, cardNo);
                         SLog.d("RecordThread(icRecordTask.java:114)IC卡上传成功   时间:" + tradeDate + " cardNo：" + cardNo + ",busNo" + busNo + ",上传方式=" + (type == 0 ? "正常上传" : "补采上传"));
                     }
@@ -178,9 +182,9 @@ public class RecordThread extends Thread {
             } catch (Exception e) {
                 SLog.d("RecordThread(icRecordTask.java:114)IC卡上传异常>>" + e.toString());
             }
-
         } else {
-            SLog.d("RecordThread(icRecordTask.java:124)IC卡上传网络异常" + execute.toString());
+            SLog.d("RecordThread(unionRecordTask.java:187)IC卡上传网络异常");
+            SLog.d("RecordThread(unionRecordTask.java:187)IC卡上传网络异常" + execute.getException().toString() + Config.IC_CARD_RECORD);
         }
     }
 
@@ -265,7 +269,7 @@ public class RecordThread extends Thread {
                 SLog.d("RecordThread(unionRecordTask.java:116)银联卡上传异常>>" + e.toString());
             }
         } else {
-            SLog.d("RecordThread(unionRecordTask.java:187)银联卡上传网络异常" + execute.getException().toString());
+            SLog.d("RecordThread(unionRecordTask.java:187)银联卡上传网络异常" + execute.getException().toString() + Config.IC_CARD_RECORD);
         }
     }
 

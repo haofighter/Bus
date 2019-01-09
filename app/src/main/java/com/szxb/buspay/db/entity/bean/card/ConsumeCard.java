@@ -1,6 +1,7 @@
 package com.szxb.buspay.db.entity.bean.card;
 
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.szxb.buspay.BusApp;
 import com.szxb.buspay.util.HexUtil;
@@ -110,9 +111,38 @@ public class ConsumeCard {
     private String reserve_4;
     private String reserve_5;
 
+    private String cardRecordType;//交通部卡的记录类型为0xA0。莱芜本地卡和济南卡默认是0。
+    private String cardMacVersion;// 密钥版本号
+    private String cardMacIndex;//密钥索引
+
+    public String getCardRecordType() {
+        return cardRecordType;
+    }
+
+    public void setCardRecordType(String cardRecordType) {
+        this.cardRecordType = cardRecordType;
+    }
+
+    public String getCardMacVersion() {
+        return cardMacVersion;
+    }
+
+    public void setCardMacVersion(String cardMacVersion) {
+        this.cardMacVersion = cardMacVersion;
+    }
+
+    public String getCardMacIndex() {
+        return cardMacIndex;
+    }
+
+    public void setCardMacIndex(String cardMacIndex) {
+        this.cardMacIndex = cardMacIndex;
+    }
+
     public ConsumeCard(byte[] receDatas, boolean isSignOrBack, String city, String cardModuleType) {
         int index = 0;
-        byte[] status_byte = new byte[1];
+        byte[] status_byte = new byte[0];
+        status_byte = new byte[1];
         arraycopy(receDatas, index, status_byte, 0, status_byte.length);
         status = HexUtil.printHexBinary(status_byte);
 
@@ -179,6 +209,8 @@ public class ConsumeCard {
         isHalfPrices = BusApp.getPosManager().isHalfPrices() ? "1" : "0";
         mchId = BusApp.getPosManager().getAppId();
         companyNo = BusApp.getPosManager().getUnitno();
+        upStatus=1;
+        uniqueFlag = pasmNo + transNo + transTime;
 
         reserve_1 = Util.Random(10);
     }
@@ -200,8 +232,7 @@ public class ConsumeCard {
         arraycopy(ziboDatas, index + stationId_byte.length, fareFlag_byte, 0, fareFlag_byte.length);
         fareFlag = HexUtil.printHexBinary(fareFlag_byte);
 
-        upStatus = 1;
-        uniqueFlag = pasmNo + transNo + transTime;
+
         byte[] recordData = new byte[50];
         arraycopy(ziboDatas, 0, recordData, 0, recordData.length);
         singleRecord = HexUtil.printHexBinary(recordData);
@@ -210,6 +241,7 @@ public class ConsumeCard {
 
 
     private void getLw(byte[] lwDatas, int index) {
+        Log.i("数据", HexUtil.bcd2Str(lwDatas));
         byte[] algFlag_bytes = new byte[1];
         arraycopy(lwDatas, index, lwDatas, 0, algFlag_bytes.length);
         algFlag = HexUtil.printHexBinary(algFlag_bytes);
@@ -227,17 +259,26 @@ public class ConsumeCard {
         cpuVersion = HexUtil.printHexBinary(cpuVersion_bytes);
 
         byte[] cardNumhead = new byte[2];
-        arraycopy(lwDatas, index + cardNumhead.length, cardNumhead, 0, cardNumhead.length);
+        arraycopy(lwDatas, index + cpuVersion_bytes.length, cardNumhead, 0, cardNumhead.length);
         cpuVersion = HexUtil.printHexBinary(cardNumhead);
+
+
+        byte[] cardMacversion = new byte[1];
+        arraycopy(lwDatas, index + cardNumhead.length, cardMacversion, 0, cardMacversion.length);
+        cardMacVersion = HexUtil.printHexBinary(cardMacversion);
+
+        byte[] cardMacindex = new byte[1];
+        arraycopy(lwDatas, index + cardMacversion.length, cardMacindex, 0, cardMacindex.length);
+        cardMacIndex = HexUtil.printHexBinary(cardMacindex);
 
     }
 
-    @Generated(hash = 1273169348)
+    @Generated(hash = 1184016689)
     public ConsumeCard(Long id, String status, String cardType, String cardModuleType, String transType, String transNo, String cardNo, String cardBalance, String payFee,
                        String transTime, String transNo2, String tac, String lineNo, String busNo, String driverNo, String pasmNo, String direction, String stationId, String fareFlag,
                        String localLineNo, String localBusNo, String localDriverNo, String algFlag, String issuerFlag, String cardChildType, String cpuVersion, String uniqueFlag,
-                       Integer upStatus, String singleRecord, String isHalfPrices, String mchId, String companyNo, String reserve_1, String reserve_2, String reserve_3,
-                       String reserve_4, String reserve_5) {
+                       Integer upStatus, String singleRecord, String isHalfPrices, String mchId, String companyNo, String reserve_1, String reserve_2, String reserve_3, String reserve_4,
+                       String reserve_5, String cardRecordType, String cardMacVersion, String cardMacIndex) {
         this.id = id;
         this.status = status;
         this.cardType = cardType;
@@ -275,6 +316,9 @@ public class ConsumeCard {
         this.reserve_3 = reserve_3;
         this.reserve_4 = reserve_4;
         this.reserve_5 = reserve_5;
+        this.cardRecordType = cardRecordType;
+        this.cardMacVersion = cardMacVersion;
+        this.cardMacIndex = cardMacIndex;
     }
 
     @Generated(hash = 476783687)

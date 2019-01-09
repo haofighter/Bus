@@ -116,7 +116,13 @@ public class WorkThread extends Thread {
             String sdDirectory = "/log";
             exportFile(posPath, sdDirectory);
 
-        } else if (TextUtils.equals(name, "export_db")) {
+        } else if(TextUtils.equals(name, "history")){
+            //导出日志
+            String posPath = Environment.getExternalStorageDirectory() + "/history";
+            String sdDirectory = "/history";
+            exportFile(posPath, sdDirectory);
+
+        }else if (TextUtils.equals(name, "export_db")) {
             //导出数据库文件
             String posDirectory = "data/data/" + BusApp.getInstance().getPackageName() + "/databases";
             String sdDirectory = "/databases/" + BusApp.getPosManager().getBusNo();

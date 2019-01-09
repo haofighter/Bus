@@ -249,6 +249,5 @@ public class BusApp extends Application {
         //判断网络是否已经连接，如果连接的话，返回true，否则false
         return (networkInfo != null && networkInfo.isConnected());
 
-
     }
 }

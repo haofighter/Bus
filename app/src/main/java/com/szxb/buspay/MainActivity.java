@@ -63,9 +63,6 @@ MainActivity extends BaseActivity implements OnReceiverMessageListener {
         sign_time = (TextView) findViewById(R.id.sign_time);
         sign_version = (TextView) findViewById(R.id.sign_version);
         sign_bus_no = (TextView) findViewById(R.id.sign_bus_no);
-
-
-
     }
 
     @Override
@@ -84,7 +81,7 @@ MainActivity extends BaseActivity implements OnReceiverMessageListener {
                             : TextUtils.equals(appId, "10000098") ? new LoopCardThread_TA()//泰安
                             : TextUtils.equals(appId, "10000011") ? new LoopCardThread_ZY() ://招远
                             new LoopCardThread()
-                    , 500, 500, "loop_ic", TimeUnit.MILLISECONDS);
+                    , 500, 200, "loop_ic", TimeUnit.MILLISECONDS);
         }
     }
 

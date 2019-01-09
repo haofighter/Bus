@@ -26,7 +26,7 @@ android {
     }
 
     greendao {
-        schemaVersion 2
+        schemaVersion 3
         daoPackage 'com.szxb.buspay.db.dao'
         targetGenDir 'src/main/java'
     }
@@ -72,7 +72,7 @@ android {
             buildConfigField 'String', 'LOG_TAG', '"laiwu"'
 //            buildConfigField 'String', 'BIN_NAME', '"laiwu_cy.bin"'
 //            buildConfigField 'String', 'BIN_NAME', '"laiwu_jiance1.bin"'
-            buildConfigField 'String', 'BIN_NAME', '"laiwu_zhenshi.bin"'
+            buildConfigField 'String', 'BIN_NAME', '"laiwu_190104170513.bin"'
             buildConfigField 'int', 'CITY', '2'
         }
 
