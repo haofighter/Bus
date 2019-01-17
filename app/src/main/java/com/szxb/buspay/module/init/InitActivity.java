@@ -90,7 +90,6 @@ public class InitActivity extends AppCompatActivity implements OnResponse {
         List<BaseRequest> taskList = AppUtil.getRequestList();
         taskSize = new AtomicInteger(taskList.size());
         AppUtil.run(taskList, this);
-
     }
 
 

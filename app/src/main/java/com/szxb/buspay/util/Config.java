@@ -170,7 +170,7 @@ public class Config {
     //下载银联参数
     public static final int POSITION_DN_UNION_PARAMS = POSITION_PUSH_FILL + 1;
     //交易记录导出
-    public static final int HISTROY = POSITION_DN_UNION_PARAMS + 1;
+    public static final int SELECT_LINE = POSITION_DN_UNION_PARAMS + 1;
 
     public static String tip() {
         return tip[(int) (Math.random() * 20)];

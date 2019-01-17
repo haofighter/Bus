@@ -180,6 +180,7 @@ MainActivity extends BaseActivity implements OnReceiverMessageListener {
         mList.add(new MainEntity("查看基础信息"));
         mList.add(new MainEntity("手动补传"));
         mList.add(new MainEntity("更新银联参数"));
+        mList.add(new MainEntity("线路选择"));
     }
 
 

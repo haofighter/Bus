@@ -140,6 +140,10 @@ public class AppUtil {
             lineRequest.setFileName(lineInfoEntity.getFileName());
             lineRequest.setForceUpdate(false);
             taskList.add(lineRequest);
+        } else {
+            DownloadLineRequest lineRequest = new DownloadLineRequest();
+            lineRequest.setForceUpdate(false);
+            taskList.add(lineRequest);
         }
 
         DownloadBlackRequest blackRequest = new DownloadBlackRequest();
@@ -160,7 +164,8 @@ public class AppUtil {
         List<BaseRequest> taskList = new ArrayList<>();
         DownloadLineRequest lineRequest = new DownloadLineRequest();
         lineRequest.setFileName(fileName);
-        lineRequest.setBusNo(busNo);
+        if (busNo != null)
+            lineRequest.setBusNo(busNo);
         lineRequest.setForceUpdate(true);
         taskList.add(lineRequest);
         return taskList;

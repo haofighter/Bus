@@ -7,11 +7,16 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.szxb.buspay.BusApp;
 import com.szxb.buspay.db.dao.LineInfoEntityDao;
+import com.szxb.buspay.db.entity.bean.LINEGuideEntity;
 import com.szxb.buspay.db.entity.card.LineInfoEntity;
+import com.szxb.buspay.db.manager.DBManager;
 import com.szxb.buspay.util.HexUtil;
 import com.szxb.buspay.util.param.sign.FileByte;
 import com.szxb.buspay.util.tip.BusToast;
 import com.szxb.mlog.SLog;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import io.reactivex.ObservableEmitter;
 
@@ -59,28 +64,29 @@ public class DownloadLineRequest extends BaseRequest {
      * 指定下载
      */
     private void downloadPoint() {
-        LineInfoEntity infoEntity = BusApp.getPosManager().getLineInfoEntity();
-        if (infoEntity == null) {
-            //线路文件不存在
-            //不更新任何
-            SLog.d("DownloadLineRequest(doSubscribe.java:52)线路文件不存在>>>>");
-            response.setStatus(ResponseMessage.FILE_NO_EXIT);
-            response.setMsg("线路文件不存在");
-        } else {
-            boolean res = download("allline.json", "pram/allline.json", "版本文件下载");
-            if (res) {
-                //版本文件下载成功
-                SLog.d("DownloadLineRequest(doSubscribe.java:61)版本文件下载成功");
-                byte[] pramVersion = FileByte.File2byte(Environment.getExternalStorageDirectory() + "/allline.json");
-                JSONObject object = HexUtil.parseObject(pramVersion);
-                if (object != null) {
-                    JSONArray jsonArray = object.getJSONArray("allline");
-                    for (int i = 0; i < jsonArray.size(); i++) {
-                        JSONObject ob = jsonArray.getJSONObject(i);
-                        String acnt = ob.getString("acnt");
-                        String routeno = ob.getString("routeno");
-                        String routeversion = ob.getString("routeversion");
-                        String fileName_ = acnt + "," + routeno + ".json";
+        boolean res = download("allline.json", "pram/allline.json", "版本文件下载");
+        if (res) {
+            //版本文件下载成功
+            SLog.d("DownloadLineRequest(doSubscribe.java:61)版本文件下载成功");
+            byte[] pramVersion = FileByte.File2byte(Environment.getExternalStorageDirectory() + "/allline.json");
+            JSONObject object = HexUtil.parseObject(pramVersion);
+            List<LINEGuideEntity> lineGuideEntities = new ArrayList<>();
+            if (object != null) {
+                JSONArray jsonArray = object.getJSONArray("allline");
+                for (int i = 0; i < jsonArray.size(); i++) {
+                    JSONObject ob = jsonArray.getJSONObject(i);
+                    String acnt = ob.getString("acnt");
+                    String routeno = ob.getString("routeno");
+                    String routeversion = ob.getString("routeversion");
+                    String routevname = ob.getString("routename");
+                    String fileName_ = acnt + "," + routeno + ".json";
+                    lineGuideEntities.add(new LINEGuideEntity((long) i, acnt, routeno, routeversion, routevname, fileName_));
+
+                    LineInfoEntity infoEntity = BusApp.getPosManager().getLineInfoEntity();
+                    if (infoEntity == null) {
+                        SLog.d("DownloadLineRequest(doSubscribe.java:52)线路文件不存在>>>>");
+
+                    } else {
                         if (TextUtils.equals(fileName_, infoEntity.getFileName())) {
                             if (TextUtils.equals(routeversion, infoEntity.getVersion())
                                     && !TextUtils.isEmpty(infoEntity.getRmk1())) {
@@ -88,23 +94,21 @@ public class DownloadLineRequest extends BaseRequest {
                                 BusToast.showToast(BusApp.getInstance(), "线路信息初始化成功[EQ]", true);
                                 response.setStatus(ResponseMessage.NOUPDATE);
                                 response.setMsg("版本相同无需更新");
+                            } else {
+                                fileName = infoEntity.getFileName();
+                                downloadFile();
                             }
                         }
-
-                    }
-
-                    if (response.getStatus() != ResponseMessage.NOUPDATE) {
-                        //如果不是无需更新则更新
-                        SLog.d("DownloadLineRequest(doSubscribe.java:83)线路版本不相同>>>>>>");
-                        downloadFile();
                     }
                 }
+                DBManager.saveAllLine(lineGuideEntities);
             } else {
                 //版本文件下载失败>>直接更新
                 SLog.d("DownloadLineRequest(doSubscribe.java:88)版本文件下载失败>>直接更新");
                 downloadFile();
             }
         }
+
     }
 
     /**

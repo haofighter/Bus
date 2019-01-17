@@ -22,6 +22,7 @@ import com.szxb.buspay.BuildConfig;
 import com.szxb.buspay.BusApp;
 import com.szxb.buspay.R;
 import com.szxb.buspay.db.entity.bean.CntEntity;
+import com.szxb.buspay.db.entity.bean.LINEGuideEntity;
 import com.szxb.buspay.db.entity.bean.MainEntity;
 import com.szxb.buspay.db.entity.bean.QRCode;
 import com.szxb.buspay.db.entity.bean.QRScanMessage;
@@ -38,6 +39,7 @@ import com.szxb.buspay.util.Util;
 import com.szxb.buspay.util.WaitDialog;
 import com.szxb.buspay.util.WriteRecordToSD;
 import com.szxb.buspay.util.adapter.HomeParentAdapter;
+import com.szxb.buspay.util.adapter.LineAdapter;
 import com.szxb.buspay.util.adapter.RecordAdapter;
 import com.szxb.buspay.util.rx.RxBus;
 import com.szxb.buspay.util.tip.BusToast;
@@ -99,6 +101,11 @@ public abstract class BaseActivity extends AppCompatActivity implements OnKeyLis
     protected RecyclerView recycler_view_record;
     protected View main_record;
     protected TextView record_type;
+
+    //线路view
+    protected RecyclerView recycler_view_line;
+    protected View main_line;
+    protected TextView line_title;
 
     //汇总view
     protected TextView record_type_cnt;
@@ -177,6 +184,8 @@ public abstract class BaseActivity extends AppCompatActivity implements OnKeyLis
     private boolean childViewShow = false;
     private RecordAdapter recordAdapter;
     private List<MainEntity> mRecordList = new ArrayList<>();
+    private LineAdapter lineAdapter;
+    private List<LINEGuideEntity> lineGuideEntities = new ArrayList<>();
 
     //dialog
     private WaitDialog waitDialog;
@@ -188,6 +197,11 @@ public abstract class BaseActivity extends AppCompatActivity implements OnKeyLis
         recycler_view_record = findViewById(R.id.recycler_view_record);
         main_record = findViewById(R.id.main_record);
         record_type = findViewById(R.id.record_type);
+
+        recycler_view_line = findViewById(R.id.recycler_view_line);
+        main_line = findViewById(R.id.main_line);
+        line_title = findViewById(R.id.line_title);
+
         record_type_cnt = findViewById(R.id.record_type_cnt);
         main_cnt = findViewById(R.id.main_cnt);
         main_sign = findViewById(R.id.main_sign);
@@ -254,6 +268,7 @@ public abstract class BaseActivity extends AppCompatActivity implements OnKeyLis
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<QRScanMessage>() {
+                    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
                     @Override
                     public void accept(@NonNull QRScanMessage qrScanMessage) {
                         try {
@@ -311,6 +326,12 @@ public abstract class BaseActivity extends AppCompatActivity implements OnKeyLis
         recycler_view_record.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         recycler_view_record.setAdapter(recordAdapter);
         recycler_view_record.addItemDecoration(new DividerItemDecoration(getApplicationContext(), DividerItemDecoration.VERTICAL));
+
+        lineAdapter = new LineAdapter(getApplicationContext(), lineGuideEntities, recycler_view_line);
+        recycler_view_line.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        recycler_view_line.setAdapter(lineAdapter);
+        recycler_view_line.addItemDecoration(new DividerItemDecoration(getApplicationContext(), DividerItemDecoration.VERTICAL));
+
     }
 
     //菜单初始化动画
@@ -341,7 +362,11 @@ public abstract class BaseActivity extends AppCompatActivity implements OnKeyLis
                 mAdapter.downKey();
             }
         } else {
-            recordAdapter.downKey();
+            if (recycler_view_line.getVisibility() == View.VISIBLE) {
+                lineAdapter.downKey();
+            } else if (recycler_view_record.getVisibility() == View.VISIBLE) {
+                recordAdapter.downKey();
+            }
         }
     }
 
@@ -357,12 +382,19 @@ public abstract class BaseActivity extends AppCompatActivity implements OnKeyLis
                 mAdapter.upKey();
             }
         } else {
-            recordAdapter.upKey();
+            if (recycler_view_line.getVisibility() == View.VISIBLE) {
+                lineAdapter.upKey();
+            } else if (recycler_view_record.getVisibility() == View.VISIBLE) {
+                recordAdapter.upKey();
+            }
         }
     }
 
     @Override
     public void onKeyOk() {
+        if (childViewShow && recycler_view_line.getVisibility() == View.VISIBLE) {
+            lineAdapter.okKey();
+        }
         if (childViewShow || main_sign.getVisibility() == View.VISIBLE) {
             return;
         }
@@ -504,10 +536,17 @@ public abstract class BaseActivity extends AppCompatActivity implements OnKeyLis
             payRequest.setForceUpdate(true);
             payRequest.getDisposable();
             onKeyCancel();
-        } else if (position == Config.HISTROY) {
-
-            ThreadFactory.getScheduledPool().execute(new WorkThread("history"));
+        } else if (position == Config.SELECT_LINE) {
+            onKeyCancel();
+            childViewShow = true;
+            setViewStatus(main_line, true);
+            record_type.setText("线路选择");
+            lineAdapter.position = 0;
+            lineAdapter.setItemChecked(0);
+            lineAdapter.refreshData(DBManager.queryAllLine());
         }
+
+
     }
 
     /**
@@ -541,6 +580,11 @@ public abstract class BaseActivity extends AppCompatActivity implements OnKeyLis
 
         if (main_info.getVisibility() == View.VISIBLE) {
             setViewStatus(main_info, false);
+            childViewShow = false;
+        }
+
+        if (main_line.getVisibility() == View.VISIBLE) {
+            setViewStatus(main_line, false);
             childViewShow = false;
         }
     }

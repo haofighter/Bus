@@ -64,4 +64,9 @@
         android:id="@+id/main_info"
         layout="@layout/main_info"
         android:visibility="gone" />
+
+    <include
+        android:id="@+id/main_line"
+        layout="@layout/main_line"
+        android:visibility="gone" />
 </RelativeLayout>

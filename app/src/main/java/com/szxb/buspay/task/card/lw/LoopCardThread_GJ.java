@@ -78,25 +78,29 @@ public class LoopCardThread_GJ extends Thread {
             //通信部的卡寻卡  问题卡返回
             if (searchBytes[0] == (byte) 0xA0) {
                 //如果寻卡状态不等于00..无法处理此卡
-                searchCard = new SearchCard(searchBytes);
+                searchCard = null;
                 tranErrAll(searchCard.errorCode);
                 lastTime = SystemClock.elapsedRealtime();
                 return;
             }
 
             if (searchBytes[0] != (byte) 0x00) {
+                searchCard = null;
                 //如果寻卡状态不等于00..无法处理此卡
                 Log.i("获取到卡状态GJ", "   " + searchBytes[0]);
                 return;
             }
 
             Log.i("刷卡", " searchCard  ");
+
+            /*******控制连刷**********/
             SearchCard nowSearchCard = new SearchCard(searchBytes);
-            if (searchCard != null && nowSearchCard.cardNo.equals(searchCard.cardNo)) {
+            if (searchCard != null && nowSearchCard.cardNo.equals(searchCard.cardNo) && !nowSearchCard.cardType.equals("46")) {
                 return;
             } else {
                 searchCard = nowSearchCard;
             }
+            /*************控制特殊卡连刷************/
             String cardNo = searchCard.cityCode + searchCard.cardNo;//"8000000102164414"
             ConsumeCard consumeCard = DBCore.getDaoSession().getConsumeCardDao().queryBuilder().where(ConsumeCardDao.Properties.CardNo.eq(cardNo)).orderDesc(ConsumeCardDao.Properties.TransTime).limit(1).unique();
             String[] coefficent = BusApp.getPosManager().getCoefficent();
@@ -118,6 +122,7 @@ public class LoopCardThread_GJ extends Thread {
                 }
             }
 
+            /*************司机未上班只能刷司机卡********************/
             Log.i("刷卡", " 时间间隔  ");
             String driverNo = BusApp.getPosManager().getDriverNo();
             if (TextUtils.equals(driverNo, String.format("%08d", 0))
@@ -181,12 +186,14 @@ public class LoopCardThread_GJ extends Thread {
                 }
 
             } else {
-                //判断,线路是否存在
-                if (checkLine()) {
-                    return;
-                }
+
                 if (TextUtils.equals(searchCard.cardType, "40")) {//如果是40设置卡 则进行下班操作
                     offWork(null);
+                    return;
+                }
+
+                //判断,线路是否存在
+                if (checkLine()) {
                     return;
                 }
                 Log.i("time", "checkLine");
@@ -263,7 +270,7 @@ public class LoopCardThread_GJ extends Thread {
         } else {
             int pay_fee = payFee(searchCard);
             ConsumeCard response = response(pay_fee, isBlack, isWhite, isWrok, false);
-            Log.i("刷卡", " 消费完成  解析数据  ");
+            Log.i("刷卡", " 消费完成  解析数据  " + response.getStatus());
 
             String status = response.getStatus();
             String cardModuleType = response.getCardModuleType();

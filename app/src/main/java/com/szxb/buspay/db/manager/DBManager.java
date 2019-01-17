@@ -17,6 +17,7 @@ import com.szxb.buspay.db.dao.ScanInfoEntityDao;
 import com.szxb.buspay.db.dao.UnionPayEntityDao;
 import com.szxb.buspay.db.dao.whitelistDao;
 import com.szxb.buspay.db.entity.bean.CntEntity;
+import com.szxb.buspay.db.entity.bean.LINEGuideEntity;
 import com.szxb.buspay.db.entity.bean.card.ConsumeCard;
 import com.szxb.buspay.db.entity.bean.card.SearchCard;
 import com.szxb.buspay.db.entity.bean.whitelist;
@@ -467,6 +468,20 @@ public class DBManager {
                 .where(ConsumeCardDao.Properties.UpStatus.eq(1))
                 .orderDesc(ConsumeCardDao.Properties.Id)
                 .limit(15).build().list();
+    }
+
+    /**
+     * @return 保存allline的数据
+     */
+    public static void saveAllLine(List<LINEGuideEntity> lineGuideEntityList) {
+        DBCore.getDaoSession().getLINEGuideEntityDao().insertOrReplaceInTx(lineGuideEntityList);
+    }
+
+    /**
+     * @return 查询allline的数据
+     */
+    public static List<LINEGuideEntity> queryAllLine() {
+        return DBCore.getDaoSession().getLINEGuideEntityDao().queryBuilder().build().list();
     }
 
     /**
