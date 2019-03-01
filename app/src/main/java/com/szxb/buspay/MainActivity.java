@@ -8,6 +8,7 @@ import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -19,6 +20,7 @@ import com.szxb.buspay.interfaces.OnReceiverMessageListener;
 import com.szxb.buspay.module.BaseActivity;
 import com.szxb.buspay.module.WeakHandler;
 import com.szxb.buspay.task.card.lw.LoopCardThread_CY;
+import com.szxb.buspay.task.card.lw.LoopCardThread_CY1;
 import com.szxb.buspay.task.card.lw.LoopCardThread_GJ;
 import com.szxb.buspay.task.card.taian.LoopCardThread_TA;
 import com.szxb.buspay.task.card.zhaoyuan.LoopCardThread_ZY;
@@ -74,10 +76,11 @@ MainActivity extends BaseActivity implements OnReceiverMessageListener {
         boolean isSuppIC = BusApp.getPosManager().isSuppIcPay();
         if (isSuppIC) {
             String appId = BusApp.getPosManager().getAppId();
+            Log.i("公交ID", appId);
             ThreadFactory.getScheduledPool().executeCycle(
                     TextUtils.equals(appId, "10000009") ? new LoopCardThread()//淄博
-                            : TextUtils.equals(appId, "10000093") ? new LoopCardThread_GJ()//莱芜长运
-                            : TextUtils.equals(appId, "10000010") ? new LoopCardThread_CY()//莱芜长运
+                            : TextUtils.equals(appId, "10000093") ? new  LoopCardThread_GJ()//莱芜公交
+                            : TextUtils.equals(appId, "10000010") ? new LoopCardThread_CY1()//莱芜长运
                             : TextUtils.equals(appId, "10000098") ? new LoopCardThread_TA()//泰安
                             : TextUtils.equals(appId, "10000011") ? new LoopCardThread_ZY() ://招远
                             new LoopCardThread()

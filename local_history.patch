@@ -1,0 +1,168 @@
+Index: app/src/main/java/com/szxb/buspay/db/entity/bean/card/BaseEntity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/szxb/buspay/db/entity/bean/card/BaseEntity.java	(date 1547353742000)
++++ app/src/main/java/com/szxb/buspay/db/entity/bean/card/BaseEntity.java	(date 1547353742000)
+@@ -0,0 +1,12 @@
++package com.szxb.buspay.db.entity.bean.card;
++
++/**
++ * 作者：Tangren on 2018-07-17
++ * 包名：com.szxb.buspay.db.entity
++ * 邮箱：996489865@qq.com
++ * TODO:一句话描述
++ */
++
++public class BaseEntity {
++
++}
+Index: app/src/main/java/com/szxb/buspay/db/entity/bean/MainEntity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/szxb/buspay/db/entity/bean/MainEntity.java	(date 1547353742000)
++++ app/src/main/java/com/szxb/buspay/db/entity/bean/MainEntity.java	(date 1547353742000)
+@@ -1,5 +1,7 @@
+ package com.szxb.buspay.db.entity.bean;
+ 
++import com.szxb.buspay.db.entity.bean.card.BaseEntity;
++
+ /**
+  * 作者：Tangren on 2018-07-17
+  * 包名：com.szxb.buspay.db.entity
+@@ -7,7 +9,7 @@
+  * TODO:一句话描述
+  */
+ 
+-public class MainEntity {
++public class MainEntity extends BaseEntity {
+     private String card_id;
+     private String card_money;
+     private String pay_money;
+Index: app/src/main/java/com/szxb/buspay/util/adapter/BaseAdapter.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/szxb/buspay/util/adapter/BaseAdapter.java	(date 1547353742000)
++++ app/src/main/java/com/szxb/buspay/util/adapter/BaseAdapter.java	(date 1547353742000)
+@@ -11,6 +11,7 @@
+ 
+ import com.szxb.buspay.R;
+ import com.szxb.buspay.db.entity.bean.MainEntity;
++import com.szxb.buspay.db.entity.bean.card.BaseEntity;
+ 
+ import java.util.List;
+ 
+@@ -24,7 +25,7 @@
+ 
+ public abstract class BaseAdapter extends RecyclerView.Adapter<BaseAdapter.BaseHolder> {
+ 
+-    private List<MainEntity> mList;
++    private List< BaseEntity> mList;
+     private SparseBooleanArray mBooleanArray;
+     public int mLastCheckPosition = -1;
+     public int position = 0;
+@@ -32,19 +33,19 @@
+     private LinearLayoutManager manager;
+     private boolean suppSelect = false;
+ 
+-    public BaseAdapter(Context context, List<MainEntity> mList, RecyclerView mRecyclerView) {
++    public BaseAdapter(Context context, List<BaseEntity> mList, RecyclerView mRecyclerView) {
+         this.mList = mList;
+         this.mRecyclerView = mRecyclerView;
+         manager = new LinearLayoutManager(context);
+         mBooleanArray = new SparseBooleanArray(mList.size());
+     }
+ 
+-    public void refreshData(List<MainEntity> list) {
++    public void refreshData(List< BaseEntity> list) {
+         this.mList = list;
+         notifyDataSetChanged();
+     }
+ 
+-    public void addData(List<MainEntity> list) {
++    public void addData(List< BaseEntity> list) {
+         this.mList.addAll(0, list);
+         notifyDataSetChanged();
+     }
+@@ -88,7 +89,7 @@
+     }
+ 
+     //得到请求的position的Str
+-    public MainEntity getCurrentItemPositionStr() {
++    public BaseEntity getCurrentItemPositionStr() {
+         return mList.get(getCurrentItemPosition());
+     }
+ 
+@@ -131,7 +132,7 @@
+         }
+     }
+ 
+-    protected abstract void convert(BaseHolder holder, MainEntity t, int position);
++    protected abstract void convert(BaseHolder holder, BaseEntity t, int position);
+ 
+     class BaseHolder extends RecyclerView.ViewHolder {
+         public TextView card_id;
+Index: app/src/main/java/com/szxb/buspay/util/adapter/RecordAdapter.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/szxb/buspay/util/adapter/RecordAdapter.java	(date 1547353589000)
++++ app/src/main/java/com/szxb/buspay/util/adapter/RecordAdapter.java	(date 1547353589000)
+@@ -15,7 +15,7 @@
+  * TODO:一句话描述
+  */
+ 
+-public class RecordAdapter extends BaseAdapter {
++public class RecordAdapter extends BaseAdapter<MainEntity> {
+     private Context context;
+ 
+     public RecordAdapter(Context context, List<MainEntity> mList, RecyclerView mRecyclerView) {
+Index: app/app.iml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/app.iml	(date 1547353742000)
++++ app/app.iml	(date 1547353742000)
+@@ -130,23 +130,35 @@
+       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/annotation_processor_list" />
+       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/apk_list" />
+       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/blame" />
++      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/build-info" />
++      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/builds" />
+       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/check-libraries" />
+       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/check-manifest" />
+       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/checkLaiwu_appDebugClasspath" />
+       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/compatible_screen_manifest" />
+       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/incremental" />
++      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/incremental-classes" />
++      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/incremental-runtime-classes" />
++      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/incremental-verifier" />
++      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/instant-run-apk" />
++      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/instant-run-resources" />
+       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/instant_run_merged_manifests" />
++      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/instant_run_split_apk_resources" />
+       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/javac" />
+       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/jniLibs" />
++      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/manifest-checker" />
+       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/merged_assets" />
+       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/merged_manifests" />
+       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/prebuild" />
+       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/processed_res" />
+       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/proguard-rules" />
++      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/reload-dex" />
+       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/res" />
++      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/resources" />
+       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/rs" />
+       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/shader_assets" />
+       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/shaders" />
++      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/split-apk" />
+       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/split_list" />
+       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/symbols" />
+       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/transforms" />

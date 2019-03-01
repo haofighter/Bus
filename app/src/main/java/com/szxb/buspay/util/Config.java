@@ -122,6 +122,7 @@ public class Config {
     public static final int JUNRENKA_T = LAORENKA_T + 1;//军人卡
 
     public static final int GUANAIKA_T = LAORENKA_T + 1;//关爱卡
+    public static final int IC_NEWFREE = GUANAIKA_T + 1;//关爱卡
 
 
     //菜单

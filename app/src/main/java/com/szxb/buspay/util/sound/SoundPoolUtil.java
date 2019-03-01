@@ -62,6 +62,7 @@ public class SoundPoolUtil {
             R.raw.laorenka_t,//无效卡
             R.raw.junrenka_t,//军人卡
             R.raw.guanaika_t,//关爱卡
+            R.raw.newfree,//免费卡
 
     };
 

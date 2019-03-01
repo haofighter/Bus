@@ -42,7 +42,7 @@ import static com.szxb.buspay.util.Util.string2Int;
  * TODO:莱芜公交
  */
 
-public class LoopCardThread_GJ extends Thread {
+public class LoopCardThread_CY1 extends Thread {
 
     private boolean isBlack = false;
     private boolean isWhite = false;
@@ -82,7 +82,6 @@ public class LoopCardThread_GJ extends Thread {
                 cardNoTemp = "0";
                 tranErrAll(searchCard.errorCode);
                 lastTime = SystemClock.elapsedRealtime();
-                SLog.e("LoopCardThread_GJ(run.java:19)问题卡 " + status);
                 return;
             }
 
@@ -93,16 +92,6 @@ public class LoopCardThread_GJ extends Thread {
                 Log.i("获取到卡状态GJ", "   " + searchBytes[0]);
                 return;
             }
-
-            //防止重复刷卡
-            //去重刷,同一个卡号3S内不提示
-            if (Util.check(cardNoTemp, searchCard.cardNo)) {
-//                lastTime = SystemClock.elapsedRealtime();
-//                BusToast.showToast(BusApp.getInstance(), "您已刷过[" + searchCard.cardType + "]", false);
-                Log.i("刷卡", " 3S 去重  ");
-                return;
-            }
-
 
 
             /*******控制连刷**********/
@@ -124,10 +113,10 @@ public class LoopCardThread_GJ extends Thread {
                     !"41".equals(consumeCard.getCardType()) && !"04".equals(consumeCard.getCardType())
                     && !"41".equals(searchCard.cardType) && !"04".equals(searchCard.cardType)) {
                 String cardN = BusApp.getPosManager().getEmpNo();
-                if (searchCard.cardType.equals("46") && (BusApp.getPosManager().getEmpNo().equals("00000000") || BusApp.getPosManager().getEmpNo().equals(searchCard.cityCode + searchCard.cardNo))) {
+                if ((searchCard.cardType.equals("46") && (BusApp.getPosManager().getEmpNo().equals("00000000") || BusApp.getPosManager().getEmpNo().equals(searchCard.cityCode + searchCard.cardNo)))||searchCard.cardType.equals("10")||searchCard.cardType.equals("11")) {
                 } else {
                     Log.i("test", "上一次时间" + DateUtil.String2Date(consumeCard.getTransTime()).getTime() + "   当前时间：" + System.currentTimeMillis());
-                    if (Math.abs(DateUtil.String2Date(consumeCard.getTransTime()).getTime() - System.currentTimeMillis()) < 30000) {//特殊卡1分钟间隔
+                    if (Math.abs(DateUtil.String2Date(consumeCard.getTransTime()).getTime() - System.currentTimeMillis()) < 60000) {//特殊卡1分钟间隔
                         BusToast.showToast(BusApp.getInstance(), "重复刷卡", false);
 //                        notice(music, "重复刷卡", false);
                         lastTime = SystemClock.elapsedRealtime();
@@ -136,10 +125,10 @@ public class LoopCardThread_GJ extends Thread {
                 }
             }
 
-            /*************司机未上班只能刷司机卡********************/
+//            /*************司机未上班只能刷司机卡********************/
             String driverNo = BusApp.getPosManager().getDriverNo();
-            if (TextUtils.equals(driverNo, String.format("%08d", 0))
-                    && !TextUtils.equals(searchCard.cardType, "46") && !TextUtils.equals(searchCard.cardType, "06") && !TextUtils.equals(searchCard.cardType, "40")) {
+            Log.i("刷卡", " 司机号：  " + driverNo + "  卡类型：" + searchCard.cardType);
+            if (TextUtils.equals(driverNo, String.format("%08d", 0)) && !TextUtils.equals(searchCard.cardType, "06")) {
                 return;
             }
 
@@ -159,7 +148,14 @@ public class LoopCardThread_GJ extends Thread {
                     }
                 }
             }
-
+            //防止重复刷卡
+            //去重刷,同一个卡号3S内不提示
+            if (Util.check(cardNoTemp, searchCard.cardNo)) {
+//                lastTime = SystemClock.elapsedRealtime();
+//                BusToast.showToast(BusApp.getInstance(), "您已刷过[" + searchCard.cardType + "]", false);
+                Log.i("刷卡", " 3S 去重  ");
+                return;
+            }
 
 
             //1.判断是否已签到
@@ -172,7 +168,7 @@ public class LoopCardThread_GJ extends Thread {
                     ConsumeCard response = response(0, false, false, false, true);
                     SLog.d("LoopCardThread(run.java:67)签到>>" + response);
                     if (TextUtils.equals(response.getStatus(), "00") &&
-                            TextUtils.equals(response.getTransType(), "12")) {
+                            TextUtils.equals(response.getTransType(), "06")) {
                         //司机卡上班
                         BusApp.getPosManager().setDriverNo(response.getTac(), response.getCardNo());
                         notice(Config.IC_TO_WORK, "司机卡上班[" + response.getTac() + "]", true);

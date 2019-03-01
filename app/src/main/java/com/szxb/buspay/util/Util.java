@@ -172,6 +172,18 @@ public class Util {
                 && filter(SystemClock.elapsedRealtime(), lastTime);//两次刷卡间隔大于1S(防止语音叠加)
     }
 
+    /**
+     * 防连刷（3S）
+     *
+     * @param temCardNo 临时卡号
+     * @param cardNo    当前卡号
+     * @return true则继续往下走
+     */
+    public static boolean check(String temCardNo, String cardNo) {
+
+        return TextUtils.equals(temCardNo, cardNo);//不是相同的卡
+    }
+
     public static boolean filter(long currentTime, long lastTime) {
         return currentTime - lastTime > 2000;
     }

@@ -98,7 +98,6 @@ public class BusApp extends Application {
         SophixManager.getInstance().queryAndLoadNewPatch();
         crashReport();
         initTask();
-
         initService();
     }
 
