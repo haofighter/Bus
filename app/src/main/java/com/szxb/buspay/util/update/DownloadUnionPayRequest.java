@@ -31,11 +31,11 @@ public class DownloadUnionPayRequest extends BaseRequest {
     @Override
     protected void doSubscribe(ObservableEmitter<ResponseMessage> e) {
         response.setWhat(ResponseMessage.WHAT_UNION);
-//        UnionPayParam unionParam1 = new UnionPayParam();
-//        unionParam1.setSn("99900301");
-//        unionParam1.setMch("105370941319002");
-//        unionParam1.setKey("4664DCD92CD07FD932E5C2402F292CF1");
-//        Util.updateUnionParam(unionParam1);
+        UnionPayParam unionParam1 = new UnionPayParam();
+        unionParam1.setSn("99900301");
+        unionParam1.setMch("105370941319002");
+        unionParam1.setKey("4664DCD92CD07FD932E5C2402F292CF1");
+        Util.updateUnionParam(unionParam1);
 
         int res = Util.downUnionPayParasFile(forceUpdate, "unionpay/", "银联参数检查更新");
         if (res == 1) {

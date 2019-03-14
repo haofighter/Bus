@@ -114,7 +114,9 @@ public abstract class BaseLineAdapter extends RecyclerView.Adapter<BaseLineAdapt
 
     //选中
     public void okKey() {
-        select(mList.get(position));
+        if (mList.size() > 0 && position < mList.size()) {
+            select(mList.get(position));
+        }
     }
 
     private void move() {

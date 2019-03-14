@@ -185,7 +185,7 @@ public class Util {
     }
 
     public static boolean filter(long currentTime, long lastTime) {
-        return currentTime - lastTime > 2000;
+        return currentTime - lastTime > 1000;
     }
 
     private static boolean checkSwipe(long currentTime, long lastTime) {

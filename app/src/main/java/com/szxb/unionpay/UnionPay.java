@@ -59,7 +59,7 @@ public class UnionPay {
         return instance;
     }
 
-    public  void exeSSL(int what, byte[] sendData) {
+    public void exeSSL(int what, byte[] sendData) {
         exeSSL(what, sendData, false);
     }
 
@@ -154,6 +154,7 @@ public class UnionPay {
                                         SLog.d("UnionPay(success.java:136)卡过期");
                                         break;
                                     default:
+                                        SLog.d("刷卡失败报错" + Util.unionPayStatus(resCode));
                                         BusToast.showToast(BusApp.getInstance().getApplicationContext(), "刷卡失败[" + Util.unionPayStatus(resCode) + "]", false);
                                         break;
                                 }
