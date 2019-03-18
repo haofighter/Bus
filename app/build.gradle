@@ -66,23 +66,23 @@ android {
 //            buildConfigField 'int', 'CITY', '3'
 //        }
 
-            laiwu_app {
-                versionCode 100
-                versionName "1.0.3"
-                buildConfigField 'String', 'LOG_TAG', '"laiwu"'
-    //            buildConfigField 'String', 'BIN_NAME', '"laiwu_cy.bin"'
-                buildConfigField 'String', 'BIN_NAME', '"laiwu_gj.bin"'
-                buildConfigField 'int', 'CITY', '2'
-            }
-
-
-//            laiwucy_app {
+//            laiwu_app {
 //                versionCode 100
 //                versionName "1.0.3"
-//                buildConfigField 'String', 'LOG_TAG', '"laiwuchangyun"'
-//                buildConfigField 'String', 'BIN_NAME', '"laiwu_cy_0209.bin"'
-//                buildConfigField 'int', 'CITY', '7'
+//                buildConfigField 'String', 'LOG_TAG', '"laiwu"'
+//    //            buildConfigField 'String', 'BIN_NAME', '"laiwu_cy.bin"'
+//                buildConfigField 'String', 'BIN_NAME', '"laiwu_gj.bin"'
+//                buildConfigField 'int', 'CITY', '2'
 //            }
+
+
+            laiwucy_app {
+                versionCode 100
+                versionName "1.0.3"
+                buildConfigField 'String', 'LOG_TAG', '"laiwuchangyun"'
+                buildConfigField 'String', 'BIN_NAME', '"laiwu_cy_0209.bin"'
+                buildConfigField 'int', 'CITY', '7'
+            }
 
 
 //        rc_app {

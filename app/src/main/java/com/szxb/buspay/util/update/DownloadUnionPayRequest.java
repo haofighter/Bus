@@ -10,6 +10,7 @@ import com.szxb.buspay.util.HexUtil;
 import com.szxb.buspay.util.Util;
 import com.szxb.buspay.util.param.sign.FileByte;
 import com.szxb.mlog.SLog;
+import com.szxb.unionpay.unionutil.ParseUtil;
 
 import io.reactivex.ObservableEmitter;
 
@@ -31,11 +32,11 @@ public class DownloadUnionPayRequest extends BaseRequest {
     @Override
     protected void doSubscribe(ObservableEmitter<ResponseMessage> e) {
         response.setWhat(ResponseMessage.WHAT_UNION);
-        UnionPayParam unionParam1 = new UnionPayParam();
-        unionParam1.setSn("99900301");
-        unionParam1.setMch("105370941319002");
-        unionParam1.setKey("4664DCD92CD07FD932E5C2402F292CF1");
-        Util.updateUnionParam(unionParam1);
+//        UnionPayParam unionParam1 = new UnionPayParam();
+//        unionParam1.setSn("99900301");
+//        unionParam1.setMch("105370941319002");
+//        unionParam1.setKey("4664DCD92CD07FD932E5C2402F292CF1");
+//        Util.updateUnionParam(unionParam1);
 
         int res = Util.downUnionPayParasFile(forceUpdate, "unionpay/", "银联参数检查更新");
         if (res == 1) {
@@ -49,6 +50,7 @@ public class DownloadUnionPayRequest extends BaseRequest {
                 Util.updateUnionParam(unionParam);
                 response.setStatus(ResponseMessage.SUCCESSFUL);
                 response.setMsg("银联参数更新成功");
+                ParseUtil.initUnionPay();
 //                SLog.d("DownloadUnionPayRequest(doSubscribe.java:47)unionParam=" + unionParam);
             }
         } else if (res == 2) {

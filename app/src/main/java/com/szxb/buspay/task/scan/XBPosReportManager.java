@@ -13,6 +13,7 @@ import com.szxb.buspay.util.Util;
 import com.szxb.buspay.util.tip.BusToast;
 import com.szxb.buspay.util.update.BaseRequest;
 import com.szxb.mlog.SLog;
+import com.szxb.unionpay.unionutil.ParseUtil;
 
 import java.util.List;
 
@@ -68,6 +69,7 @@ public class XBPosReportManager {
                     String resultUnion = qrcode.substring(10, qrcode.length());
                     UnionPayParam unionPayParam = new Gson().fromJson(resultUnion, UnionPayParam.class);
                     Util.updateUnionParam(unionPayParam);
+                    ParseUtil.initUnionPay();
                     break;
                 case QRCode.QR_MOREN:
 

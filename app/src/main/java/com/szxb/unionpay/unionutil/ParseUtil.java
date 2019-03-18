@@ -140,6 +140,7 @@ public class ParseUtil {
                 byte[] exe = UnionPay.getInstance().exeSyncSSL(message.getBytes());
                 if (exe == null) {
                     SLog.d("InitZipActivity(call.java:83)签到失败>>");
+                    BusToast.showToast(BusApp.getInstance(), "银联签到失败", true);
                 } else {
                     Iso8583MessageFactory factory = SingletonFactory.forQuickStart();
                     factory.setSpecialFieldHandle(62, new SpecialField62());
@@ -148,7 +149,7 @@ public class ParseUtil {
                     if (message0810.getValue(39).getValue().equals("00")) {
                         String batchNum = message0810.getValue(60).getValue().substring(2, 8);
                         BusllPosManage.getPosManager().setBatchNum(batchNum);
-                        parseMackey(message0810.getValue(62).getValue(),false);
+                        parseMackey(message0810.getValue(62).getValue(), true);
                     }
                     SLog.d("InitZipActivity(call.java:89)签到\n" + message0810.toFormatString());
                 }
