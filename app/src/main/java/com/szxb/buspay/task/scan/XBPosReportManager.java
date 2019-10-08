@@ -81,7 +81,6 @@ public class XBPosReportManager {
                     if (linEntity != null) {
                         String fileName = HexUtil.fileName(linEntity.getL());
                         SLog.d("XBPosReportManager(posScan.java:70)需要下载的文件名：" + fileName);
-
                         List<BaseRequest> taskList = AppUtil.getDownloadAppointFileList(fileName, linEntity.getN());
                         AppUtil.run(taskList, null);
                     }

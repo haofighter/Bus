@@ -20,13 +20,13 @@ import static android.content.Context.MODE_MULTI_PROCESS;
 
 public class CommonSharedPreferences {
 
-    public static final String FILE_NAME = BuildConfig.CITY==1?"XB_BASE_PARAMS_TEMP":"XB_BASE_PARAMS";
+    public static final String FILE_NAME = BuildConfig.CITY == 1 ? "XB_BASE_PARAMS_TEMP" : "XB_BASE_PARAMS";
 
     public static void put(String key, Object value) {
 
-        SharedPreferences sp = BusApp.getInstance().getSharedPreferences(FILE_NAME, MODE_MULTI_PROCESS)
-                ;
+        SharedPreferences sp = BusApp.getInstance().getSharedPreferences(FILE_NAME, MODE_MULTI_PROCESS);
         SharedPreferences.Editor editor = sp.edit();
+        //editor.putString("DataNumber","0");
 
         if (value instanceof Boolean) {
             editor.putBoolean(key, (Boolean) value);

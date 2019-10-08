@@ -5,6 +5,8 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.IBinder;
@@ -16,6 +18,7 @@ import com.szxb.buspay.manager.PosManager;
 import com.szxb.buspay.task.TaskDelFile;
 import com.szxb.buspay.task.service.RecordThread;
 import com.szxb.buspay.task.thread.ThreadFactory;
+import com.szxb.buspay.task.thread.ThreadScheduledExecutorUtil;
 import com.szxb.buspay.task.thread.WorkThread;
 import com.szxb.buspay.util.AppUtil;
 import com.szxb.buspay.util.DateUtil;
@@ -29,6 +32,7 @@ import com.szxb.mlog.PrettyFormatStrategy;
 import com.szxb.mlog.SLog;
 import com.szxb.unionpay.config.UnionPayManager;
 import com.szxb.unionpay.dispose.BankRefund;
+import com.szxb.jni.libszxb;
 import com.taobao.sophix.PatchStatus;
 import com.taobao.sophix.SophixManager;
 import com.taobao.sophix.listener.PatchLoadStatusListener;
@@ -36,6 +40,7 @@ import com.tencent.bugly.crashreport.CrashReport;
 import com.yanzhenjie.nohttp.InitializationConfig;
 import com.yanzhenjie.nohttp.NoHttp;
 import com.yanzhenjie.nohttp.OkHttpNetworkExecutor;
+import com.yanzhenjie.nohttp.URLConnectionNetworkExecutor;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -83,23 +88,36 @@ public class BusApp extends Application {
         BusllPosManage.init(unionPayManager);
 
         manager = new PosManager();
-        manager.loadFromPrefs(city, binName);
+        manager.loadFromPrefs(city, binName);//初始化配置文件
 
 
         initLog();
 
-        SoundPoolUtil.init(this);
+        SoundPoolUtil.init(this);//初始化声音
 
+        //初始化网络请求
         NoHttp.initialize(InitializationConfig.newBuilder(this)
-                .networkExecutor(new OkHttpNetworkExecutor())
+                .networkExecutor(new URLConnectionNetworkExecutor())
                 .connectionTimeout(15 * 1000)
                 .build());
 
         SophixManager.getInstance().queryAndLoadNewPatch();
-        crashReport();
-        initTask();
+        crashReport();//崩溃日志上报
+        initTask();//开启轮询线程
         initService();
+//        AlUtils.test();
     }
+
+//    /**
+//     * 初始化阿里支付sdk
+//     */
+//    private void initAliPay() {
+//        IBusCloudStdRetCodeEnum rc = IBusCloudPos.initIBusCloudSDK();
+//        if (IBusCloudStdRetCodeEnum.IBUSCLOUDSDK_SUCCESS != rc) {
+//            throw new RuntimeException("initIBusCloudSDK Failed!");
+//        }
+//    }
+
 
     //连接服务
     private void initService() {
@@ -248,5 +266,44 @@ public class BusApp extends Application {
         //判断网络是否已经连接，如果连接的话，返回true，否则false
         return (networkInfo != null && networkInfo.isConnected());
 
+    }
+
+    public int packageCode() {
+        PackageManager manager = getPackageManager();
+        int code = 0;
+        try {
+            PackageInfo info = manager.getPackageInfo(getPackageName(), 0);
+            code = info.versionCode;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return code;
+    }
+
+    public static void setBusNumber(int cishu){
+
+        byte[] num = new byte[4];
+        if(cishu>0&&cishu<10){
+            num[0] = 0;
+            num[1] = 0;
+            num[2] = 0;
+            num[3] = (byte) cishu;
+        }else if(cishu>9&&cishu<100){
+            num[0] = 0;
+            num[1] = 0;
+            num[2] = (byte) (cishu/10);
+            num[3] = (byte) (cishu%10);
+        }else if(cishu>99&&cishu<1000){
+            num[0] = 0;
+            num[1] = (byte) (cishu/100);
+            num[2] = (byte) ((cishu%100)/10);
+            num[3] = (byte)((cishu%100)%10);
+        }else if(cishu>999&&cishu<10000){
+            num[0] = (byte) (cishu/1000);
+            num[1] = (byte) ((cishu%1000)/100);
+            num[2] = (byte) (((cishu%1000)%100)/10);
+            num[3] = (byte)(((cishu%1000)%100)%10);
+        }
+        libszxb.setNixietube(num);
     }
 }

@@ -1,8 +1,8 @@
 package com.szxb.buspay.db.entity.bean;
 
 import org.greenrobot.greendao.annotation.Entity;
-import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Generated;
+import org.greenrobot.greendao.annotation.Id;
 
 /**
  * 作者：Tangren on 2018-07-18
@@ -21,54 +21,78 @@ public class LINEGuideEntity {
     String routeversion;
     String routevname;
     String fileName;
-    @Generated(hash = 139818251)
-    public LINEGuideEntity(Long id, String acnt, String routeno,
-            String routeversion, String routevname, String fileName) {
+    boolean needUpdate;
+
+    @Generated(hash = 448040329)
+    public LINEGuideEntity(Long id, String acnt, String routeno, String routeversion,
+            String routevname, String fileName, boolean needUpdate) {
         this.id = id;
         this.acnt = acnt;
         this.routeno = routeno;
         this.routeversion = routeversion;
         this.routevname = routevname;
         this.fileName = fileName;
+        this.needUpdate = needUpdate;
     }
+
     @Generated(hash = 538097070)
     public LINEGuideEntity() {
     }
+
     public Long getId() {
         return this.id;
     }
+
     public void setId(Long id) {
         this.id = id;
     }
+
     public String getAcnt() {
         return this.acnt;
     }
+
     public void setAcnt(String acnt) {
         this.acnt = acnt;
     }
+
     public String getRouteno() {
         return this.routeno;
     }
+
     public void setRouteno(String routeno) {
         this.routeno = routeno;
     }
+
     public String getRouteversion() {
         return this.routeversion;
     }
+
     public void setRouteversion(String routeversion) {
         this.routeversion = routeversion;
     }
+
     public String getRoutevname() {
         return this.routevname;
     }
+
     public void setRoutevname(String routevname) {
         this.routevname = routevname;
     }
+
     public String getFileName() {
         return this.fileName;
     }
+
     public void setFileName(String fileName) {
         this.fileName = fileName;
     }
-   
+
+    public boolean getNeedUpdate() {
+        return this.needUpdate;
+    }
+
+    public void setNeedUpdate(boolean needUpdate) {
+        this.needUpdate = needUpdate;
+    }
+
 }

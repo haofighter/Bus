@@ -13,6 +13,7 @@ import com.szxb.buspay.db.entity.bean.card.SearchCard;
 import com.szxb.buspay.db.entity.scan.PosRecord;
 import com.szxb.buspay.db.manager.DBCore;
 import com.szxb.buspay.db.manager.DBManager;
+import com.szxb.buspay.db.sp.CommonSharedPreferences;
 import com.szxb.buspay.task.thread.ThreadFactory;
 import com.szxb.buspay.task.thread.WorkThread;
 import com.szxb.buspay.util.AppUtil;
@@ -28,6 +29,7 @@ import com.szxb.jni.libszxb;
 import com.szxb.mlog.SLog;
 import com.szxb.unionpay.UnionCard;
 
+import java.util.Calendar;
 import java.util.List;
 
 import static com.szxb.buspay.task.card.lw.CardTypeGJ.CARD_NORMAL;
@@ -57,7 +59,7 @@ public class LoopCardThread_CY extends Thread {
         super.run();
         try {
             byte[] searchBytes = new byte[120];
-            int status = libszxb.MifareGetSNR(searchBytes);
+            int status =libszxb.MifareGetSNR(searchBytes);
             if (status < 0) {
                 if (status == -2) {
                     //重启K21
@@ -108,16 +110,15 @@ public class LoopCardThread_CY extends Thread {
             String[] coefficent = BusApp.getPosManager().getCoefficent();
             int basePrices = BusApp.getPosManager().getBasePrice();
             int price = string2Int(coefficent[0]) * basePrices / 100;
-
             if (consumeCard != null &&
                     !"41".equals(consumeCard.getCardType()) && !"04".equals(consumeCard.getCardType())
                     && !"41".equals(searchCard.cardType) && !"04".equals(searchCard.cardType)) {
                 String cardN = BusApp.getPosManager().getEmpNo();
-                if ((searchCard.cardType.equals("46") && (BusApp.getPosManager().getEmpNo().equals("00000000") || BusApp.getPosManager().getEmpNo().equals(searchCard.cityCode + searchCard.cardNo)))||searchCard.cardType.equals("10")||searchCard.cardType.equals("11")) {
+                if (((searchCard.cardType.equals("46") || searchCard.cardType.equals("06")) && (BusApp.getPosManager().getEmpNo().equals("00000000") || BusApp.getPosManager().getEmpNo().equals(searchCard.cityCode + searchCard.cardNo))) || searchCard.cardType.equals("10") || searchCard.cardType.equals("11")) {
                 } else {
                     Log.i("test", "上一次时间" + DateUtil.String2Date(consumeCard.getTransTime()).getTime() + "   当前时间：" + System.currentTimeMillis());
                     if (Math.abs(DateUtil.String2Date(consumeCard.getTransTime()).getTime() - System.currentTimeMillis()) < 60000) {//特殊卡1分钟间隔
-                        BusToast.showToast(BusApp.getInstance(), "重复刷卡", false);
+                        BusToast.showToast(BusApp.getInstance(), "重复刷卡，卡类型：" + searchCard.cardType, false);
 //                        notice(music, "重复刷卡", false);
                         lastTime = SystemClock.elapsedRealtime();
                         return;
@@ -167,8 +168,7 @@ public class LoopCardThread_CY extends Thread {
                     //只允许普通员工签到
                     ConsumeCard response = response(0, false, false, false, true);
                     SLog.d("LoopCardThread(run.java:67)签到>>" + response);
-                    if (TextUtils.equals(response.getStatus(), "00") &&
-                            TextUtils.equals(response.getTransType(), "06")) {
+                    if (TextUtils.equals(response.getStatus(), "00") && TextUtils.equals(response.getTransType(), "12")) {
                         //司机卡上班
                         BusApp.getPosManager().setDriverNo(response.getTac(), response.getCardNo());
                         notice(Config.IC_TO_WORK, "司机卡上班[" + response.getTac() + "]", true);
@@ -370,6 +370,7 @@ public class LoopCardThread_CY extends Thread {
         String cardType = response.getCardType();
         switch (cardType) {
             case "41"://普通卡和CPU福利卡
+            case "01"://普通卡和CPU福利卡
                 checkTheBalance(response, hex2Int(balance) > 500 ? Config.IC_BASE : Config.IC_RECHARGE);
                 break;
             case "02"://学生卡
@@ -394,6 +395,7 @@ public class LoopCardThread_CY extends Thread {
                 zeroDis(response);
                 checkTheBalance(response, Config.IC_DIS);
                 break;
+            case "06":
             case "46"://员工卡
                 if (TextUtils.equals(response.getTransType(), "13")) {
                     //下班
@@ -642,7 +644,6 @@ public class LoopCardThread_CY extends Thread {
                 }
             }
         } catch (Exception e) {
-            BusToast.showToast(BusApp.getInstance(), "折扣获取失败", false);
             return string2Int(coefficent[0]) * basePrices / 100;
         }
     }
@@ -702,6 +703,9 @@ public class LoopCardThread_CY extends Thread {
     private void offWork(ConsumeCard response) {
         BusApp.getPosManager().setDriverNo(String.format("%08d", 0), String.format("%08d", 0));
         notice(Config.IC_OFF_WORK, "司机卡下班[00]", true);
+
+
+
         if (response != null) {
             saveRecord(response);
         }
@@ -734,7 +738,18 @@ public class LoopCardThread_CY extends Thread {
      * @param isOk   .
      */
     private void notice(int music, String tipVar, boolean isOk) {
-        SoundPoolUtil.play(music);
+        SoundPoolUtil.play(music);//播报语音下班
+
+        Log.i("下班语音播报：","true"); //日志显示
+
+        BusApp.setBusNumber(0);//司机下班后，将计数器清零
+
+        Calendar calendar = Calendar.getInstance();
+        String day = String.valueOf(calendar.get(Calendar.DAY_OF_MONTH)); //计数保存的时间
+        CommonSharedPreferences.put("NumberTime",22);
+
+        Log.i("下班日期：",day);
+
         BusToast.showToast(BusApp.getInstance(), tipVar, isOk);
     }
 

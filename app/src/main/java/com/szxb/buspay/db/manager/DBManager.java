@@ -10,6 +10,7 @@ import com.szxb.buspay.BusApp;
 import com.szxb.buspay.db.dao.BlackListCardDao;
 import com.szxb.buspay.db.dao.BlackListEntityDao;
 import com.szxb.buspay.db.dao.ConsumeCardDao;
+import com.szxb.buspay.db.dao.LINEGuideEntityDao;
 import com.szxb.buspay.db.dao.LineInfoEntityDao;
 import com.szxb.buspay.db.dao.MacKeyEntityDao;
 import com.szxb.buspay.db.dao.PublicKeyEntityDao;
@@ -104,6 +105,26 @@ public class DBManager {
     public static LineInfoEntity getLineInfoEntity(String lineNo) {
         LineInfoEntityDao dao = getDaoSession().getLineInfoEntityDao();
         return dao.queryBuilder().where(LineInfoEntityDao.Properties.Line.eq(lineNo)).limit(1).build().unique();
+    }
+
+    /**
+     * 根据线路号获取线路信息
+     *
+     * @return .
+     */
+    public static LineInfoEntity getLineInfoByFileName(String fileName) {
+        LineInfoEntityDao dao = getDaoSession().getLineInfoEntityDao();
+        return dao.queryBuilder().where(LineInfoEntityDao.Properties.LineFileName.eq(fileName)).limit(1).build().unique();
+    }
+
+    /**
+     * 根据线路号获取线路信息
+     *
+     * @return .
+     */
+    public static LINEGuideEntity getLineGuide(String an, String cn) {
+        LINEGuideEntityDao dao = getDaoSession().getLINEGuideEntityDao();
+        return dao.queryBuilder().where(LINEGuideEntityDao.Properties.Acnt.eq(an), LINEGuideEntityDao.Properties.Routeno.eq(cn)).limit(1).build().unique();
     }
 
     /**

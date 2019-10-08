@@ -4,6 +4,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.szxb.buspay.BusApp;
+import com.szxb.buspay.util.Util;
 import com.szxb.mlog.SLog;
 
 import org.apache.commons.net.ftp.FTPClient;
@@ -11,6 +12,7 @@ import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.FTPReply;
 
 import java.io.BufferedOutputStream;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -40,7 +42,7 @@ public class FTP {
     private String tag = "TAG";
 
 
-    private String[] ftpPaths;
+
     private String packgeName;
 
     private String posSn;
@@ -344,6 +346,5 @@ public class FTP {
 
         return success;
     }
-
 
 }

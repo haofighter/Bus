@@ -64,7 +64,7 @@ public class libszxb {
 	public static native int deviceTime(byte[] buf, boolean flag);
 	public static native int devicekey(byte[] recv);
 	public static native int getBarcode(byte[] recv);
-	public static native int setNixietube(byte[] nos);
+	public static native int setNixietube(byte[] nos);  //公交计数功能
 	public static native int setLed(byte[] leds);
 	public static native String getVersion();
 	public static native String getCarInfo();

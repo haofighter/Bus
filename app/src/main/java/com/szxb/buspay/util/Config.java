@@ -29,17 +29,23 @@ public class Config {
 //    private static final String IP = "http://112.74.102.125" ;
 //    private static final String IP = "http://2t183d9338.iask.in:27781";
 
-    //小兵mac
-    public static final String MAC_KEY = IP + "/bipbus/interaction/getmackey";
-
-    //小兵公钥
-    public static final String PUBLIC_KEY = IP + "/bipbus/interaction/getpubkey";
 
     //小兵黑名单
     public static final String BLACK_LIST = IP + "/bipbus/interaction/blacklist";
 
     //小兵腾讯支付
     public static final String XBPAY = IP + "/bipbus/interaction/posrecv";
+
+    //小兵mac
+    public static final String MAC_KEY = IP + "/bipbus/interaction/getmackey";
+
+    //小兵公钥
+    public static final String PUBLIC_KEY = IP + "/bipbus/interaction/getpubkey";
+
+    public static final String ALI_PUBLIC_KEY = "http://2t183d9338.iask.in:37092/jnbus/interaction/getAlipayPubKey";
+    //小兵济南支付
+    public static final String XBPAY_JINA_WX = "http://2t183d9338.iask.in:37092/jnbus/interaction/wxposrecv";
+    public static final String XBPAY_JINA_AL = "http://2t183d9338.iask.in:37092/jnbus/interaction/zfbposrecv";
 
     //IC卡上传
     public static final String IC_CARD_RECORD = IP + "/bipbus/interaction/carduploadzb";
@@ -122,7 +128,18 @@ public class Config {
     public static final int JUNRENKA_T = LAORENKA_T + 1;//军人卡
 
     public static final int GUANAIKA_T = LAORENKA_T + 1;//关爱卡
-    public static final int IC_NEWFREE = GUANAIKA_T + 1;//关爱卡
+
+    public static final int IC_NEWFREE = GUANAIKA_T + 1;//
+
+    public static final int ZHIFU_SUC = 38;//支付成功
+
+    public static final int SUCCESS = ZHIFU_SUC+1;//成功
+
+    public static final int LOSE = SUCCESS+1;//失败
+
+    public static final int YINLIANSHAOMA = LOSE+1;//银联扫码
+
+    public static final int YINLIANSHANFU = YINLIANSHAOMA+1;//银联闪付
 
 
     //菜单

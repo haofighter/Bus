@@ -1,5 +1,6 @@
 package com.szxb.buspay;
 
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Message;
 import android.text.Spannable;
@@ -12,13 +13,16 @@ import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.szxb.buspay.db.entity.bean.MainEntity;
 import com.szxb.buspay.db.entity.bean.QRCode;
 import com.szxb.buspay.db.entity.bean.QRScanMessage;
+import com.szxb.buspay.db.sp.CommonSharedPreferences;
 import com.szxb.buspay.interfaces.OnReceiverMessageListener;
 import com.szxb.buspay.module.BaseActivity;
 import com.szxb.buspay.module.WeakHandler;
+import com.szxb.buspay.task.card.haikou.LoopCardThread_HK;
 import com.szxb.buspay.task.card.lw.LoopCardThread_CY;
 import com.szxb.buspay.task.card.lw.LoopCardThread_GJ;
 import com.szxb.buspay.task.card.taian.LoopCardThread_TA;
@@ -34,6 +38,9 @@ import com.szxb.buspay.util.sound.SoundPoolUtil;
 import com.szxb.buspay.util.tip.BusToast;
 import com.szxb.unionpay.unionutil.ParseUtil;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import static com.szxb.buspay.util.AppUtil.sp2px;
@@ -61,9 +68,29 @@ public class MainActivity extends BaseActivity implements OnReceiverMessageListe
         prices = (TextView) findViewById(R.id.prices);
         version_name = (TextView) findViewById(R.id.version_name);
         bus_no = (TextView) findViewById(R.id.bus_no);
-        sign_time = (TextView) findViewById(R.id.sign_time );
+        sign_time = (TextView) findViewById(R.id.sign_time);
         sign_version = (TextView) findViewById(R.id.sign_version);
         sign_bus_no = (TextView) findViewById(R.id.sign_bus_no);
+
+
+        String time = new SimpleDateFormat("dd").format(new Date(System.currentTimeMillis()));//当前日期
+
+        if(String.valueOf(CommonSharedPreferences.get("NumberTime",0)).equals(time)){
+            //如果保存的日期与当前日期是一样的，那就直接去读取，并将数据展示出来
+            BusApp.setBusNumber((Integer) CommonSharedPreferences.get("infonumber",0));
+        }else{
+            //存储的日期与当前日期不一样，从设计数器并重新读取显示
+            CommonSharedPreferences.put("infonumber",0);
+            BusApp.setBusNumber((Integer) CommonSharedPreferences.get("infonumber",0));
+        }
+        //BusApp.setBusNumber(0);
+        //用于没有司机卡的时候 手动签到
+        findViewById(R.id.sign).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                BusApp.getPosManager().setDriverNo("12345677", "12313131");
+            }
+        });
     }
 
     @Override
@@ -81,9 +108,10 @@ public class MainActivity extends BaseActivity implements OnReceiverMessageListe
                             : TextUtils.equals(appId, "10000093") ? new LoopCardThread_GJ()//莱芜公交
                             : TextUtils.equals(appId, "10000010") ? new LoopCardThread_CY()//莱芜长运
                             : TextUtils.equals(appId, "10000098") ? new LoopCardThread_TA()//泰安
-                            : TextUtils.equals(appId, "10000011") ? new LoopCardThread_ZY() ://招远
+                            : TextUtils.equals(appId, "10000011") ? new LoopCardThread_ZY() //招远
+                            : TextUtils.equals(appId, "99999999") ? new LoopCardThread_HK() ://海口
                             new LoopCardThread()
-                    , 500, 200, "loop_ic", TimeUnit.MILLISECONDS);
+                    , 500, 500, "loop_ic", TimeUnit.MILLISECONDS);
         }
     }
 
@@ -91,6 +119,12 @@ public class MainActivity extends BaseActivity implements OnReceiverMessageListe
         String driverNo = BusApp.getPosManager().getDriverNo();
         if (TextUtils.equals(driverNo, String.format("%08d", 0))) {
             main_sign.setVisibility(View.VISIBLE);
+            main_sign.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    BusApp.getPosManager().setDriverNo("1231313", "23131");
+                }
+            });
         }
         setPrices();
         sign_time.setText(DateUtil.getCurrentDate("yyyy-MM-dd"));

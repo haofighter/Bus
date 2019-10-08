@@ -7,11 +7,13 @@ import android.util.Log;
 import com.szxb.buspay.BusApp;
 import com.szxb.buspay.db.dao.UnionAidEntityDao;
 import com.szxb.buspay.db.manager.DBCore;
+import com.szxb.buspay.db.sp.CommonSharedPreferences;
 import com.szxb.buspay.task.thread.ThreadFactory;
 import com.szxb.buspay.task.thread.WorkThread;
 import com.szxb.buspay.util.Config;
 import com.szxb.buspay.util.DateUtil;
 import com.szxb.buspay.util.Util;
+import com.szxb.buspay.util.sound.SoundPoolUtil;
 import com.szxb.buspay.util.tip.BusToast;
 import com.szxb.java8583.core.Iso8583Message;
 import com.szxb.java8583.module.BankPay;
@@ -28,6 +30,7 @@ import com.szxb.unionpay.unionutil.HexUtil;
 import com.szxb.unionpay.unionutil.TLV;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -106,7 +109,7 @@ public class UnionCard {
         }
 
         try {
-            money = BusApp.getPosManager().getUnionPayPrice();
+            money = BusApp.getPosManager().getUnionPayPrice();//初始化信息，得到票价
 
             if (money > 1500) {
                 notice(Config.EC_FEE, "金额超出最大限制[" + money + "]", false);
@@ -333,22 +336,28 @@ public class UnionCard {
                 payEntity.setUniqueFlag(String.format("%06d", BusllPosManage.getPosManager().getTradeSeq()) + BusllPosManage.getPosManager().getBatchNum());
                 payEntity.setTlv55(tlv);
                 payEntity.setSingleData(HexUtil.bytesToHexString(sendData));
-
                 ThreadFactory.getScheduledPool().execute(new WorkThread("union", payEntity));
 
                 SLog.d("LoopCard(run.java:278)" + payEntity);
-                UnionPay.getInstance().exeSSL(UnionConfig.PAY, sendData);
-
-                ret = 0;
                 BusToast.showToast(BusApp.getInstance(), "刷卡成功:正在向银联发起请求", true);
+
+                //TODO:播报语音（银联闪付）
+                SoundPoolUtil.play(Config.YINLIANSHANFU);
+                int cishu = (int) CommonSharedPreferences.get("infonumber",0);
+                int a = (cishu+1);
+
+                //TODO:刷卡计数
+                BusApp.setBusNumber(a);
+                CommonSharedPreferences.put("infonumber",a);
+                UnionPay.getInstance().exeSSL(UnionConfig.PAY, sendData);
+                ret = 0;
                 tempStr = mainCardNo;
-                SLog.d("LoopCard(run.java:309)ret=" + ret);
                 break;
             } while (true);
 
-            if (ret != 0) {
-                BusToast.showToast(BusApp.getInstance(), "刷卡失败[" + ret + "]", false);
-            }
+//            if (ret != 0) {
+//                BusToast.showToast(BusApp.getInstance(), "刷卡失败[" + ret + "]", false);
+//            }
         } catch (Exception e) {
             e.printStackTrace();
             ret = EXCEPTION;

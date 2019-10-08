@@ -26,19 +26,20 @@ public class LineInfoEntityDao extends AbstractDao<LineInfoEntity, Long> {
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property Line = new Property(1, String.class, "line", false, "LINE");
-        public final static Property Version = new Property(2, String.class, "version", false, "VERSION");
-        public final static Property Up_station = new Property(3, String.class, "up_station", false, "UP_STATION");
-        public final static Property Down_station = new Property(4, String.class, "down_station", false, "DOWN_STATION");
-        public final static Property Chinese_name = new Property(5, String.class, "chinese_name", false, "CHINESE_NAME");
-        public final static Property Is_fixed_price = new Property(6, String.class, "is_fixed_price", false, "IS_FIXED_PRICE");
-        public final static Property Is_keyboard = new Property(7, String.class, "is_keyboard", false, "IS_KEYBOARD");
-        public final static Property Fixed_price = new Property(8, String.class, "fixed_price", false, "FIXED_PRICE");
-        public final static Property Coefficient = new Property(9, String.class, "coefficient", false, "COEFFICIENT");
-        public final static Property Shortcut_price = new Property(10, String.class, "shortcut_price", false, "SHORTCUT_PRICE");
-        public final static Property FileName = new Property(11, String.class, "fileName", false, "FILE_NAME");
-        public final static Property Rmk1 = new Property(12, String.class, "rmk1", false, "RMK1");
-        public final static Property Rmk2 = new Property(13, String.class, "rmk2", false, "RMK2");
-        public final static Property Rmk3 = new Property(14, String.class, "rmk3", false, "RMK3");
+        public final static Property LineFileName = new Property(2, String.class, "lineFileName", false, "LINE_FILE_NAME");
+        public final static Property Version = new Property(3, String.class, "version", false, "VERSION");
+        public final static Property Up_station = new Property(4, String.class, "up_station", false, "UP_STATION");
+        public final static Property Down_station = new Property(5, String.class, "down_station", false, "DOWN_STATION");
+        public final static Property Chinese_name = new Property(6, String.class, "chinese_name", false, "CHINESE_NAME");
+        public final static Property Is_fixed_price = new Property(7, String.class, "is_fixed_price", false, "IS_FIXED_PRICE");
+        public final static Property Is_keyboard = new Property(8, String.class, "is_keyboard", false, "IS_KEYBOARD");
+        public final static Property Fixed_price = new Property(9, String.class, "fixed_price", false, "FIXED_PRICE");
+        public final static Property Coefficient = new Property(10, String.class, "coefficient", false, "COEFFICIENT");
+        public final static Property Shortcut_price = new Property(11, String.class, "shortcut_price", false, "SHORTCUT_PRICE");
+        public final static Property FileName = new Property(12, String.class, "fileName", false, "FILE_NAME");
+        public final static Property Rmk1 = new Property(13, String.class, "rmk1", false, "RMK1");
+        public final static Property Rmk2 = new Property(14, String.class, "rmk2", false, "RMK2");
+        public final static Property Rmk3 = new Property(15, String.class, "rmk3", false, "RMK3");
     }
 
 
@@ -56,19 +57,20 @@ public class LineInfoEntityDao extends AbstractDao<LineInfoEntity, Long> {
         db.execSQL("CREATE TABLE " + constraint + "\"LINE_INFO_ENTITY\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
                 "\"LINE\" TEXT UNIQUE ," + // 1: line
-                "\"VERSION\" TEXT," + // 2: version
-                "\"UP_STATION\" TEXT," + // 3: up_station
-                "\"DOWN_STATION\" TEXT," + // 4: down_station
-                "\"CHINESE_NAME\" TEXT," + // 5: chinese_name
-                "\"IS_FIXED_PRICE\" TEXT," + // 6: is_fixed_price
-                "\"IS_KEYBOARD\" TEXT," + // 7: is_keyboard
-                "\"FIXED_PRICE\" TEXT," + // 8: fixed_price
-                "\"COEFFICIENT\" TEXT," + // 9: coefficient
-                "\"SHORTCUT_PRICE\" TEXT," + // 10: shortcut_price
-                "\"FILE_NAME\" TEXT," + // 11: fileName
-                "\"RMK1\" TEXT," + // 12: rmk1
-                "\"RMK2\" TEXT," + // 13: rmk2
-                "\"RMK3\" TEXT);"); // 14: rmk3
+                "\"LINE_FILE_NAME\" TEXT," + // 2: lineFileName
+                "\"VERSION\" TEXT," + // 3: version
+                "\"UP_STATION\" TEXT," + // 4: up_station
+                "\"DOWN_STATION\" TEXT," + // 5: down_station
+                "\"CHINESE_NAME\" TEXT," + // 6: chinese_name
+                "\"IS_FIXED_PRICE\" TEXT," + // 7: is_fixed_price
+                "\"IS_KEYBOARD\" TEXT," + // 8: is_keyboard
+                "\"FIXED_PRICE\" TEXT," + // 9: fixed_price
+                "\"COEFFICIENT\" TEXT," + // 10: coefficient
+                "\"SHORTCUT_PRICE\" TEXT," + // 11: shortcut_price
+                "\"FILE_NAME\" TEXT," + // 12: fileName
+                "\"RMK1\" TEXT," + // 13: rmk1
+                "\"RMK2\" TEXT," + // 14: rmk2
+                "\"RMK3\" TEXT);"); // 15: rmk3
     }
 
     /** Drops the underlying database table. */
@@ -91,69 +93,74 @@ public class LineInfoEntityDao extends AbstractDao<LineInfoEntity, Long> {
             stmt.bindString(2, line);
         }
  
+        String lineFileName = entity.getLineFileName();
+        if (lineFileName != null) {
+            stmt.bindString(3, lineFileName);
+        }
+ 
         String version = entity.getVersion();
         if (version != null) {
-            stmt.bindString(3, version);
+            stmt.bindString(4, version);
         }
  
         String up_station = entity.getUp_station();
         if (up_station != null) {
-            stmt.bindString(4, up_station);
+            stmt.bindString(5, up_station);
         }
  
         String down_station = entity.getDown_station();
         if (down_station != null) {
-            stmt.bindString(5, down_station);
+            stmt.bindString(6, down_station);
         }
  
         String chinese_name = entity.getChinese_name();
         if (chinese_name != null) {
-            stmt.bindString(6, chinese_name);
+            stmt.bindString(7, chinese_name);
         }
  
         String is_fixed_price = entity.getIs_fixed_price();
         if (is_fixed_price != null) {
-            stmt.bindString(7, is_fixed_price);
+            stmt.bindString(8, is_fixed_price);
         }
  
         String is_keyboard = entity.getIs_keyboard();
         if (is_keyboard != null) {
-            stmt.bindString(8, is_keyboard);
+            stmt.bindString(9, is_keyboard);
         }
  
         String fixed_price = entity.getFixed_price();
         if (fixed_price != null) {
-            stmt.bindString(9, fixed_price);
+            stmt.bindString(10, fixed_price);
         }
  
         String coefficient = entity.getCoefficient();
         if (coefficient != null) {
-            stmt.bindString(10, coefficient);
+            stmt.bindString(11, coefficient);
         }
  
         String shortcut_price = entity.getShortcut_price();
         if (shortcut_price != null) {
-            stmt.bindString(11, shortcut_price);
+            stmt.bindString(12, shortcut_price);
         }
  
         String fileName = entity.getFileName();
         if (fileName != null) {
-            stmt.bindString(12, fileName);
+            stmt.bindString(13, fileName);
         }
  
         String rmk1 = entity.getRmk1();
         if (rmk1 != null) {
-            stmt.bindString(13, rmk1);
+            stmt.bindString(14, rmk1);
         }
  
         String rmk2 = entity.getRmk2();
         if (rmk2 != null) {
-            stmt.bindString(14, rmk2);
+            stmt.bindString(15, rmk2);
         }
  
         String rmk3 = entity.getRmk3();
         if (rmk3 != null) {
-            stmt.bindString(15, rmk3);
+            stmt.bindString(16, rmk3);
         }
     }
 
@@ -171,69 +178,74 @@ public class LineInfoEntityDao extends AbstractDao<LineInfoEntity, Long> {
             stmt.bindString(2, line);
         }
  
+        String lineFileName = entity.getLineFileName();
+        if (lineFileName != null) {
+            stmt.bindString(3, lineFileName);
+        }
+ 
         String version = entity.getVersion();
         if (version != null) {
-            stmt.bindString(3, version);
+            stmt.bindString(4, version);
         }
  
         String up_station = entity.getUp_station();
         if (up_station != null) {
-            stmt.bindString(4, up_station);
+            stmt.bindString(5, up_station);
         }
  
         String down_station = entity.getDown_station();
         if (down_station != null) {
-            stmt.bindString(5, down_station);
+            stmt.bindString(6, down_station);
         }
  
         String chinese_name = entity.getChinese_name();
         if (chinese_name != null) {
-            stmt.bindString(6, chinese_name);
+            stmt.bindString(7, chinese_name);
         }
  
         String is_fixed_price = entity.getIs_fixed_price();
         if (is_fixed_price != null) {
-            stmt.bindString(7, is_fixed_price);
+            stmt.bindString(8, is_fixed_price);
         }
  
         String is_keyboard = entity.getIs_keyboard();
         if (is_keyboard != null) {
-            stmt.bindString(8, is_keyboard);
+            stmt.bindString(9, is_keyboard);
         }
  
         String fixed_price = entity.getFixed_price();
         if (fixed_price != null) {
-            stmt.bindString(9, fixed_price);
+            stmt.bindString(10, fixed_price);
         }
  
         String coefficient = entity.getCoefficient();
         if (coefficient != null) {
-            stmt.bindString(10, coefficient);
+            stmt.bindString(11, coefficient);
         }
  
         String shortcut_price = entity.getShortcut_price();
         if (shortcut_price != null) {
-            stmt.bindString(11, shortcut_price);
+            stmt.bindString(12, shortcut_price);
         }
  
         String fileName = entity.getFileName();
         if (fileName != null) {
-            stmt.bindString(12, fileName);
+            stmt.bindString(13, fileName);
         }
  
         String rmk1 = entity.getRmk1();
         if (rmk1 != null) {
-            stmt.bindString(13, rmk1);
+            stmt.bindString(14, rmk1);
         }
  
         String rmk2 = entity.getRmk2();
         if (rmk2 != null) {
-            stmt.bindString(14, rmk2);
+            stmt.bindString(15, rmk2);
         }
  
         String rmk3 = entity.getRmk3();
         if (rmk3 != null) {
-            stmt.bindString(15, rmk3);
+            stmt.bindString(16, rmk3);
         }
     }
 
@@ -247,19 +259,20 @@ public class LineInfoEntityDao extends AbstractDao<LineInfoEntity, Long> {
         LineInfoEntity entity = new LineInfoEntity( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // line
-            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // version
-            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // up_station
-            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // down_station
-            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // chinese_name
-            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // is_fixed_price
-            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // is_keyboard
-            cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // fixed_price
-            cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9), // coefficient
-            cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10), // shortcut_price
-            cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11), // fileName
-            cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12), // rmk1
-            cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13), // rmk2
-            cursor.isNull(offset + 14) ? null : cursor.getString(offset + 14) // rmk3
+            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // lineFileName
+            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // version
+            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // up_station
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // down_station
+            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // chinese_name
+            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // is_fixed_price
+            cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // is_keyboard
+            cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9), // fixed_price
+            cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10), // coefficient
+            cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11), // shortcut_price
+            cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12), // fileName
+            cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13), // rmk1
+            cursor.isNull(offset + 14) ? null : cursor.getString(offset + 14), // rmk2
+            cursor.isNull(offset + 15) ? null : cursor.getString(offset + 15) // rmk3
         );
         return entity;
     }
@@ -268,19 +281,20 @@ public class LineInfoEntityDao extends AbstractDao<LineInfoEntity, Long> {
     public void readEntity(Cursor cursor, LineInfoEntity entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setLine(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
-        entity.setVersion(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
-        entity.setUp_station(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
-        entity.setDown_station(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
-        entity.setChinese_name(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
-        entity.setIs_fixed_price(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
-        entity.setIs_keyboard(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
-        entity.setFixed_price(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
-        entity.setCoefficient(cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9));
-        entity.setShortcut_price(cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10));
-        entity.setFileName(cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11));
-        entity.setRmk1(cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12));
-        entity.setRmk2(cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13));
-        entity.setRmk3(cursor.isNull(offset + 14) ? null : cursor.getString(offset + 14));
+        entity.setLineFileName(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
+        entity.setVersion(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
+        entity.setUp_station(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
+        entity.setDown_station(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setChinese_name(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
+        entity.setIs_fixed_price(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
+        entity.setIs_keyboard(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
+        entity.setFixed_price(cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9));
+        entity.setCoefficient(cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10));
+        entity.setShortcut_price(cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11));
+        entity.setFileName(cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12));
+        entity.setRmk1(cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13));
+        entity.setRmk2(cursor.isNull(offset + 14) ? null : cursor.getString(offset + 14));
+        entity.setRmk3(cursor.isNull(offset + 15) ? null : cursor.getString(offset + 15));
      }
     
     @Override

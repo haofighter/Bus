@@ -22,7 +22,7 @@ import io.reactivex.schedulers.Schedulers;
 
 public abstract class BaseRequest {
 
-    public ResponseMessage response = new ResponseMessage();
+    public static ResponseMessage response = new ResponseMessage();
 
     public Disposable getDisposable() {
         return getObservable().observeOn(AndroidSchedulers.mainThread())

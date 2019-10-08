@@ -213,6 +213,9 @@ public abstract class BaseActivity extends AppCompatActivity implements OnKeyLis
         } else if (BuildConfig.CITY == 2) {
             main_sign.setBackgroundResource(R.mipmap.laiwu_gj);
             main_main.setBackgroundResource(R.mipmap.laiwu_gj);
+        } else if (BuildConfig.CITY == 7) {
+            main_sign.setBackgroundResource(R.mipmap.laiwu_cy);
+            main_main.setBackgroundResource(R.mipmap.laiwu_cy);
         } else {
             main_sign.setBackgroundResource(R.mipmap.bzb);
             main_main.setBackgroundResource(R.mipmap.bzb);

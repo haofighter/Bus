@@ -59,7 +59,7 @@ public class Util {
      * @return
      */
     public static boolean checkQR(long currentTime, long lastTime) {
-        return currentTime - lastTime > 1500;
+        return currentTime - lastTime > 3000;
     }
 
 
@@ -398,6 +398,8 @@ public class Util {
             SLog.d("Util(updateUnionParam.java:334)银联参数设置成功>>>马上签到");
             BusllPosManage.getPosManager().setTradeSeq();
             Iso8583Message message = SignIn.getInstance().message(BusllPosManage.getPosManager().getTradeSeq());
+
+            SLog.d("LoopCard(run.java:242)" + message.toFormatString());
             UnionPay.getInstance().exeSSL(UnionConfig.SIGN, message.getBytes(), true);
 
         }
@@ -478,6 +480,15 @@ public class Util {
             return ex.toString();
         }
 
+    }
+
+
+    public static String formatLine(String str) {
+        String newStr = str;
+        for (int i = 0; i < 3 - str.length(); i++) {
+            newStr = "0" + newStr;
+        }
+        return newStr;
     }
 
 }

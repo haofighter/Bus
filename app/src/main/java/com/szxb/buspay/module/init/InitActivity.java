@@ -21,6 +21,7 @@ import com.szxb.buspay.db.manager.DBCore;
 import com.szxb.buspay.task.thread.ThreadFactory;
 import com.szxb.buspay.util.AppUtil;
 import com.szxb.buspay.util.Config;
+import com.szxb.buspay.util.sound.SoundPoolUtil;
 import com.szxb.buspay.util.tip.BusToast;
 import com.szxb.buspay.util.tip.MainLooper;
 import com.szxb.buspay.util.update.BaseRequest;
@@ -51,7 +52,7 @@ public class InitActivity extends AppCompatActivity implements OnResponse {
     private boolean binOk = false;
     private boolean whiteListOK = false;
 
-    private TextView update_info;
+    private TextView update_info; //具体消息
     private RelativeLayout init_layout;
     private AtomicInteger taskSize;
 
@@ -63,10 +64,10 @@ public class InitActivity extends AppCompatActivity implements OnResponse {
         setContentView(R.layout.activity);
         update_info = findViewById(R.id.update_info);
         init_layout = findViewById(R.id.init_layout);
-        ImageView progress = findViewById(R.id.progress);
+        ImageView progress = findViewById(R.id.progress); //加载的小图片
         drawable = (AnimationDrawable) progress.getBackground();
         drawable.start();
-        TextView tip_info = findViewById(R.id.tip_info);
+        TextView tip_info = findViewById(R.id.tip_info); //界面底部的温馨提示
         tip_info.setText(String.format("温馨提示:\n\t\t\t\t%1$s", Config.tip()));
         update_info.setText("微信同步中\n");
         update_info.append("bin初始化中\n");
@@ -79,8 +80,12 @@ public class InitActivity extends AppCompatActivity implements OnResponse {
     }
 
     private void initView() {
-        if (BusApp.getInstance().city == 2) {
+        if (BuildConfig.CITY == 1) {
+            init_layout.setBackgroundResource(R.mipmap.taian__bg);
+        } else if (BuildConfig.CITY == 2) {
             init_layout.setBackgroundResource(R.mipmap.laiwu_gj);
+        } else if (BuildConfig.CITY == 7) {
+            init_layout.setBackgroundResource(R.mipmap.laiwu_cy);
         } else {
             init_layout.setBackgroundResource(R.mipmap.bzb);
         }
@@ -97,8 +102,10 @@ public class InitActivity extends AppCompatActivity implements OnResponse {
         ThreadFactory.getScheduledPool().execute(new Runnable() {
             @Override
             public void run() {
-                String lastVersion = BusApp.getPosManager().getLastVersion();
+                String lastVersion = BusApp.getPosManager().getLastVersion();  //上个bin版本
+                Log.e("lastVersion",lastVersion);
                 String binName = BuildConfig.BIN_NAME;
+                Log.e("binName",binName);
                 if (!TextUtils.equals(lastVersion, binName)) {
                     AssetManager ass = BusApp.getInstance().getAssets();
                     int k = libszxb.ymodemUpdate(ass, binName);

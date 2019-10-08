@@ -46,7 +46,7 @@ public class CommonBase {
             ConsumeCard response = CommonBase.response(0, 0, false, false, false, true, searchCard.cardModuleType);
             SLog.d("CommonBase(empSign.java:44)签到>>" + response);
             if (TextUtils.equals(response.getStatus(), "00") &&
-                    TextUtils.equals(response.getTransType(), "12")) {
+                    TextUtils.equals(response.getTransType(), "06")) {
                 //司机卡上班
                 BusApp.getPosManager().setDriverNo(response.getTac(), response.getCardNo());
                 notice(Config.IC_TO_WORK, "司机卡上班[" + response.getTac() + "]", true);

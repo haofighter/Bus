@@ -47,6 +47,15 @@ public class ConfigParam {
         private boolean is_supp_scan_pay;
         private boolean is_supp_ic_pay;
         private boolean is_supp_union_pay;
+        private boolean is_supp_ali_pay;
+
+        public boolean isIs_supp_ali_pay() {
+            return is_supp_ali_pay;
+        }
+
+        public void setIs_supp_ali_pay(boolean is_supp_ali_pay) {
+            this.is_supp_ali_pay = is_supp_ali_pay;
+        }
 
         public String getOrganization() {
             return organization;
@@ -154,6 +163,26 @@ public class ConfigParam {
 
         public void setCity(String city) {
             this.city = city;
+        }
+
+        @Override
+        public String toString() {
+            return "ConfigBean{" +
+                    "ip='" + ip + '\'' +
+                    ", port=" + port +
+                    ", user='" + user + '\'' +
+                    ", psw='" + psw + '\'' +
+                    ", mch_id='" + mch_id + '\'' +
+                    ", city_code='" + city_code + '\'' +
+                    ", url_ip='" + url_ip + '\'' +
+                    ", is_supp_scan_pay=" + is_supp_scan_pay +
+                    ", is_supp_ic_pay=" + is_supp_ic_pay +
+                    ", is_supp_union_pay=" + is_supp_union_pay +
+                    ", is_supp_ali_pay=" + is_supp_ali_pay +
+                    ", is_supp_key_board=" + is_supp_key_board +
+                    ", city='" + city + '\'' +
+                    ", organization='" + organization + '\'' +
+                    '}';
         }
     }
 }

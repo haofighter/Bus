@@ -75,7 +75,7 @@ public class UnionPayManager implements IManager {
 //        } else if (binName.contains("zhaoyuan")) {
 //            TPDU = "6004500000";
 //        }
-        TPDU = "6005010000";
+        TPDU = "6005010000";  //6006010000
         tradeSeq = UnionConfig.tradeSeq();
         key = UnionConfig.key();
         posSN = UnionConfig.getUnionPonSn();

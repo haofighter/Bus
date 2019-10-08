@@ -30,6 +30,7 @@ public class LINEGuideEntityDao extends AbstractDao<LINEGuideEntity, Long> {
         public final static Property Routeversion = new Property(3, String.class, "routeversion", false, "ROUTEVERSION");
         public final static Property Routevname = new Property(4, String.class, "routevname", false, "ROUTEVNAME");
         public final static Property FileName = new Property(5, String.class, "fileName", false, "FILE_NAME");
+        public final static Property NeedUpdate = new Property(6, boolean.class, "needUpdate", false, "NEED_UPDATE");
     }
 
 
@@ -50,7 +51,8 @@ public class LINEGuideEntityDao extends AbstractDao<LINEGuideEntity, Long> {
                 "\"ROUTENO\" TEXT," + // 2: routeno
                 "\"ROUTEVERSION\" TEXT," + // 3: routeversion
                 "\"ROUTEVNAME\" TEXT," + // 4: routevname
-                "\"FILE_NAME\" TEXT);"); // 5: fileName
+                "\"FILE_NAME\" TEXT," + // 5: fileName
+                "\"NEED_UPDATE\" INTEGER NOT NULL );"); // 6: needUpdate
     }
 
     /** Drops the underlying database table. */
@@ -92,6 +94,7 @@ public class LINEGuideEntityDao extends AbstractDao<LINEGuideEntity, Long> {
         if (fileName != null) {
             stmt.bindString(6, fileName);
         }
+        stmt.bindLong(7, entity.getNeedUpdate() ? 1L: 0L);
     }
 
     @Override
@@ -127,6 +130,7 @@ public class LINEGuideEntityDao extends AbstractDao<LINEGuideEntity, Long> {
         if (fileName != null) {
             stmt.bindString(6, fileName);
         }
+        stmt.bindLong(7, entity.getNeedUpdate() ? 1L: 0L);
     }
 
     @Override
@@ -142,7 +146,8 @@ public class LINEGuideEntityDao extends AbstractDao<LINEGuideEntity, Long> {
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // routeno
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // routeversion
             cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // routevname
-            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5) // fileName
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // fileName
+            cursor.getShort(offset + 6) != 0 // needUpdate
         );
         return entity;
     }
@@ -155,6 +160,7 @@ public class LINEGuideEntityDao extends AbstractDao<LINEGuideEntity, Long> {
         entity.setRouteversion(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
         entity.setRoutevname(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
         entity.setFileName(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setNeedUpdate(cursor.getShort(offset + 6) != 0);
      }
     
     @Override

@@ -1,6 +1,7 @@
 package com.szxb.buspay.util.update;
 
 import android.os.Environment;
+import android.util.Log;
 
 import com.alibaba.fastjson.JSONObject;
 import com.google.gson.Gson;
@@ -33,9 +34,9 @@ public class DownloadUnionPayRequest extends BaseRequest {
     protected void doSubscribe(ObservableEmitter<ResponseMessage> e) {
         response.setWhat(ResponseMessage.WHAT_UNION);
 //        UnionPayParam unionParam1 = new UnionPayParam();
-//        unionParam1.setSn("99900301");
-//        unionParam1.setMch("105370941319002");
-//        unionParam1.setKey("4664DCD92CD07FD932E5C2402F292CF1");
+//        unionParam1.setSn("06340705");
+//        unionParam1.setMch("914371241110001");
+//        unionParam1.setKey("A21F43164A31866BD513E304AB76B0C4");
 //        Util.updateUnionParam(unionParam1);
 
         int res = Util.downUnionPayParasFile(forceUpdate, "unionpay/", "银联参数检查更新");
@@ -48,6 +49,7 @@ public class DownloadUnionPayRequest extends BaseRequest {
             if (object != null) {
                 UnionPayParam unionParam = new Gson().fromJson(object.toJSONString(), UnionPayParam.class);
                 Util.updateUnionParam(unionParam);
+                //Log.e("银联商户号：",unionParam.getSn()+";"+unionParam.getMch()+";"+unionParam.getSn());
                 response.setStatus(ResponseMessage.SUCCESSFUL);
                 response.setMsg("银联参数更新成功");
                 ParseUtil.initUnionPay();

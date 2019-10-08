@@ -170,7 +170,7 @@ public class LoopCardThread_ZY extends Thread {
                     int endTime = Util.string2Int(time.substring(index + 1, time.length()));
                     int currentTime = Util.string2Int(format.format(new Date()));
                     if (currentTime >= startTime && currentTime <= endTime) {
-                        SLog.e("LoopCardThread_ZY(checkMonthEnableTime.java:173)currentTime="+currentTime+",startTime="+startTime+",endTime="+endTime);
+                        SLog.e("LoopCardThread_ZY(checkMonthEnableTime.java:173)currentTime=" + currentTime + ",startTime=" + startTime + ",endTime=" + endTime);
                         return true;
                     }
                 }

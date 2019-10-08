@@ -1,5 +1,7 @@
 package com.szxb.unionpay;
 
+import android.util.Log;
+
 import com.szxb.buspay.BusApp;
 import com.szxb.buspay.db.dao.UnionPayEntityDao;
 import com.szxb.buspay.db.manager.DBCore;
@@ -101,6 +103,7 @@ public class UnionPay {
                                 parseMackey(message0810.getValue(62).getValue(), isTip);
                             } else {
                                 if (isTip) {
+                                    //Log.i("银联签到",""+message0810.getValue(39).getValue());
                                     BusToast.showToast(BusApp.getInstance().getApplicationContext(), "银联签到失败[" + message0810.getValue(39).getValue() + "]", false);
                                 }
                             }
@@ -123,8 +126,10 @@ public class UnionPay {
                                     case "A5":
                                     case "A6":
                                         //支付成功
+                                        Log.i("莱芜扫码","银联闪付");
                                         unique.setPayFee(pay_fee);
-                                        SoundPoolUtil.play(Config.IC_YINLIAN_CARD);
+                                        SoundPoolUtil.play(Config.ZHIFU_SUC);
+                                        Log.i("莱芜扫码","成功");
                                         String amount = message0810.getValue(4).getValue();
                                         BusToast.showToast(BusApp.getInstance().getApplicationContext(), "扣款成功\n扣款金额" + yuan2Fen(amount) + "元", true);
                                         SLog.d("UnionPay(success.java:104)修改成功");
@@ -154,6 +159,8 @@ public class UnionPay {
                                         SLog.d("UnionPay(success.java:136)卡过期");
                                         break;
                                     default:
+                                        //刷卡失败
+                                        SoundPoolUtil.play(Config.IC_PUSH_MONEY);
                                         SLog.d("刷卡失败报错" + Util.unionPayStatus(resCode));
                                         BusToast.showToast(BusApp.getInstance().getApplicationContext(), "刷卡失败[" + Util.unionPayStatus(resCode) + "]", false);
                                         break;

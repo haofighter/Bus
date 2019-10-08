@@ -136,6 +136,7 @@ public static java.lang.String TABLENAME;
 #-applymapping mapping.txt
 #hotfix
 -keep class com.taobao.sophix.**{*;}
+-keep class com.ibuscloud.ibuscloudposlib.**{*;}
 -keep class com.ta.utdid2.device.**{*;}
 -dontwarn com.alibaba.sdk.android.utils.**
 #防止inline

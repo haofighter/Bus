@@ -1,12 +1,14 @@
 package com.szxb.buspay.task.scan;
 
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.szxb.buspay.BusApp;
 import com.szxb.buspay.db.entity.bean.QRCode;
 import com.szxb.buspay.db.entity.bean.QRScanMessage;
 import com.szxb.buspay.db.entity.scan.PosRecord;
 import com.szxb.buspay.db.manager.DBManager;
+import com.szxb.buspay.db.sp.CommonSharedPreferences;
 import com.szxb.buspay.util.Config;
 import com.szxb.buspay.util.Util;
 import com.szxb.buspay.util.rx.RxBus;
@@ -43,13 +45,14 @@ public class TenPosReportManager {
     }
 
     public void posScan(String qrcode) {
-        if (wxSdk == null) wxSdk = new WlxSdk();
+        if (wxSdk == null) wxSdk = new WlxSdk();  //实例化WlxSdk
         int init = wxSdk.init(qrcode);
         int key_id = wxSdk.get_key_id();
         String open_id = wxSdk.get_open_id();
         String mac_root_id = wxSdk.get_mac_root_id();
         int verify = 0;
-        if (!TextUtils.isEmpty(open_id)) {
+        Log.i("腾讯二维码", qrcode + "      init=" + init + "      key_id=" + key_id + "         open_id=" + open_id + "       mac_root_id=mac_root_id=" + mac_root_id);
+        if (!TextUtils.isEmpty(open_id)) {  //判断open_id是否为空
             if (DBManager.filterOpenID(open_id)) {
                 BusToast.showToast(BusApp.getInstance(), "禁止频繁刷码", false);
             } else if (DBManager.filterSameQR(qrcode)) {
@@ -59,6 +62,9 @@ public class TenPosReportManager {
                 RxBus.getInstance().send(new QRScanMessage(new PosRecord(), QRCode.QR_ERROR));
             } else {
                 if (init == 0 && key_id > 0) {
+
+
+
                     //String open_id, String pub_key, int payfee, byte scene, byte scantype, String pos_id, String pos_trx_id, String aes_mac_root
                     verify = wxSdk.verify(open_id
                             , BusApp.getPosManager().getPublicKey(String.valueOf(key_id))
@@ -70,7 +76,7 @@ public class TenPosReportManager {
                             , BusApp.getPosManager().getMac(mac_root_id));
 
                     String record = wxSdk.get_record();
-
+                    Log.i("验证", " 公钥" + BusApp.getPosManager().getPublicKey(String.valueOf(key_id))+"   verify="+verify);
                     PosRecord posRecord = new PosRecord();
                     posRecord.setOpen_id(open_id);
                     posRecord.setQr_code(qrcode);
@@ -95,14 +101,19 @@ public class TenPosReportManager {
                     posRecord.setIn_station_name(BusApp.getPosManager().getLineName());
 
                     PosRequest.getInstance().request(new QRScanMessage(posRecord, verify));
+
+
+                    //TODO:语音提示（成功）
+//                    SoundPoolUtil.play(Config.SUCCESS);
+//
                 } else {
                     SoundPoolUtil.play(Config.VERIFY_FAIL);
+                   /* //TODO:语音提示（失败）
+                    SoundPoolUtil.play(Config.LOSE);*/
                     BusToast.showToast(BusApp.getInstance(), "验码失败\n[SDK初始化失败]", false);
                 }
 
             }
         }
     }
-
-
 }

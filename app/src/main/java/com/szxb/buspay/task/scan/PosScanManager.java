@@ -1,5 +1,7 @@
 package com.szxb.buspay.task.scan;
 
+import android.util.Log;
+
 import com.szxb.buspay.BusApp;
 import com.szxb.buspay.db.entity.bean.QRCode;
 import com.szxb.buspay.util.tip.BusToast;
@@ -42,12 +44,19 @@ public class PosScanManager {
         return qrcode != null && qrcode.indexOf("TX") == 0;
     }
 
+    public static boolean isAliQRcode(String qrcode) {
+        return qrcode != null && qrcode.indexOf("TX") == 0;
+    }
+
+
     //腾讯
     public void txposScan(String qrcode) {
         //当为配置参数时提示
         if (BusApp.getPosManager().getLineInfoEntity() == null) {
             BusToast.showToast(BusApp.getInstance(), "请先配置线路信息", false);
         } else {
+            Log.i("qrcode123", "值：" + qrcode);
+            //将值qrcode传到TenPosReportManager类里面的posScan方法里面
             TenPosReportManager.getInstance().posScan(qrcode);
         }
     }

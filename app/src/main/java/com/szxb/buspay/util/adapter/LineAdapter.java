@@ -2,10 +2,14 @@ package com.szxb.buspay.util.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
 import com.szxb.buspay.db.entity.bean.LINEGuideEntity;
+import com.szxb.buspay.db.entity.card.LineInfoEntity;
+import com.szxb.buspay.db.manager.DBManager;
 import com.szxb.buspay.util.AppUtil;
 import com.szxb.buspay.util.update.BaseRequest;
+import com.szxb.buspay.util.update.DownloadLineRequest;
 
 import java.util.List;
 
@@ -41,7 +45,14 @@ public class LineAdapter extends BaseLineAdapter {
 
     @Override
     public void select(LINEGuideEntity lineGuideEntity) {
-        List<BaseRequest> taskList = AppUtil.getDownloadAppointFileList(lineGuideEntity.getFileName(), null);
-        AppUtil.run(taskList, null);
+        LineInfoEntity lineInfoEntity = DBManager.getLineInfoByFileName(lineGuideEntity.getAcnt() + "," + lineGuideEntity.getRouteno() + ".json");
+        if (lineInfoEntity != null) {
+            Log.i("设置线路", "不需要下载");
+            DownloadLineRequest.setNowLine(lineInfoEntity);
+        } else {
+            Log.i("设置线路", "需要下载");
+            List<BaseRequest> taskList = AppUtil.getDownloadAppointFileList(lineGuideEntity.getFileName(), null);
+            AppUtil.run(taskList, null);
+        }
     }
 }

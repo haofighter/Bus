@@ -63,7 +63,11 @@ public class SoundPoolUtil {
             R.raw.junrenka_t,//军人卡
             R.raw.guanaika_t,//关爱卡
             R.raw.newfree,//免费卡
-
+            R.raw.zhifuchenggong,//支付成功
+            R.raw.success,//成功
+            R.raw.lose,//失败
+            R.raw.yinlianshaoma,//银联扫码
+            R.raw.yinlianshanfu,//银联闪付
     };
 
     /**

@@ -79,10 +79,13 @@ public class LoopKeyTask {
     private void keyBord() {
         int i = libszxb.deviceSerialRecv(3, recv, 50);
         String keycode = HexUtil.printHexBinary(recv).substring(12, 14);
+
         if (TextUtils.isEmpty(keycode) ||
                 TextUtils.equals(keycode, "00")) {
             return;
         }
+
+
         switch (keycode) {
             case "2E"://.
             case "23"://#

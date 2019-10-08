@@ -12,6 +12,7 @@
       "is_supp_ic_pay": true,
       "is_supp_union_pay": true,
       "is_supp_key_board": false,
+      "is_supp_ali_pay": false,
       "city": "淄博[0]"
     },
     {
@@ -26,6 +27,7 @@
       "is_supp_ic_pay": true,
       "is_supp_union_pay": true,
       "is_supp_key_board": true,
+      "is_supp_ali_pay": false,
       "city": "泰安[1]"
     },
     {
@@ -40,6 +42,7 @@
       "is_supp_ic_pay": true,
       "is_supp_union_pay": true,
       "is_supp_key_board": true,
+      "is_supp_ali_pay": false,
       "city": "莱芜公交[2]",
       "organization": "03754790"
     },
@@ -55,6 +58,7 @@
       "is_supp_ic_pay": true,
       "is_supp_union_pay": true,
       "is_supp_key_board": true,
+      "is_supp_ali_pay": false,
       "city": "招远[3]"
     },
     {
@@ -69,6 +73,7 @@
       "is_supp_ic_pay": false,
       "is_supp_union_pay": true,
       "is_supp_key_board": false,
+      "is_supp_ali_pay": false,
       "city": "荣成[4]"
     },
     {
@@ -83,6 +88,7 @@
       "is_supp_ic_pay": false,
       "is_supp_union_pay": false,
       "is_supp_key_board": false,
+      "is_supp_ali_pay": false,
       "city": "潍坊[5]"
     },
     {
@@ -97,6 +103,7 @@
       "is_supp_ic_pay": false,
       "is_supp_union_pay": true,
       "is_supp_key_board": false,
+      "is_supp_ali_pay": false,
       "city": "荣成[6]",
       "tag": "新修改荣成FTP"
     },
@@ -112,7 +119,38 @@
       "is_supp_ic_pay": true,
       "is_supp_union_pay": true,
       "is_supp_key_board": true,
+      "is_supp_ali_pay": false,
       "city": "莱芜长运[7]"
+    },
+    {
+      "ip": "222.134.206.204",
+      "port": 26,
+      "user": "ydtcommserver\\ftp",
+      "psw": "ftp1234!@#$",
+      "mch_id": "10000010",
+      "city_code": "371200",
+      "url_ip": "111.230.85.238",
+      "is_supp_scan_pay": true,
+      "is_supp_ic_pay": true,
+      "is_supp_union_pay": true,
+      "is_supp_key_board": true,
+      "is_supp_ali_pay": true,
+      "city": "济南公交[8]"
+    },
+    {
+      "ip": "222.134.206.204",
+      "port": 26,
+      "user": "ydtcommserver\\ftp",
+      "psw": "ftp1234!@#$",
+      "mch_id": "10000002",
+      "city_code": "371200",
+      "url_ip": "111.230.85.238",
+      "is_supp_scan_pay": true,
+      "is_supp_ic_pay": true,
+      "is_supp_union_pay": true,
+      "is_supp_key_board": true,
+      "is_supp_ali_pay": true,
+      "city": "海口[9]"
     }
   ]
 }

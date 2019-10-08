@@ -1,9 +1,11 @@
 package com.szxb.buspay.task.card.lw;
 
+import android.content.SharedPreferences;
 import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.sqlite.insert;
 import com.szxb.buspay.BusApp;
 import com.szxb.buspay.db.dao.ConsumeCardDao;
 import com.szxb.buspay.db.entity.bean.QRCode;
@@ -13,6 +15,7 @@ import com.szxb.buspay.db.entity.bean.card.SearchCard;
 import com.szxb.buspay.db.entity.scan.PosRecord;
 import com.szxb.buspay.db.manager.DBCore;
 import com.szxb.buspay.db.manager.DBManager;
+import com.szxb.buspay.db.sp.CommonSharedPreferences;
 import com.szxb.buspay.task.thread.ThreadFactory;
 import com.szxb.buspay.task.thread.WorkThread;
 import com.szxb.buspay.util.AppUtil;
@@ -28,6 +31,9 @@ import com.szxb.jni.libszxb;
 import com.szxb.mlog.SLog;
 import com.szxb.unionpay.UnionCard;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import static com.szxb.buspay.task.card.lw.CardTypeGJ.CARD_NORMAL;
@@ -47,11 +53,11 @@ public class LoopCardThread_GJ extends Thread {
 
     private boolean isBlack = false;
     private boolean isWhite = false;
-
+    private boolean timecard = false;
     private String cardNoTemp = "0";
     private long lastTime = 0;
     private SearchCard searchCard;
-
+    private int cishu = 0;
 
     @Override
     public void run() {
@@ -90,6 +96,8 @@ public class LoopCardThread_GJ extends Thread {
                 Log.i("获取到卡状态GJ", "   " + searchBytes[0]);
                 return;
             }
+
+            /**检测到卡的时候记录*/
 
 
             /*******控制连刷**********/
@@ -175,6 +183,18 @@ public class LoopCardThread_GJ extends Thread {
                             TextUtils.equals(response.getTransType(), "12")) {
                         //司机卡上班
                         BusApp.getPosManager().setDriverNo(response.getTac(), response.getCardNo());
+
+                        String time = new SimpleDateFormat("dd").format(new Date(System.currentTimeMillis()));//当前日期
+
+                        if(String.valueOf(CommonSharedPreferences.get("NumberTime",0)).equals(time)){
+                            //如果保存的日期与当前日期是一样的，那就直接去读取，并将数据展示出来
+                            BusApp.setBusNumber((Integer) CommonSharedPreferences.get("infonumber",0));
+                        }else{
+                            //存储的日期与当前日期不一样，从设计数器并重新读取显示
+                            CommonSharedPreferences.put("infonumber",0);
+                            BusApp.setBusNumber((Integer) CommonSharedPreferences.get("infonumber",0));
+                        }
+
                         notice(Config.IC_TO_WORK, "司机卡上班[" + response.getTac() + "]", true);
                         saveRecord(response);
                         RxBus.getInstance().send(new QRScanMessage(new PosRecord(), QRCode.SIGN));
@@ -187,6 +207,7 @@ public class LoopCardThread_GJ extends Thread {
                 }
 
                 if (TextUtils.equals(searchCard.cardType, "40")) {
+                    //if(lastTime)
                     elseCardControl(searchCard, false);
                 }
 
@@ -203,12 +224,7 @@ public class LoopCardThread_GJ extends Thread {
                 }
                 Log.i("time", "checkLine");
 
-                // 白名单校验
-                if (DBManager.checkedWhiteList(searchCard) && searchCard.cardModuleType.equals("A0") && !searchCard.company.startsWith(BusApp.getPosManager().getOrganization())) {
-                    notice(Config.IC_ERROR, "不在白名单中[5469]", false);
-                    lastTime = SystemClock.elapsedRealtime();
-                    return;
-                }
+
 
                 Log.i("刷卡", " 卡消费检测  ");
 
@@ -236,7 +252,7 @@ public class LoopCardThread_GJ extends Thread {
 
             cardNoTemp = searchCard.cardNo;
             lastTime = SystemClock.elapsedRealtime();
-            searchCard = null;
+//            searchCard = null;
         } catch (Exception e) {
             e.printStackTrace();
             SLog.d("LoopCardThread(run.java:60)LoopCardThread出现异常>>>" + e.toString());
@@ -273,6 +289,14 @@ public class LoopCardThread_GJ extends Thread {
             UnionCard.getInstance().run(searchCard.cityCode + searchCard.cardNo);
 
         } else {
+
+            // 白名单校验
+            if (DBManager.checkedWhiteList(searchCard) && searchCard.cardModuleType.equals("A0") && !searchCard.company.startsWith(BusApp.getPosManager().getOrganization())) {
+                notice(Config.IC_ERROR, "不在白名单中[5469]", false);
+                lastTime = SystemClock.elapsedRealtime();
+                return;
+            }
+
             int pay_fee = payFee(searchCard);
             ConsumeCard response = response(pay_fee, isBlack, isWhite, isWrok, false);
             Log.i("刷卡", " 消费完成  解析数据  " + response.getStatus());
@@ -706,6 +730,15 @@ public class LoopCardThread_GJ extends Thread {
      */
     private void offWork(ConsumeCard response) {
         BusApp.getPosManager().setDriverNo(String.format("%08d", 0), String.format("%08d", 0));
+
+        BusApp.setBusNumber(0);//司机下班后，将计数器清零
+
+        //获取当前的日期，保存下来，用于登录的时候判断日期
+        Calendar calendar = Calendar.getInstance();
+        CommonSharedPreferences.put("NumberTime",calendar.get(Calendar.DAY_OF_MONTH));
+        Log.i("下班日期：",""+calendar.get(Calendar.DAY_OF_MONTH));
+        Log.i("下班语音是否播报：","true"); //日志显示
+
         notice(Config.IC_OFF_WORK, "司机卡下班[00]", true);
         if (response != null) {
             saveRecord(response);
@@ -720,10 +753,21 @@ public class LoopCardThread_GJ extends Thread {
      * @param response .
      */
     private void checkTheBalance(ConsumeCard response, int music) {
+
+        int cishu = (int) CommonSharedPreferences.get("infonumber",0);
+        int a = (cishu+1);
+        //TODO:刷卡计数
+        BusApp.setBusNumber(a);
+        CommonSharedPreferences.put("infonumber",a);
         notice(music, "本次扣款:"
                 + fen2Yuan(string2Int(response.getPayFee())) + "元\n余额:"
                 + fen2Yuan(string2Int(response.getCardBalance())) + "元", true);
 
+
+       /* int number = (Integer) CommonSharedPreferences.get("DataNumber",null);
+        BusApp.setBusNumber(number++);
+        Log.i("刷卡计数",""+number);
+        CommonSharedPreferences.put("DataNumber",number);*/
         if (response.getCardType().equals("43")
                 || response.getCardType().equals("44")
                 || response.getCardType().equals("45")) {//老年卡 优化卡 免费卡 需要填充记录

@@ -1,10 +1,13 @@
 package com.szxb.unionpay.dispose;
 
 import android.os.SystemClock;
+import android.util.Log;
 
+import com.szxb.buspay.BuildConfig;
 import com.szxb.buspay.BusApp;
 import com.szxb.buspay.db.dao.UnionPayEntityDao;
 import com.szxb.buspay.db.manager.DBCore;
+import com.szxb.buspay.db.sp.CommonSharedPreferences;
 import com.szxb.buspay.http.BaseByteRequest;
 import com.szxb.buspay.task.thread.ThreadFactory;
 import com.szxb.buspay.task.thread.WorkThread;
@@ -28,6 +31,9 @@ import com.yanzhenjie.nohttp.rest.SyncRequestExecutor;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
+import static com.szxb.buspay.util.Config.SCAN_SUCCESS;
+import static com.szxb.buspay.util.Config.SUCCESS;
+import static com.szxb.buspay.util.Config.ZHIFU_SUC;
 import static com.szxb.unionpay.unionutil.HexUtil.yuan2Fen;
 
 /**
@@ -100,6 +106,13 @@ public class SyncSSLRequest {
                 case "A5":
                 case "A6":
                     //支付成功
+
+                    int cishu = (int) CommonSharedPreferences.get("infonumber",0);
+                    int a = (cishu+1);
+                    //TODO:二维码计数
+                    BusApp.setBusNumber(a);
+                    CommonSharedPreferences.put("infonumber",a);
+
                     String amount = message0810.getValue(4).getValue();
                     icResponse.setResCode(BankCardParse.SUCCESS);
                     if (type == Config.PAY_TYPE_BANK_IC) {
@@ -109,7 +122,12 @@ public class SyncSSLRequest {
                     icResponse.setMsg("扣款成功\n扣款金额" + yuan2Fen(amount) + "元");
                     icResponse.setLastTime(SystemClock.elapsedRealtime());
                     unique.setPayFee(pay_fee);
-                    SoundPoolUtil.play(type == Config.PAY_TYPE_BANK_IC ? Config.IC_YINLIAN_CARD : Config.SCAN_SUCCESS);
+                    if (BuildConfig.FLAVOR.equals("laiwu_app")) {
+                        //TODO:语音播报改成（成功）
+                        SoundPoolUtil.play(SUCCESS);
+                    } else {
+                        SoundPoolUtil.play(SCAN_SUCCESS);
+                    }
                     SLog.d("UnionPay(success.java:104)修改成功");
                     break;
                 case "A0":

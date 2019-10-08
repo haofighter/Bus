@@ -85,6 +85,7 @@ public class ParseUtil {
             }
 
             SLog.d("ParseUtil(parseMackey.java:80)商户号=" + BusllPosManage.getPosManager().getMchId() + ",终端号=" + BusllPosManage.getPosManager().getPosSn() + ",秘钥=" + BusllPosManage.getPosManager().getKey());
+
         }
     }
 

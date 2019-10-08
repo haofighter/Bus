@@ -1,6 +1,7 @@
 package com.szxb.buspay.manager;
 
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.example.zhoukai.modemtooltest.ModemToolTest;
 import com.google.gson.Gson;
@@ -62,6 +63,10 @@ public class PosManager implements IPosManager, IAddRess, ISwitch {
      * 银联实际扣款
      */
     private int unionPaymarkedPrice;
+    /**
+     * 支付宝实际扣款金额
+     */
+    private int alipaymarkedPrice;
 
     /**
      * 银联二维码
@@ -171,6 +176,9 @@ public class PosManager implements IPosManager, IAddRess, ISwitch {
     //是否支持银联卡支付
     private boolean isSuppUnionPay = false;
 
+    //是否支持支付宝支付
+    private boolean isSuppAliPay = false;
+
     //是否支付刷公交卡
     private boolean isSuppIcPay = false;
 
@@ -245,9 +253,11 @@ public class PosManager implements IPosManager, IAddRess, ISwitch {
 
     private void config(int city) {
         String config = Util.readAssetsFile("config.json", BusApp.getInstance().getApplicationContext());
+        Log.i("config", config);
         ConfigParam configParam = new Gson().fromJson(config, ConfigParam.class);
         List<ConfigParam.ConfigBean> configList = configParam.getConfig();
         ConfigParam.ConfigBean configBean = configList.get(city);
+        Log.i("config", "当前配置:" + configBean.toString());
         isSuppIcPay = configBean.isIs_supp_ic_pay();
         isSuppScanPay = configBean.isIs_supp_scan_pay();
         isSuppUnionPay = configBean.isIs_supp_union_pay();
@@ -259,6 +269,7 @@ public class PosManager implements IPosManager, IAddRess, ISwitch {
         ftpUser = configBean.getUser();
         ftpPsw = configBean.getPsw();
         isSuppKeyBoard = configBean.isIs_supp_key_board();
+        isSuppAliPay = configBean.isIs_supp_ali_pay();
         ftpEntity = new FTPEntity(ftpIP, ftpPort, ftpUser, ftpPsw);
     }
 
@@ -273,6 +284,11 @@ public class PosManager implements IPosManager, IAddRess, ISwitch {
         paymarkedPrice = string2Int(coefficient[8]) * basePrice / 100;
         unionPaymarkedPrice = string2Int(coefficient[9]) * basePrice / 100;
         unionScanPrice = string2Int(coefficient[12]) * basePrice / 100;
+        try {
+            alipaymarkedPrice = string2Int(coefficient[13]) * basePrice / 100;
+        } catch (Exception e) {
+            alipaymarkedPrice = basePrice;
+        }
     }
 
     private void initSn() {
@@ -377,6 +393,10 @@ public class PosManager implements IPosManager, IAddRess, ISwitch {
         CommonSharedPreferences.put("num_seq", numSeqStr);
 
         return Util.Random(10) + numSeqStr;
+    }
+
+    public int getTanNo() {
+        return numSeq;
     }
 
     @Override
@@ -700,6 +720,14 @@ public class PosManager implements IPosManager, IAddRess, ISwitch {
 
     public String getOrganization() {
         return organization;
+    }
+
+    public boolean isSuppAliPay() {
+        return isSuppAliPay;
+    }
+
+    public int getAlipaymarkedPrice() {
+        return alipaymarkedPrice;
     }
 
 }

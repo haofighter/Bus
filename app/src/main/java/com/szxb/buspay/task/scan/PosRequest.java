@@ -1,11 +1,19 @@
 package com.szxb.buspay.task.scan;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.util.Log;
+
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.sqlite.insert;
+import com.szxb.buspay.BuildConfig;
 import com.szxb.buspay.BusApp;
+import com.szxb.buspay.MainActivity;
 import com.szxb.buspay.db.entity.bean.QRCode;
 import com.szxb.buspay.db.entity.bean.QRScanMessage;
 import com.szxb.buspay.db.manager.DBManager;
+import com.szxb.buspay.db.sp.CommonSharedPreferences;
 import com.szxb.buspay.http.CallServer;
 import com.szxb.buspay.http.HttpListener;
 import com.szxb.buspay.http.JsonRequest;
@@ -25,8 +33,10 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
+import static android.content.Context.MODE_PRIVATE;
 import static com.szxb.buspay.util.Config.QR_ERROR;
 import static com.szxb.buspay.util.Config.SCAN_SUCCESS;
+import static com.szxb.buspay.util.Config.ZHIFU_SUC;
 
 /**
  * 作者: Tangren on 2017-09-27
@@ -38,7 +48,9 @@ import static com.szxb.buspay.util.Config.SCAN_SUCCESS;
 public class PosRequest {
 
     private volatile static PosRequest instance = null;
-
+   // private int cishu = 0;
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor  editor;
     private PosRequest() {
     }
 
@@ -56,11 +68,30 @@ public class PosRequest {
     public void request(final QRScanMessage message) {
         switch (message.getResult()) {
             case QRCode.EC_SUCCESS:
-                SoundPoolUtil.play(SCAN_SUCCESS);
+                //判断是哪个城市的app
+                if (BuildConfig.FLAVOR.equals("laiwu_app")) {
+                    //BusApp.setBusNumber(5);
+                    SoundPoolUtil.play(ZHIFU_SUC);  //莱芜城市语音播报支付成功
+                    int cishu = (int) CommonSharedPreferences.get("infonumber",0);
+                    int a = (cishu+1);
+                    //TODO:刷卡计数
+                    BusApp.setBusNumber(a);
+                    CommonSharedPreferences.put("infonumber",a);
+                } else {
+                    SoundPoolUtil.play(SCAN_SUCCESS); //其他城市语音播报扫码成功
+                }
                 MyToast.showToast(BusApp.getInstance(), "扫码成功", true);
-                message.getPosRecord().setMch_trx_id(BusApp.getPosManager().getmchTrxId());
-                Map<String, Object> map = ParamsUtil.requestMap(message.getPosRecord());
-                requestTX(1000, Config.XBPAY, map);
+
+
+                if (BuildConfig.FLAVOR.equals("jinan_app")) {
+                    message.getPosRecord().setMch_trx_id(BusApp.getPosManager().getmchTrxId());
+                    Map<String, Object> map = ParamsUtil.requestMapForJiNan(message.getPosRecord());
+                    requestTXFroJN(1000, Config.XBPAY_JINA_WX, map);
+                } else {
+                    message.getPosRecord().setMch_trx_id(BusApp.getPosManager().getmchTrxId());
+                    Map<String, Object> map = ParamsUtil.requestMap(message.getPosRecord());
+                    requestTX(100, Config.XBPAY, map);
+                }
                 break;
             case QRCode.QR_ERROR://非腾讯或者小兵二维码
             case QRCode.EC_CARD_CERT_SIGN_ALG_NOT_SUPPORT://卡证书签名算法不支持
@@ -143,7 +174,8 @@ public class PosRequest {
      *
      * @param result .
      */
-    private void parseOneJson(JSONObject result) {
+    public static void parseOneJson(JSONObject result) {
+        Log.i("上传数据返回", result.toString());
         String retcode = result.getString("retcode");
         if (retcode.equals("0")) {
             String retmsg = result.getString("retmsg");
@@ -175,4 +207,27 @@ public class PosRequest {
     }
 
 
+    private void requestTXFroJN(int what, String url, final Map<String, Object> map) {
+        JsonRequest request = new JsonRequest(url);
+        request.set(map);
+        CallServer.getHttpclient().add(what, request, new HttpListener<JSONObject>() {
+            @Override
+            public void success(int what, Response<JSONObject> response) {
+                try {
+                    //TODO  记录上传成功  需要做后续操作
+
+                    SLog.d("PosRequest(success.java:127)数据返回" + response.get());
+//                    JSONObject result = response.get();
+//                    parseOneJson(result);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    SLog.d("PosRequest(success.java:127)解析异常," + e.toString());
+                }
+            }
+            @Override
+            public void fail(int what, String e) {
+                SLog.d("PosRequest(fail.java:134)网络超时" + e);
+            }
+        });
+    }
 }

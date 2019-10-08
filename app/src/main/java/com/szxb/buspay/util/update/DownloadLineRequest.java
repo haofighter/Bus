@@ -2,6 +2,7 @@ package com.szxb.buspay.util.update;
 
 import android.os.Environment;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -17,6 +18,8 @@ import com.szxb.mlog.SLog;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import io.reactivex.ObservableEmitter;
 
@@ -32,9 +35,9 @@ import static com.szxb.buspay.util.Util.download;
 
 public class DownloadLineRequest extends BaseRequest {
 
-    private String fileName;
-    private String busNo;
-    private boolean forceUpdate;
+    private static String fileName;
+    private static String busNo;
+    private static boolean forceUpdate;
 
     public void setForceUpdate(boolean forceUpdate) {
         this.forceUpdate = forceUpdate;
@@ -52,12 +55,12 @@ public class DownloadLineRequest extends BaseRequest {
     protected void doSubscribe(ObservableEmitter<ResponseMessage> e) {
         response.setWhat(ResponseMessage.WHAT_LINE);
         if (forceUpdate) {
-            downloadFile();
+            downloadFile(true, fileName);
         } else {
             downloadPoint();
         }
         e.onNext(response);
-        SLog.d("DownloadLineRequest(doSubscribe.java:55)线路响应");
+        SLog.d("DownloadLineRequest(doSubscribe.java:55)线路响应" + forceUpdate);
     }
 
     /**
@@ -80,12 +83,18 @@ public class DownloadLineRequest extends BaseRequest {
                     String routeversion = ob.getString("routeversion");
                     String routevname = ob.getString("routename");
                     String fileName_ = acnt + "," + routeno + ".json";
-                    lineGuideEntities.add(new LINEGuideEntity((long) i, acnt, routeno, routeversion, routevname, fileName_));
+                    LINEGuideEntity downInfo = new LINEGuideEntity((long) i, acnt, routeno, routeversion, routevname, fileName_, true);
 
+                    LINEGuideEntity lineGuideEntity = DBManager.getLineGuide(acnt, routeno);
+                    if (lineGuideEntity == null || !lineGuideEntity.getRouteversion().equals(routeversion)) {
+                        downInfo.setNeedUpdate(true);
+                    } else {
+                        downInfo.setNeedUpdate(false);
+                    }
+                    lineGuideEntities.add(downInfo);
                     LineInfoEntity infoEntity = BusApp.getPosManager().getLineInfoEntity();
                     if (infoEntity == null) {
                         SLog.d("DownloadLineRequest(doSubscribe.java:52)线路文件不存在>>>>");
-
                     } else {
                         if (TextUtils.equals(fileName_, infoEntity.getFileName())) {
                             if (TextUtils.equals(routeversion, infoEntity.getVersion())
@@ -96,7 +105,7 @@ public class DownloadLineRequest extends BaseRequest {
                                 response.setMsg("版本相同无需更新");
                             } else {
                                 fileName = infoEntity.getFileName();
-                                downloadFile();
+                                downloadFile(true, fileName);
                             }
                         }
                     }
@@ -105,17 +114,45 @@ public class DownloadLineRequest extends BaseRequest {
             } else {
                 //版本文件下载失败>>直接更新
                 SLog.d("DownloadLineRequest(doSubscribe.java:88)版本文件下载失败>>直接更新");
-                downloadFile();
+                downloadFile(true, fileName);
             }
         }
+        List<LINEGuideEntity> lineGuideEntities = DBManager.queryAllLine();
+        SLog.d("DownloadLineRequest(doSubscribe.java:88)版本文件下载失败>>直接更新" + lineGuideEntities.size());
+
+        startDownLoadAllLine();
+    }
+
+
+    public void startDownLoadAllLine() {
+        Executors.newScheduledThreadPool(6).schedule(new Runnable() {
+            @Override
+            public void run() {
+                List<LINEGuideEntity> lineGuideEntities = DBManager.queryAllLine();
+                for (int i = 0; i < lineGuideEntities.size(); i++) {
+                    try {
+                        if(lineGuideEntities.get(i).getNeedUpdate()) {
+                            SLog.d("DownloadLineRequest(doSubscribe.java:40)下载线路文件" + "lineGuideEntities" + lineGuideEntities.get(i).getFileName());
+                            downloadFile(false, lineGuideEntities.get(i).getAcnt() + "," + lineGuideEntities.get(i).getRouteno() + ".json");
+                        }
+                    } catch (Exception e) {
+                        SLog.d("DownloadLineRequest(doSubscribe.java:40)下载线路文件 报错了" + e.getMessage());
+
+                    }
+                }
+            }
+        }, 0, TimeUnit.SECONDS);
 
     }
+
 
     /**
      * 强制更新(扫码更新)
      */
-    private void downloadFile() {
+    private void downloadFile(boolean isUse, String fileName) {
+        SLog.d("DownloadLineRequest(doSubscribe.java:40)下载线路文件" + "pram/" + fileName);
         boolean res = download(fileName, "pram/" + fileName, "下载指定文件");
+        SLog.d("DownloadLineRequest(doSubscribe.java:40)下载线路文件" + res);
         if (res) {
             byte[] line = FileByte.File2byte(Environment.getExternalStorageDirectory() + "/" + fileName);
             JSONObject object = HexUtil.parseObject(line);
@@ -124,6 +161,7 @@ public class DownloadLineRequest extends BaseRequest {
                 LineInfoEntityDao dao = getDaoSession().getLineInfoEntityDao();
                 LineInfoEntity onLineInfo = new LineInfoEntity();
                 onLineInfo.setLine(object.getString("line"));
+                onLineInfo.setLineFileName(fileName);
                 onLineInfo.setVersion(object.getString("version"));
                 onLineInfo.setUp_station(object.getString("up_station"));
                 onLineInfo.setDown_station(object.getString("down_station"));
@@ -139,13 +177,19 @@ public class DownloadLineRequest extends BaseRequest {
                     onLineInfo.setRmk1("0");
                 }
                 onLineInfo.setFileName(fileName);
+
+                LineInfoEntity old = DBManager.getLineInfoByFileName(fileName);
+                if (old != null) {
+                    onLineInfo.setId(old.getId());
+                }
                 //先删除所有
-                dao.deleteAll();
+//                dao.deleteAll();
                 dao.insertOrReplace(onLineInfo);
-                HexUtil.parseLine(onLineInfo, busNo);
-                BusApp.getPosManager().setLineInfoEntity();
-                response.setStatus(ResponseMessage.SUCCESSFUL);
-                response.setMsg("线路文件更新成功");
+                if (isUse) {
+                    setNowLine(onLineInfo);
+                } else {
+                    Log.i("线路文件更新成功", "其他线路文件下载成功");
+                }
             } else {
                 response.setMsg("解析异常");
             }
@@ -154,4 +198,13 @@ public class DownloadLineRequest extends BaseRequest {
         }
     }
 
+
+    //设置当前线路
+    public static void setNowLine(LineInfoEntity onLineInfo) {
+        HexUtil.parseLine(onLineInfo, busNo);
+        BusApp.getPosManager().setLineInfoEntity();
+        response.setStatus(ResponseMessage.SUCCESSFUL);
+        response.setMsg("线路文件更新成功");
+        Log.i("线路文件更新成功", "当前线路文件下载成功");
+    }
 }

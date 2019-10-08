@@ -10,12 +10,15 @@ import com.szxb.buspay.db.entity.bean.QRScanMessage;
 import com.szxb.buspay.db.entity.scan.PosRecord;
 import com.szxb.buspay.util.Util;
 import com.szxb.buspay.util.rx.RxBus;
+import com.szxb.buspay.util.sound.SoundPoolUtil;
 import com.szxb.buspay.util.tip.BusToast;
 import com.szxb.jni.libszxb;
 import com.szxb.mlog.SLog;
 import com.szxb.unionpay.dispose.BankQRParse;
 import com.szxb.unionpay.dispose.BankResponse;
 
+import static com.szxb.buspay.util.Config.YINLIANSHAOMA;
+import static com.szxb.buspay.util.Config.ZHIFU_SUC;
 import static com.szxb.buspay.util.Util.checkQR;
 import static com.szxb.buspay.util.Util.checkQRMy;
 
@@ -33,6 +36,7 @@ public class LoopScanThread extends Thread {
     private long lastTime = 0;
 
     private BankResponse response = new BankResponse();
+    private String oldScan = "";
 
     @Override
     public void run() {
@@ -40,10 +44,10 @@ public class LoopScanThread extends Thread {
         try {
             byte[] recs = new byte[1024];
             int barcode = libszxb.getBarcode(recs);
-            Log.i("扫码", "状态：" + barcode);
+            Log.i("扫码123", "状态：" + barcode);
             if (barcode > 0) {
                 String result = new String(recs, 0, barcode);
-                Log.i("扫码", result);
+                Log.i("扫码123123", result);
                 if (PosScanManager.isTenQRcode(result)) {
                     if (!BusApp.getPosManager().isSuppScanPay()) {
                         //本线路不支持扫码
@@ -53,7 +57,7 @@ public class LoopScanThread extends Thread {
                     if (filter(result)) {
                         return;
                     }
-
+                    //跳转到PosScanManager类里面的txposScan方法
                     PosScanManager.getInstance().txposScan(result);
                 } else if (PosScanManager.isMyQRcode(result)) {
                     if (!checkQRMy(SystemClock.elapsedRealtime(), lastTime)) {
@@ -71,6 +75,8 @@ public class LoopScanThread extends Thread {
                     }
 
                     BankQRParse qrParse = new BankQRParse();
+//TODO:语音播报（银联扫码）
+                    SoundPoolUtil.play(YINLIANSHAOMA);
                     response = qrParse.parseResponse(BusApp.getPosManager().getUnionScanPrice(), result);
 
                     if (response.getResCode() > 0) {

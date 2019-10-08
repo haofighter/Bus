@@ -28,6 +28,15 @@ public class PosRecord {
     private String pos_no = "default";
     private String unitno = "default";
     private String driveno = "default";
+    private String qrCodeType = "1";//1 TX  2 AL
+
+    public String getQrCodeType() {
+        return qrCodeType;
+    }
+
+    public void setQrCodeType(String qrCodeType) {
+        this.qrCodeType = qrCodeType;
+    }
 
     private String qr_code;
 

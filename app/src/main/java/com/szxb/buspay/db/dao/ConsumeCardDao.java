@@ -120,7 +120,7 @@ public class ConsumeCardDao extends AbstractDao<ConsumeCard, Long> {
                 "\"CARD_MAC_VERSION\" TEXT," + // 38: cardMacVersion
                 "\"CARD_MAC_INDEX\" TEXT);"); // 39: cardMacIndex
         // Add Indexes
-        db.execSQL("CREATE INDEX " + constraint + "IDX_CONSUME_CARD_CARD_NO ON CONSUME_CARD" +
+        db.execSQL("CREATE INDEX " + constraint + "IDX_CONSUME_CARD_CARD_NO ON \"CONSUME_CARD\"" +
                 " (\"CARD_NO\" ASC);");
     }
 

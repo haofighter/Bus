@@ -30,7 +30,13 @@ public class FetchAppConfig {
 
     //司机tac
     public static String getDriverNo() {
-        return (String) CommonSharedPreferences.get("driver_no", BuildConfig.CITY == 1 ? "00112234" : "00000000");
+        String driverNo = "";
+        if (BuildConfig.CITY == 1 || BuildConfig.CITY == 8) {
+            driverNo = "00112234";
+        } else {
+            driverNo = "00000000";
+        }
+        return (String) CommonSharedPreferences.get("driver_no", driverNo);
     }
 
     //司机卡号
