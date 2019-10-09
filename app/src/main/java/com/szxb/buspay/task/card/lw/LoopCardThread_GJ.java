@@ -5,8 +5,7 @@ import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.sqlite.insert;
-import com.szxb.buspay.BusApp;
+   import com.szxb.buspay.BusApp;
 import com.szxb.buspay.db.dao.ConsumeCardDao;
 import com.szxb.buspay.db.entity.bean.QRCode;
 import com.szxb.buspay.db.entity.bean.QRScanMessage;

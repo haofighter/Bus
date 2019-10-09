@@ -22,7 +22,6 @@ import com.szxb.buspay.db.sp.CommonSharedPreferences;
 import com.szxb.buspay.interfaces.OnReceiverMessageListener;
 import com.szxb.buspay.module.BaseActivity;
 import com.szxb.buspay.module.WeakHandler;
-import com.szxb.buspay.task.card.haikou.LoopCardThread_HK;
 import com.szxb.buspay.task.card.lw.LoopCardThread_CY;
 import com.szxb.buspay.task.card.lw.LoopCardThread_GJ;
 import com.szxb.buspay.task.card.taian.LoopCardThread_TA;
@@ -109,8 +108,7 @@ public class MainActivity extends BaseActivity implements OnReceiverMessageListe
                             : TextUtils.equals(appId, "10000010") ? new LoopCardThread_CY()//莱芜长运
                             : TextUtils.equals(appId, "10000098") ? new LoopCardThread_TA()//泰安
                             : TextUtils.equals(appId, "10000011") ? new LoopCardThread_ZY() //招远
-                            : TextUtils.equals(appId, "99999999") ? new LoopCardThread_HK() ://海口
-                            new LoopCardThread()
+                            : new LoopCardThread()
                     , 500, 500, "loop_ic", TimeUnit.MILLISECONDS);
         }
     }
